@@ -8,10 +8,6 @@
 	
 	require __DIR__.'/Connection.php';
 
-	// use App\Connection as ConnRequest;
-	// use Database\Connection as ConnRequest;
-	// use Conn\Connection;
-
 	class Login
 	{
 		
@@ -21,7 +17,6 @@
 		public function __construct()
 		{
 			
-			// $database = new ConnRequest();
 			$database = new Connection();
 
 			$db = $database->db_connection();
