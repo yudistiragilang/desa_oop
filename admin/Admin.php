@@ -33,6 +33,15 @@ class Admin
 
 	}
 
+	public function get_user($value='')
+	{
+		$stmt = $this->conn->prepare("SELECT * FROM users");
+		$stmt->execute();
+		$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		return $userRow;
+	}
+
 }
 
 ?>

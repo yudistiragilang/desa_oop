@@ -20,7 +20,11 @@ if ($login->is_logged_in() == "") {
 
 }
 
+$userLogin = $login->user_online();
+$namaUser = $userLogin['real_name'];
+
 $admin = new Admin();
+$page_content = "Beranda";
 
 ?>
 
@@ -35,7 +39,7 @@ $admin = new Admin();
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Dashboard</title>
+  <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="assets/img/favicon.ico">
   <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -178,7 +182,7 @@ $admin = new Admin();
                 <ul class="navbar-nav ml-auto">
                   <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                      <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $namaUser; ?></span>
                       <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -201,7 +205,7 @@ $admin = new Admin();
               <div class="container-fluid">
 
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                  <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                  <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
                 </div>
 
                 <div class="row">

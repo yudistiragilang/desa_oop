@@ -128,6 +128,14 @@
 			return TRUE;
 		
 		}
+
+		public function user_online()
+		{
+			$stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
+			$stmt->execute(array(":id" => $_SESSION['user_session']));
+			$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
+			return $userRow;
+		}
 	
 	}
 
