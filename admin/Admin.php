@@ -22,10 +22,10 @@ class Admin
 
 	}
 
-	public function count_user()
+	public function count_data($tabel)
 	{
 
-		$stmt = $this->conn->prepare("SELECT * FROM users");
+		$stmt = $this->conn->prepare("SELECT * FROM ".$tabel);
 		$stmt->execute();
 		$userRow = $stmt->fetch(PDO::FETCH_OBJ);
 

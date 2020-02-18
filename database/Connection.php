@@ -12,7 +12,7 @@
 		private $servername = "localhost";
 		private $username = "root";
 		private $password = "";
-		private $database = "desa";
+		private $database = "service";
 		public $conn;
 
 		public function db_connection()
