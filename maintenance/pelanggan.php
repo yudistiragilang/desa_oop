@@ -24,7 +24,7 @@ if ($db->is_logged_in() == "") {
 $userLogin = $db->user_online();
 $namaUser = $userLogin['real_name'];
 
-$page_content = "Maintenance Admin";
+$page_content = "Maintenance Pelanggan";
 
 ?>
 
