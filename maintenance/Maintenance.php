@@ -6,8 +6,6 @@
 *  
 */
 
-// require_once '../connection.php';
-
 class Maintenance
 {
 	
@@ -48,17 +46,11 @@ class Maintenance
 
 	public function get_data_admin_by_id($idAdmin)
 	{
-		// $data = array();
+		
 		$stmt = $this->conn->prepare("SELECT * FROM admin WHERE id_admin = :id_admin");
 		$stmt->execute(array(":id_admin" => $idAdmin));
-
-		// while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
-		// 	$data[] = $dt;
-		// }
-
-		// return $data;
-
 		return $stmt->fetch(PDO::FETCH_ASSOC);
+		
 	}
 
 	public function save_admin($username, $password)
@@ -75,7 +67,6 @@ class Maintenance
 			$this->conn->beginTransaction();
 			$stmt->execute();
 			$this->conn->commit();
-			// return $this->conn->lastInsertId();
 			return TRUE;
 
 		}catch(PDOException $e){
