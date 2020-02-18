@@ -10,10 +10,10 @@
 session_start();
 
 require_once 'database/Login.php';
-require_once 'admin/Admin.php';
+require_once 'admin/Maintenance.php';
 
 $db = new Login();
-$usr = new Admin();
+$usr = new Maintenance();
 
 if ($db->is_logged_in() == "") {
 
