@@ -10,7 +10,7 @@
 session_start();
 
 require_once 'database/Login.php';
-require_once 'admin/Maintenance.php';
+require_once 'maintenance/Maintenance.php';
 
 $db = new Login();
 $usr = new Maintenance();
@@ -77,8 +77,8 @@ $page_content = "Beranda";
         <div id="collapseMaintenance" class="collapse" aria-labelledby="headingMaintenance" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Maintenance</h6>
-            <a class="collapse-item" href="admin/users.php">Admin</a>
-            <a class="collapse-item" href="">Pelanggan</a>
+            <a class="collapse-item" href="maintenance/users.php">Admin</a>
+            <a class="collapse-item" href="maintenance/pelanggan.php">Pelanggan</a>
           </div>
         </div>
       </li>
