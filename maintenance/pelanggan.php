@@ -163,11 +163,9 @@ $page_content = "Maintenance Pelanggan";
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Name</th>
+                          <th>Username</th>
+                          <th>Alamat</th>
                           <th>Telepon</th>
-                          <th>Email</th>
-                          <th>Last Visit</th>
-                          <th>Inactive</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -176,16 +174,16 @@ $page_content = "Maintenance Pelanggan";
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_user() as $dt) : ?>
+                        <?php foreach ($usr->get_data('pelanggan') as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
-                          <td><?php echo $dt['real_name']; ?></td>
-                          <td><?php echo $dt['phone']; ?></td>
-                          <td><?php echo $dt['email']; ?></td>
-                          <td><?php echo $dt['last_visit']; ?></td>
-                          <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
-                          <td> Edit || Delete </td>
+                          <td><?php echo $dt['username']; ?></td>
+                          <td><?php echo $dt['alamat']; ?></td>
+                          <td><?php echo $dt['no_telepon']; ?></td>
+                          <td>
+                            Edit || Delete 
+                          </td>
                         </tr>
 
                         <?php endforeach; ?>

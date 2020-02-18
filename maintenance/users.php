@@ -176,7 +176,7 @@ $page_content = "Maintenance Admin";
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_user() as $dt) : ?>
+                        <?php foreach ($usr->get_data('users') as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>

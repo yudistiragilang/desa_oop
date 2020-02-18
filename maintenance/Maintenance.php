@@ -33,17 +33,17 @@ class Maintenance
 
 	}
 
-	public function get_user()
+	public function get_data($tabel)
 	{
-		$user = array();
-		$stmt = $this->conn->prepare("SELECT * FROM users");
+		$data = array();
+		$stmt = $this->conn->prepare("SELECT * FROM ".$tabel);
 		$stmt->execute();
 
 		while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			$user[] = $dt;
+			$data[] = $dt;
 		}
 
-		return $user;
+		return $data;
 	}
 
 }
