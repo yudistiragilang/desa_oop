@@ -12,6 +12,8 @@ session_start();
 require_once '../database/Login.php';
 require_once 'Maintenance.php';
 
+$page_content = "Maintenance Admin";
+
 $db = new Login();
 $usr = new Maintenance();
 
@@ -24,7 +26,68 @@ if ($db->is_logged_in() == "") {
 $userLogin = $db->user_online();
 $namaUser = $userLogin['real_name'];
 
-$page_content = "Maintenance Admin";
+if (isset($_POST['save'])) {
+  
+  $errorMsg = array();
+
+  $username = strip_tags($_POST['username']);
+  $password = strip_tags($_POST['password']);
+  $password1 = strip_tags($_POST['password1']);
+
+  if ($username == "") {
+
+    $errorMsg[] = "Username tidak boleh kosong !";
+
+  }elseif ($password == "") {
+
+    $errorMsg[] = "Password tidak boleh kosong !";
+
+  }elseif (strlen($password) < 6 ) {
+
+    $errorMsg[] = "Password kurang dari 6 karakter !";
+
+  }elseif ($password != $password1){
+
+    $errorMsg[] = "Password dan repassword tidak sama !";
+
+  }else{
+
+
+    $cekUsername = $usr->cek_username_admin($username);
+    if($cekUsername == TRUE){
+
+      $return = $usr->save_admin($username, $password);
+
+      if ($return == TRUE) {
+
+        $successMsg = "Data berhasil disimpan !";
+        $username="";
+
+      }else{
+
+        $errorMsg[] = "Gagal simpan data !";
+
+      }
+
+    }else{
+      $errorMsg[] = "Username sudah digunakan !";
+    }
+
+  }
+
+}
+
+if (isset($_GET['id'])) {
+  
+  $res = $usr->delete_admin($_GET['id']);
+
+  if ($res == TRUE) {
+    $successMsg = "Data berhasil dihapus !";
+  }else{
+    $errorMsg[] = "Gagal hapus data !";
+  }
+
+}
 
 ?>
 
@@ -155,6 +218,41 @@ $page_content = "Maintenance Admin";
                 <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
               </div>
 
+              <div class="mb-2">
+                <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#addModal"">
+                  <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span class="text">Add</span>
+                </button>
+              </div>
+
+              <?php
+
+                if (isset($errorMsg)) {
+
+                  for ($i=0; $i < count($errorMsg) ; $i++) { 
+                    ?>
+
+                    <div class="alert alert-danger">
+                      <?= $errorMsg[$i]; ?>
+                    </div>
+
+                    <?php
+                  }
+                
+                }
+
+                if (isset($successMsg)) {
+                  ?>
+                    <div class="alert alert-success">
+                      <?= $successMsg; ?>
+                    </div>
+                  <?php
+                }
+
+              ?>
+
               <div class="card">
                 <div class="card-body">
                   <div class="table-responsive">
@@ -163,11 +261,7 @@ $page_content = "Maintenance Admin";
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Name</th>
-                          <th>Telepon</th>
-                          <th>Email</th>
-                          <th>Last Visit</th>
-                          <th>Inactive</th>
+                          <th>Username</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -176,16 +270,19 @@ $page_content = "Maintenance Admin";
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_data('users') as $dt) : ?>
+                        <?php foreach ($usr->get_data('admin') as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
-                          <td><?php echo $dt['real_name']; ?></td>
-                          <td><?php echo $dt['phone']; ?></td>
-                          <td><?php echo $dt['email']; ?></td>
-                          <td><?php echo $dt['last_visit']; ?></td>
-                          <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
-                          <td> Edit || Delete </td>
+                          <td><?php echo $dt['username']; ?></td>
+                          <td>
+                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_admin'];?>">
+                              <i class="fas fa-edit"></i>
+                            </a>
+                            <a onclick="return hapus()" href="users.php?id=<?= $dt['id_admin'];?>" class="btn btn-danger btn-circle">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </td>
                         </tr>
 
                         <?php endforeach; ?>
@@ -234,6 +331,90 @@ $page_content = "Maintenance Admin";
           </div>
         </div>
       </div>
+      <!-- Logout Modal-->
+
+      <!-- Add Modal-->
+      <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="Modaladd" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+
+          <form action="" method="POST">
+            <div class="modal-content">
+                
+              <div class="modal-header">
+                <h5 class="modal-title" id="Modaladd">Tambah Data</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="username" value="<?= isset($_POST['save']) ? $username:""; ?>" placeholder="Masukan username. .">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password" placeholder="Masukan password. .">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password1" placeholder="Ulangi password. .">
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input type="submit" name="save" class="btn btn-primary" value="Simpan">
+              </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <!-- Add Modal-->
+
+      <!-- Edit Modal-->
+      <div class="modal fade" id="editModal<?= $dt['id_admin'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+
+          <form action="" method="POST">
+            <div class="modal-content">
+                
+              <div class="modal-header">
+                <h5 class="modal-title" id="Modaledit">Edit Data</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+
+                <?php
+                  // get data by id
+                  $edit = $usr->get_data_admin_by_id($dt['id_admin']);
+                ?>
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="username" value="<?= $edit['username']; ?>" placeholder="Masukan username. .">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="password" value="<?= $edit['password']; ?>" placeholder="Masukan password. .">
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input type="submit" name="save" class="btn btn-primary" value="Simpan">
+              </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <!-- Edit Modal-->
+
 
       <script src="../assets/vendor/jquery/jquery.min.js"></script>
       <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -242,6 +423,13 @@ $page_content = "Maintenance Admin";
       <script src="../assets/vendor/datatables/jquery.dataTables.min.js"></script>
       <script src="../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
       <script src="../assets/js/demo/datatables-demo.js"></script>
+      <script type="text/javascript" language="JavaScript">
+        function hapus(){
+          takon = confirm("Anda Yakin Akan Menghapus Data ?");
+            if (takon == true) return true;
+            else return false;
+            }
+      </script>
 
     </body>
 

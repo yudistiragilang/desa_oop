@@ -10,11 +10,11 @@ session_start();
 
 require_once 'database/Login.php';
 
-$user = new Login();
+$db = new Login();
 
-if ($user->is_logged_in() != "") {
+if ($db->is_logged_in() != "") {
 	
-	$user->redirect('home.php');
+	$db->redirect('home.php');
 
 }
 
@@ -25,7 +25,7 @@ if (isset($_POST['btn-register'])) {
 
 
 	$fullname = strip_tags($_POST['fullname']);
-	$username = strip_tags($_POST['username']);
+	$dbname = strip_tags($_POST['username']);
 	$email = strip_tags($_POST['email']);
 	$phone = strip_tags($_POST['phone']);
 	$password = strip_tags($_POST['password']);
@@ -36,7 +36,7 @@ if (isset($_POST['btn-register'])) {
 		$errorMessage[] = "Nama tidak boleh kosong !";
 		$error = 1;
 	
-	}else if ($username == "") {
+	}else if ($dbname == "") {
 		
 		$errorMessage[] = "Username tidak boleh kosong !";
 		$error = 1;
@@ -75,11 +75,11 @@ if (isset($_POST['btn-register'])) {
 
 		try{
 
-			$stmt = $user->run_query("SELECT user_id, email FROM users WHERE user_id = :username OR email = :email");
-			$stmt->execute(array(':username' => $username, ':email' => $email));
+			$stmt = $db->run_query("SELECT user_id, email FROM users WHERE user_id = :username OR email = :email");
+			$stmt->execute(array(':username' => $dbname, ':email' => $email));
 			$row = $stmt->fetch(PDO::FETCH_OBJ);
 
-			if ($row->user_id == $username) {
+			if ($row->user_id == $dbname) {
 
 				$errorMessage[] = "Username tidak tersedia !";
 				$error = 1;
@@ -101,9 +101,9 @@ if (isset($_POST['btn-register'])) {
 
 	if($error == 0){
 
-		if ($user->register($username, $password, $fullname, $phone, $email)) {
+		if ($db->register($dbname, $password, $fullname, $phone, $email)) {
 			
-			$user->redirect('index.php');
+			$db->redirect('index.php');
 
 		}else{
 
