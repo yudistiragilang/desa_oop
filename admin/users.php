@@ -12,18 +12,18 @@ session_start();
 require_once '../database/Login.php';
 require_once 'Admin.php';
 
-$login = new Login();
+$db = new Login();
+$usr = new Admin();
 
-if ($login->is_logged_in() == "") {
+if ($db->is_logged_in() == "") {
 
- $login->redirect('../index.php');
+ $db->redirect('../index.php');
 
 }
 
-$userLogin = $login->user_online();
+$userLogin = $db->user_online();
 $namaUser = $userLogin['real_name'];
 
-$admin = new Admin();
 $page_content = "Users Maintenance";
 
 ?>
@@ -44,6 +44,7 @@ $page_content = "Users Maintenance";
   <link href="../assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="../assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -54,7 +55,7 @@ $page_content = "Users Maintenance";
         <div class="sidebar-brand-icon rotate-n-15">
           <i class="fas fa-laugh-wink"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">Desa</div>
+        <div class="sidebar-brand-text mx-3">CV. FPJ</div>
       </a>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
@@ -65,68 +66,53 @@ $page_content = "Users Maintenance";
       </li>
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
-        SETUP
+        MENU
       </div>
+
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance">
           <i class="fas fa-fw fa-users"></i>
-          <span>User</span>
+          <span>Maintenance</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseMaintenance" class="collapse" aria-labelledby="headingMaintenance" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">User Maintenance</h6>
-            <a class="collapse-item" href="../admin/users.php">User</a>
-            <a class="collapse-item" href="cards.html">Role</a>
+            <h6 class="collapse-header">List Maintenance</h6>
+            <a class="collapse-item" href="../admin/users.php">Admin</a>
+            <a class="collapse-item" href="">Pelanggan</a>
           </div>
         </div>
       </li>
+
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransaction" aria-expanded="true" aria-controls="collapseTransaction">
           <i class="fas fa-fw fa-wrench"></i>
-          <span>Utilities</span>
+          <span>Transaction</span>
         </a>
-        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+        <div id="collapseTransaction" class="collapse" aria-labelledby="headingTransaction" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">List Transaction:</h6>
+            <a class="collapse-item" href="">Pesanan</a>
+            <a class="collapse-item" href="">Service</a>
+          </div>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInquiry" aria-expanded="true" aria-controls="collapseInquiry">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Inquiry</span>
+        </a>
+        <div id="collapseInquiry" class="collapse" aria-labelledby="headingInquiry" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Colors</a>
-            <a class="collapse-item" href="utilities-border.html">Borders</a>
-            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            <a class="collapse-item" href="">Admin</a>
+            <a class="collapse-item" href="">Pelanggan</a>
+            <a class="collapse-item" href="">Pesanan</a>
+            <a class="collapse-item" href="">Service</a>
           </div>
         </div>
       </li>
-      <hr class="sidebar-divider">
-      <div class="sidebar-heading">
-        Addons
-      </div>
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
-          </div>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" href="tables.html">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Tables</span></a>
-      </li>
+
       <hr class="sidebar-divider d-none d-md-block">
       <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
@@ -164,10 +150,50 @@ $page_content = "Users Maintenance";
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
+
               <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
               </div>
-              <div class="row">
+
+              <div class="card">
+                <div class="card-body">
+                  <div class="table-responsive">
+
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>No</th>
+                          <th>Name</th>
+                          <th>Telepon</th>
+                          <th>Email</th>
+                          <th>Last Visit</th>
+                          <th>Inactive</th>
+                          <th>Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+                          $no=1;
+                        ?>
+
+                        <?php foreach ($usr->get_user() as $dt) : ?>
+
+                        <tr>
+                          <td><?= $no++; ?></td>
+                          <td><?php echo $dt['real_name']; ?></td>
+                          <td><?php echo $dt['phone']; ?></td>
+                          <td><?php echo $dt['email']; ?></td>
+                          <td><?php echo $dt['last_visit']; ?></td>
+                          <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
+                          <td> Edit || Delete </td>
+                        </tr>
+
+                        <?php endforeach; ?>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -213,9 +239,9 @@ $page_content = "Users Maintenance";
       <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script>
       <script src="../assets/js/sb-admin-2.min.js"></script>
-      <script src="../assets/vendor/chart.js/Chart.min.js"></script>
-      <script src="../assets/js/demo/chart-area-demo.js"></script>
-      <script src="../assets/js/demo/chart-pie-demo.js"></script>
+      <script src="../assets/vendor/datatables/jquery.dataTables.min.js"></script>
+      <script src="../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+      <script src="../assets/js/demo/datatables-demo.js"></script>
 
     </body>
 
