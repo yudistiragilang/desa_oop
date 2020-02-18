@@ -71,7 +71,7 @@ $page_content = "Beranda";
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance">
-          <i class="fas fa-fw fa-users"></i>
+          <i class="fas fa-fw fa-wrench"></i>
           <span>Maintenance</span>
         </a>
         <div id="collapseMaintenance" class="collapse" aria-labelledby="headingMaintenance" data-parent="#accordionSidebar">
@@ -85,7 +85,7 @@ $page_content = "Beranda";
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransaction" aria-expanded="true" aria-controls="collapseTransaction">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-feather-alt"></i>
           <span>Transaction</span>
         </a>
         <div id="collapseTransaction" class="collapse" aria-labelledby="headingTransaction" data-parent="#accordionSidebar">
@@ -99,7 +99,7 @@ $page_content = "Beranda";
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInquiry" aria-expanded="true" aria-controls="collapseInquiry">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-book"></i>
           <span>Inquiry</span>
         </a>
         <div id="collapseInquiry" class="collapse" aria-labelledby="headingInquiry" data-parent="#accordionSidebar">
