@@ -173,6 +173,20 @@ class Maintenance
 
 	}
 
+	public function cek_role($user_id)
+	{
+
+		$stmt = $this->conn->prepare("SELECT role FROM users WHERE user_id = :user_id");
+		$stmt->execute(array(':user_id' => $user_id));
+
+		while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data = $dt['role'];
+		}
+
+		return $data;
+
+	}
+
 	public function get_pelanggan()
 	{
 		$data = array();

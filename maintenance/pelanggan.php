@@ -53,6 +53,10 @@ if (isset($_POST['save'])) {
     
     $errorMsg[] = "User belum dipilih !";
 
+  }elseif ($usr->cek_role($user) == 1) {
+    
+    $errorMsg[] = "User dengan role admin tidak bisa digunakan !";
+
   }elseif ($email == "") {
     
     $errorMsg[] = "Email tidak boleh kosong !";
@@ -378,7 +382,7 @@ if (isset($_GET['id'])) {
               <div class="modal-body">
 
                 <div class="form-group">
-                  <input type="text" class="form-control" name="nama" value="<?= isset($_POST['save']) ? $username:""; ?>" placeholder="Masukan username . .">
+                  <input type="text" class="form-control" name="nama" placeholder="Masukan username . .">
                 </div>
                 <div class="form-group">
                   <input type="text" class="form-control" name="alamat" placeholder="Masukan alamat . .">
