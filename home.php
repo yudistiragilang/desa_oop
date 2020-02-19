@@ -23,6 +23,7 @@ if ($db->is_logged_in() == "") {
 
 $userLogin = $db->user_online();
 $namaUser = $userLogin['nama'];
+$roleUser = $userLogin['role'];
 
 $page_content = "Beranda";
 
@@ -69,19 +70,26 @@ $page_content = "Beranda";
         MENU
       </div>
 
+      <?php if($roleUser == 1) :?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Maintenance</span>
         </a>
+
         <div id="collapseMaintenance" class="collapse" aria-labelledby="headingMaintenance" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Maintenance</h6>
-            <a class="collapse-item" href="maintenance/users.php">Admin</a>
+
+            <a class="collapse-item" href="maintenance/users.php">Users</a>
             <a class="collapse-item" href="maintenance/pelanggan.php">Pelanggan</a>
+            <a class="collapse-item" href="maintenance/service.php">Service</a>
+
           </div>
         </div>
+
       </li>
+      <?php endif; ?>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransaction" aria-expanded="true" aria-controls="collapseTransaction">
@@ -91,8 +99,13 @@ $page_content = "Beranda";
         <div id="collapseTransaction" class="collapse" aria-labelledby="headingTransaction" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Transaction:</h6>
+
             <a class="collapse-item" href="">Pesanan</a>
+
+            <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="">Service</a>
+            <?php endif; ?>
+
           </div>
         </div>
       </li>
@@ -105,10 +118,14 @@ $page_content = "Beranda";
         <div id="collapseInquiry" class="collapse" aria-labelledby="headingInquiry" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="">Admin</a>
+
+            <?php if($roleUser == 1) :?>
+            <a class="collapse-item" href="">Users</a>
             <a class="collapse-item" href="">Pelanggan</a>
+            <?php endif; ?>
             <a class="collapse-item" href="">Pesanan</a>
             <a class="collapse-item" href="">Service</a>
+
           </div>
         </div>
       </li>
@@ -158,6 +175,7 @@ $page_content = "Beranda";
             <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
           </div>
 
+          <?php if($roleUser == 1) :?>
           <div class="row">
 
             <div class="col-xl-3 col-md-6 mb-4">
@@ -177,7 +195,7 @@ $page_content = "Beranda";
             </div>
 
             <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-primary shadow h-100 py-2">
+              <div class="card border-left-danger shadow h-100 py-2">
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -191,6 +209,27 @@ $page_content = "Beranda";
                 </div>
               </div>
             </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Service</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service_master'); ?></div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <?php endif; ?>
+
+          <div class="row">
 
             <div class="col-xl-3 col-md-6 mb-4">
               <div class="card border-left-success shadow h-100 py-2">
@@ -223,8 +262,9 @@ $page_content = "Beranda";
                 </div>
               </div>
             </div>
-
+            
           </div>
+
         </div>
       </div>
       <!-- End of Main Content -->
