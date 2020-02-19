@@ -1,98 +1,230 @@
-/*
- Navicat Premium Data Transfer
+-- phpMyAdmin SQL Dump
+-- version 4.8.4
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 19 Feb 2020 pada 20.24
+-- Versi server: 10.1.37-MariaDB
+-- Versi PHP: 7.3.1
 
- Source Server         : Localhost_PHP_7_3
- Source Server Type    : MySQL
- Source Server Version : 100137
- Source Host           : localhost:3306
- Source Schema         : service
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
- Target Server Type    : MySQL
- Target Server Version : 100137
- File Encoding         : 65001
 
- Date: 19/02/2020 00:31:43
-*/
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+--
+-- Database: `service`
+--
 
--- ----------------------------
--- Table structure for admin
--- ----------------------------
-DROP TABLE IF EXISTS `admin`;
-CREATE TABLE `admin`  (
-  `id_admin` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `password` varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id_admin`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+-- --------------------------------------------------------
 
--- ----------------------------
--- Table structure for pelanggan
--- ----------------------------
-DROP TABLE IF EXISTS `pelanggan`;
-CREATE TABLE `pelanggan`  (
-  `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `password` varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `alamat` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
-  `no_telepon` varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id_pelanggan`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+--
+-- Struktur dari tabel `pelanggan`
+--
 
--- ----------------------------
--- Table structure for pemesanan
--- ----------------------------
-DROP TABLE IF EXISTS `pemesanan`;
-CREATE TABLE `pemesanan`  (
-  `id_pesan` int(11) NOT NULL AUTO_INCREMENT,
-  `Nama` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `no_telepon` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `alamat` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `jenis_service` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `rincian_service` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id_pesan`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+CREATE TABLE `pelanggan` (
+  `id_pelanggan` int(11) NOT NULL,
+  `nama` varchar(100) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `alamat` text,
+  `no_telepon` varchar(15) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `foto` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- ----------------------------
--- Table structure for service
--- ----------------------------
-DROP TABLE IF EXISTS `service`;
-CREATE TABLE `service`  (
-  `id_service` int(11) NOT NULL AUTO_INCREMENT,
-  `id_pesan` int(11) NULL DEFAULT NULL,
-  `Nama` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `no_telepon` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `alamat` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `jenis_service` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `rincian_service` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id_service`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+--
+-- Dumping data untuk tabel `pelanggan`
+--
 
--- ----------------------------
--- Table structure for users
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `password` varchar(60) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `real_name` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `role` int(11) NOT NULL,
-  `phone` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `email` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `last_visit` datetime(0) NULL DEFAULT NULL,
-  `created_date` datetime(0) NULL DEFAULT NULL,
-  `inactive` tinyint(1) NULL DEFAULT NULL,
-  `delete_mark` tinyint(1) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `email`, `alamat`, `no_telepon`, `user_id`, `foto`) VALUES
+(3, 'Yudistira Gilang Adisetyo', 'yudhistiragilang22@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '085647247592', 6, NULL),
+(5, 'Tyas Ayu Nanda Pertiwi', 'gilacoc1122@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '081226558445', 8, NULL),
+(6, 'Yayas', 'gilacoc1122@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '081226558445', 9, NULL),
+(7, 'cek cek', 'gilacoc1122@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '085647247592', 11, NULL);
 
--- ----------------------------
--- Records of users
--- ----------------------------
-INSERT INTO `users` VALUES (1, 'gilang', '$2y$10$r6H9O6AitxDrAJOCYAYxiORJeL59kWF1Rb9pLYGLH1oZ.qpXwVpFi', 'Gilang tes', 0, '147', 'yudhistiragilang1122@gmail.com', '2020-02-19 00:18:01', '2020-02-06 10:01:10', 0, 0);
-INSERT INTO `users` VALUES (2, 'tes', '$2y$10$jLpKdMScf44AHoYM17cnWeM6JwsASH72MYuJ8zxzSth/.BwAfiU3W', 'tes', 0, '111', 'tes@tes.id', '2020-02-06 10:21:49', '2020-02-06 10:21:42', 0, 0);
+-- --------------------------------------------------------
 
-SET FOREIGN_KEY_CHECKS = 1;
+--
+-- Struktur dari tabel `pemesanan`
+--
+
+CREATE TABLE `pemesanan` (
+  `id_pesan` int(11) NOT NULL,
+  `id_pelanggan` int(11) DEFAULT NULL,
+  `service_id` int(11) DEFAULT NULL,
+  `memo` varchar(100) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
+  `approve_by` int(11) DEFAULT NULL,
+  `approve_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `service`
+--
+
+CREATE TABLE `service` (
+  `id_service` int(11) NOT NULL,
+  `id_pesan` int(11) DEFAULT NULL,
+  `id_pelanggan` int(11) DEFAULT NULL,
+  `service_id` int(11) DEFAULT NULL,
+  `memo` varchar(100) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `status` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `service_master`
+--
+
+CREATE TABLE `service_master` (
+  `service_id` int(11) NOT NULL,
+  `kode_service` varchar(5) DEFAULT NULL,
+  `description` varchar(50) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `inactive` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `last_visit` datetime DEFAULT NULL,
+  `created_date` datetime DEFAULT NULL,
+  `inactive` tinyint(1) DEFAULT NULL,
+  `role` tinyint(1) DEFAULT NULL,
+  `available` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data untuk tabel `users`
+--
+
+INSERT INTO `users` (`user_id`, `username`, `password`, `last_visit`, `created_date`, `inactive`, `role`, `available`) VALUES
+(6, 'gilang.adisetyo', '$2y$10$dFrJ07tWIQoIC7y0pqxB8eVLAJUWyIrNiVybM3NXQdmDJWNDw3Mmy', '2020-02-20 01:40:22', '2020-02-19 23:43:25', 0, 1, 0),
+(8, 'yayo', '$2y$10$98czJ8DFnrEOehwn0YDLYOxGjK6JrakV8svBlmLSU3HnOOnWHOnL.', NULL, '2020-02-20 01:20:42', 0, 2, 0),
+(9, 'yess', '$2y$10$.gOy0wogNSPKvWjCGEbHteD30U83ubXlrymQoJhyvIepnFRNiJ1c2', NULL, '2020-02-20 01:24:27', 0, 2, 0),
+(11, 'ceks', '$2y$10$HGW5aieqJLbJvgCk.BX4deSFdLXunJpL8VnG4rw4yuw7cQad9m5l2', NULL, '2020-02-20 01:40:01', 0, 2, 0);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indeks untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  ADD PRIMARY KEY (`id_pelanggan`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indeks untuk tabel `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  ADD PRIMARY KEY (`id_pesan`),
+  ADD KEY `id_pelanggan` (`id_pelanggan`),
+  ADD KEY `service_id` (`service_id`);
+
+--
+-- Indeks untuk tabel `service`
+--
+ALTER TABLE `service`
+  ADD PRIMARY KEY (`id_service`),
+  ADD KEY `id_pesan` (`id_pesan`),
+  ADD KEY `id_pelanggan` (`id_pelanggan`),
+  ADD KEY `service_id` (`service_id`);
+
+--
+-- Indeks untuk tabel `service_master`
+--
+ALTER TABLE `service_master`
+  ADD PRIMARY KEY (`service_id`);
+
+--
+-- Indeks untuk tabel `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`) USING BTREE;
+
+--
+-- AUTO_INCREMENT untuk tabel yang dibuang
+--
+
+--
+-- AUTO_INCREMENT untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT untuk tabel `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `service`
+--
+ALTER TABLE `service`
+  MODIFY `id_service` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `service_master`
+--
+ALTER TABLE `service_master`
+  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+--
+
+--
+-- Ketidakleluasaan untuk tabel `pelanggan`
+--
+ALTER TABLE `pelanggan`
+  ADD CONSTRAINT `pelanggan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Ketidakleluasaan untuk tabel `pemesanan`
+--
+ALTER TABLE `pemesanan`
+  ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`),
+  ADD CONSTRAINT `pemesanan_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service_master` (`service_id`);
+
+--
+-- Ketidakleluasaan untuk tabel `service`
+--
+ALTER TABLE `service`
+  ADD CONSTRAINT `service_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service_master` (`service_id`),
+  ADD CONSTRAINT `service_ibfk_2` FOREIGN KEY (`id_pesan`) REFERENCES `pemesanan` (`id_pesan`),
+  ADD CONSTRAINT `service_ibfk_3` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
