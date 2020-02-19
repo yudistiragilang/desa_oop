@@ -92,18 +92,18 @@
 
 						$_SESSION['user_session'] = $userRow->user_id;
 
-						// $this->conn->beginTransaction();
+						$this->conn->beginTransaction();
 
 						$stmt = $this->conn->prepare("UPDATE users SET last_visit = :last_visit WHERE user_id = :user_id");
 						$stmt->execute(array(':user_id' => $userRow->user_id, ':last_visit' => $this->time));
 						
-						// $this->conn->commit();
+						$this->conn->commit();
 
 						return TRUE;
 					
 					}else{
 
-						// $this->conn->rollback();
+						$this->conn->rollback();
 						return FALSE;
 					
 					}

@@ -187,7 +187,7 @@ $page_content = "Beranda";
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('users'); ?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                      <i class="fas fa-key fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ $page_content = "Beranda";
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service_master'); ?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-users fa-2x text-gray-300"></i>
+                      <i class="fab fa-servicestack fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -240,7 +240,7 @@ $page_content = "Beranda";
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('pemesanan'); ?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      <i class="fas fa-book-open fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
@@ -256,7 +256,7 @@ $page_content = "Beranda";
                       <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service'); ?></div>
                     </div>
                     <div class="col-auto">
-                      <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      <i class="fas fa-toolbox fa-2x text-gray-300"></i>
                     </div>
                   </div>
                 </div>
