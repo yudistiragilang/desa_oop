@@ -155,6 +155,41 @@ $page_content = "Maintenance Pelanggan";
                 <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
               </div>
 
+              <div class="mb-2">
+                <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#addModal"">
+                  <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span class="text">Add</span>
+                </button>
+              </div>
+
+              <?php
+
+                if (isset($errorMsg)) {
+
+                  for ($i=0; $i < count($errorMsg) ; $i++) { 
+                    ?>
+
+                    <div class="alert alert-danger">
+                      <?= $errorMsg[$i]; ?>
+                    </div>
+
+                    <?php
+                  }
+                
+                }
+
+                if (isset($successMsg)) {
+                  ?>
+                    <div class="alert alert-success">
+                      <?= $successMsg; ?>
+                    </div>
+                  <?php
+                }
+
+              ?>
+
               <div class="card">
                 <div class="card-body">
                   <div class="table-responsive">
@@ -182,7 +217,12 @@ $page_content = "Maintenance Pelanggan";
                           <td><?php echo $dt['alamat']; ?></td>
                           <td><?php echo $dt['no_telepon']; ?></td>
                           <td>
-                            Edit || Delete 
+                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_pelanggan'];?>">
+                              <i class="fas fa-edit"></i>
+                            </a>
+                            <a onclick="return hapus()" href="users.php?id=<?= $dt['id_pelanggan'];?>" class="btn btn-danger btn-circle">
+                              <i class="fas fa-trash"></i>
+                            </a>
                           </td>
                         </tr>
 
@@ -232,6 +272,48 @@ $page_content = "Maintenance Pelanggan";
           </div>
         </div>
       </div>
+      <!-- Logout Modal-->
+
+      <!-- Add Modal-->
+      <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="Modaladd" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+
+          <form action="" method="POST">
+            <div class="modal-content">
+                
+              <div class="modal-header">
+                <h5 class="modal-title" id="Modaladd">Tambah Data Pelanggan</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="username" value="<?= isset($_POST['save']) ? $username:""; ?>" placeholder="Masukan username. .">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password" placeholder="Masukan password. .">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="password1" placeholder="Ulangi password. .">
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input type="submit" name="save" class="btn btn-primary" value="Simpan">
+              </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <!-- Add Modal-->
+
 
       <script src="../assets/vendor/jquery/jquery.min.js"></script>
       <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
