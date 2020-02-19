@@ -271,7 +271,7 @@ if (isset($_GET['id'])) {
                         ?>
 
                         <?php foreach ($usr->get_data('admin') as $dt) : ?>
-
+                        <?php $idAdmin = $dt['id_admin']; ?>
                         <tr>
                           <td><?= $no++; ?></td>
                           <td><?php echo $dt['username']; ?></td>
@@ -374,7 +374,8 @@ if (isset($_GET['id'])) {
       <!-- Add Modal-->
 
       <!-- Edit Modal-->
-      <div class="modal fade" id="editModal<?= $dt['id_admin'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
+      <?php foreach ($usr->get_data('admin') as $edit) : ?>
+      <div class="modal fade" id="editModal<?= $edit['id_admin'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
         <div class="modal-dialog" role="document">
 
           <form action="" method="POST">
@@ -389,10 +390,7 @@ if (isset($_GET['id'])) {
 
               <div class="modal-body">
 
-                <?php
-                  // get data by id
-                  $edit = $usr->get_data_admin_by_id($dt['id_admin']);
-                ?>
+                
 
                 <div class="form-group">
                   <input type="text" class="form-control" name="username" value="<?= $edit['username']; ?>" placeholder="Masukan username. .">
@@ -400,6 +398,7 @@ if (isset($_GET['id'])) {
                 <div class="form-group">
                   <input type="text" class="form-control" name="password" value="<?= $edit['password']; ?>" placeholder="Masukan password. .">
                 </div>
+
 
               </div>
 
@@ -413,6 +412,7 @@ if (isset($_GET['id'])) {
 
         </div>
       </div>
+      <?php endforeach; ?>
       <!-- Edit Modal-->
 
 
