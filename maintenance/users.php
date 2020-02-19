@@ -308,6 +308,7 @@ if (isset($_GET['id'])) {
                           <th>Username</th>
                           <th>Available</th>
                           <th>Inactive</th>
+                          <th>Role</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -323,6 +324,7 @@ if (isset($_GET['id'])) {
                           <td><?php echo $dt['username']; ?></td>
                           <td><?php echo $dt['available'] == 1 ? "Yes":"No" ; ?></td>
                           <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
+                          <td><?php echo $dt['role'] == 1 ? "Admin":"Pelanggan" ; ?></td>
                           <td>
                             <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['user_id'];?>">
                               <i class="fas fa-edit"></i>
