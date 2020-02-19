@@ -44,14 +44,14 @@ class Maintenance
 		return $data;
 	}
 
-	public function save_admin($username, $password)
+	public function save_users($username, $password)
 	{
 
 		try{
 
 			$newPassword = password_hash($password, PASSWORD_DEFAULT);
 
-			$stmt = $this->conn->prepare("INSERT INTO admin(username, password) VALUES (:username, :password)");
+			$stmt = $this->conn->prepare("INSERT INTO users(username, password) VALUES (:username, :password)");
 			$stmt->bindParam(":username", $username);
 			$stmt->bindParam(":password", $newPassword);
 
@@ -70,10 +70,10 @@ class Maintenance
 
 	}
 
-	public function cek_username_admin($username)
+	public function cek_username($username)
 	{
 
-		$stmt = $this->conn->prepare("SELECT username FROM admin WHERE username = :username");
+		$stmt = $this->conn->prepare("SELECT username FROM users WHERE username = :username");
 		$stmt->execute(array(':username' => $username));
 
 		if ($stmt->rowCount() > 0) {
@@ -84,24 +84,24 @@ class Maintenance
 
 	}
 
-	public function update_admin($idAdmin, $username, $password = "")
+	public function update_users($idAdmin, $username, $password = "")
 	{
 
 		try{
 
 			$passBaru = password_hash($password, PASSWORD_DEFAULT);
 
-			$sql ="UPDATE admin SET username = :username";
+			$sql ="UPDATE users SET username = :username";
 
 			if ($password != "") {
 				$sql .= " ,password = :password";
 			}
 
-			$sql .=" WHERE id_admin = :id_admin";
+			$sql .=" WHERE user_id = :user_id";
 
 
 			$stmt = $this->conn->prepare($sql);			
-			$stmt->bindParam(':id_admin',$idAdmin);
+			$stmt->bindParam(':user_id',$idAdmin);
 			$stmt->bindParam(':username',$username);
 
 			if ($password !="") {
@@ -124,13 +124,13 @@ class Maintenance
 
 	}
 
-	public function delete_admin($idAdmin)
+	public function delete_users($idAdmin)
 	{
 
 		try {
 
-		    $stmt_delete = $this->conn->prepare('DELETE FROM admin WHERE id_admin =:id_admin');
-		    $stmt_delete->bindParam(":id_admin", $idAdmin);
+		    $stmt_delete = $this->conn->prepare('DELETE FROM users WHERE user_id =:user_id');
+		    $stmt_delete->bindParam(":user_id", $idAdmin);
 		      
 		    $this->conn->beginTransaction();
 		    $stmt_delete->execute();

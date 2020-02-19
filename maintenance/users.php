@@ -12,7 +12,7 @@ session_start();
 require_once '../database/Login.php';
 require_once 'Maintenance.php';
 
-$page_content = "Maintenance Admin";
+$page_content = "Maintenance Users";
 
 $db = new Login();
 $usr = new Maintenance();
@@ -24,7 +24,8 @@ if ($db->is_logged_in() == "") {
 }
 
 $userLogin = $db->user_online();
-$namaUser = $userLogin['real_name'];
+$namaUser = $userLogin['nama'];
+$roleUser = $userLogin['role'];
 
 if (isset($_POST['save'])) {
   
@@ -53,10 +54,10 @@ if (isset($_POST['save'])) {
   }else{
 
 
-    $cekUsername = $usr->cek_username_admin($username);
+    $cekUsername = $usr->cek_username($username);
     if($cekUsername == TRUE){
 
-      $return = $usr->save_admin($username, $password);
+      $return = $usr->save_users($username, $password);
 
       if ($return == TRUE) {
 
@@ -92,7 +93,7 @@ if (isset($_POST['save-update'])) {
     $errorMsg[] = "Password tidak sama !";
   }else{
 
-    $res = $usr->update_admin($id, $username, $password);
+    $res = $usr->update_users($id, $username, $password);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
     }else{
@@ -106,7 +107,7 @@ if (isset($_POST['save-update'])) {
 
 if (isset($_GET['id'])) {
   
-  $res = $usr->delete_admin($_GET['id']);
+  $res = $usr->delete_users($_GET['id']);
 
   if ($res == TRUE) {
     $successMsg = "Data berhasil dihapus !";
@@ -159,19 +160,26 @@ if (isset($_GET['id'])) {
         MENU
       </div>
 
+      <?php if($roleUser == 1) :?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance">
           <i class="fas fa-fw fa-wrench"></i>
           <span>Maintenance</span>
         </a>
+
         <div id="collapseMaintenance" class="collapse" aria-labelledby="headingMaintenance" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Maintenance</h6>
-            <a class="collapse-item" href="../maintenance/users.php">Admin</a>
+
+            <a class="collapse-item" href="../maintenance/users.php">Users</a>
             <a class="collapse-item" href="../maintenance/pelanggan.php">Pelanggan</a>
+            <a class="collapse-item" href="../maintenance/service.php">Service</a>
+
           </div>
         </div>
+
       </li>
+      <?php endif; ?>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransaction" aria-expanded="true" aria-controls="collapseTransaction">
@@ -181,8 +189,13 @@ if (isset($_GET['id'])) {
         <div id="collapseTransaction" class="collapse" aria-labelledby="headingTransaction" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Transaction:</h6>
+
             <a class="collapse-item" href="">Pesanan</a>
+
+            <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="">Service</a>
+            <?php endif; ?>
+
           </div>
         </div>
       </li>
@@ -195,10 +208,14 @@ if (isset($_GET['id'])) {
         <div id="collapseInquiry" class="collapse" aria-labelledby="headingInquiry" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="">Admin</a>
+
+            <?php if($roleUser == 1) :?>
+            <a class="collapse-item" href="">Users</a>
             <a class="collapse-item" href="">Pelanggan</a>
+            <?php endif; ?>
             <a class="collapse-item" href="">Pesanan</a>
             <a class="collapse-item" href="">Service</a>
+
           </div>
         </div>
       </li>
@@ -289,6 +306,7 @@ if (isset($_GET['id'])) {
                         <tr>
                           <th>No</th>
                           <th>Username</th>
+                          <th>Inactive</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -297,16 +315,17 @@ if (isset($_GET['id'])) {
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_data('admin') as $dt) : ?>
-                        <?php $idAdmin = $dt['id_admin']; ?>
+                        <?php foreach ($usr->get_data('users') as $dt) : ?>
+                        <?php $idAdmin = $dt['user_id']; ?>
                         <tr>
                           <td><?= $no++; ?></td>
                           <td><?php echo $dt['username']; ?></td>
+                          <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
                           <td>
-                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_admin'];?>">
+                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['user_id'];?>">
                               <i class="fas fa-edit"></i>
                             </a>
-                            <a onclick="return hapus()" href="users.php?id=<?= $dt['id_admin'];?>" class="btn btn-danger btn-circle">
+                            <a onclick="return hapus()" href="users.php?id=<?= $dt['user_id'];?>" class="btn btn-danger btn-circle">
                               <i class="fas fa-trash"></i>
                             </a>
                           </td>
@@ -401,8 +420,8 @@ if (isset($_GET['id'])) {
       <!-- Add Modal-->
 
       <!-- Edit Modal-->
-      <?php foreach ($usr->get_data('admin') as $edit) : ?>
-      <div class="modal fade" id="editModal<?= $edit['id_admin'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
+      <?php foreach ($usr->get_data('users') as $edit) : ?>
+      <div class="modal fade" id="editModal<?= $edit['user_id'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
         <div class="modal-dialog" role="document">
 
           <form action="" method="POST">
@@ -419,7 +438,7 @@ if (isset($_GET['id'])) {
 
                 <h6 class="mb-2"><b style="color: red;">Jika tidak mau berubah password kosongkan saja</b></h6>
 
-                <input type="text" hidden="hidden" name="idAdmin" value="<?= $edit['id_admin']; ?>">
+                <input type="text" hidden="hidden" name="idAdmin" value="<?= $edit['user_id']; ?>">
                 <div class="form-group">
                   <input type="text" class="form-control" name="username" value="<?= $edit['username']; ?>" placeholder="Masukan username. .">
                 </div>
