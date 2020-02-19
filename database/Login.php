@@ -43,16 +43,18 @@
 				$newPassword = password_hash($password, PASSWORD_DEFAULT);
 				$inactive = 0;
 				$role = 2;
+				$available = 0;
 
 				$this->conn->beginTransaction();
 
-				$stmt = $this->conn->prepare("INSERT INTO users(username, password, created_date, inactive, role) VALUES (:username, :password, :created_date, :inactive, :role)");
+				$stmt = $this->conn->prepare("INSERT INTO users(username, password, created_date, inactive, role, available) VALUES (:username, :password, :created_date, :inactive, :role, :available)");
 
 				$stmt->bindParam(":username", $username);
 				$stmt->bindParam(":password", $newPassword);
 				$stmt->bindParam(":created_date", $this->time);
 				$stmt->bindParam(":inactive", $inactive);
 				$stmt->bindParam(":role", $role);
+				$stmt->bindParam(":available", $available);
 
 				$stmt->execute();
 				$idUser = $this->conn->lastInsertId();

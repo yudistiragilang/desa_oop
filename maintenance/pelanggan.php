@@ -12,6 +12,8 @@ session_start();
 require_once '../database/Login.php';
 require_once 'Maintenance.php';
 
+$page_content = "Maintenance Pelanggan";
+
 $db = new Login();
 $usr = new Maintenance();
 
@@ -22,9 +24,74 @@ if ($db->is_logged_in() == "") {
 }
 
 $userLogin = $db->user_online();
-$namaUser = $userLogin['real_name'];
+$namaUser = $userLogin['nama'];
+$roleUser = $userLogin['role'];
 
-$page_content = "Maintenance Pelanggan";
+if (isset($_POST['save'])) {
+  
+  $errorMsg = array();
+
+  $nama = strip_tags($_POST['nama']);
+  $alamat = strip_tags($_POST['alamat']);
+  $telepon = strip_tags($_POST['telepon']);
+  $email = strip_tags($_POST['email']);
+  $user = strip_tags($_POST['user']);
+
+  if ($nama == "") {
+
+    $errorMsg[] = "Nama tidak boleh kosong !";
+
+  }elseif ($alamat == "") {
+
+    $errorMsg[] = "Alamat tidak boleh kosong !";
+
+  }elseif ($telepon == ""){
+
+    $errorMsg[] = "Telepon tidak boleh kosong !";
+
+  }elseif ($user == "") {
+    
+    $errorMsg[] = "User belum dipilih !";
+
+  }elseif ($email == "") {
+    
+    $errorMsg[] = "Email tidak boleh kosong !";
+
+  }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+
+    $errorMessage[] = "Email tidak valid !";
+    $error = 1;
+
+  }else{
+
+    $return = $usr->save_pelanggan($nama, $email, $alamat, $telepon, $user);
+
+    if ($return == TRUE) {
+
+      $successMsg = "Data berhasil disimpan !";
+      $username="";
+
+    }else{
+
+      $errorMsg[] = "Gagal simpan data !";
+
+    }
+
+  }
+
+}
+
+if (isset($_GET['id'])) {
+  
+  $res = $usr->delete_pelanggan($_GET['id']);
+
+  if ($res == TRUE) {
+    $successMsg = "Data berhasil dihapus !";
+  }else{
+    $errorMsg[] = "Gagal hapus data !";
+  }
+
+}
 
 ?>
 
@@ -69,46 +136,62 @@ $page_content = "Maintenance Pelanggan";
         MENU
       </div>
 
+      <?php if($roleUser == 1) :?>
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaintenance" aria-expanded="true" aria-controls="collapseMaintenance">
-          <i class="fas fa-fw fa-users"></i>
+          <i class="fas fa-fw fa-wrench"></i>
           <span>Maintenance</span>
         </a>
+
         <div id="collapseMaintenance" class="collapse" aria-labelledby="headingMaintenance" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Maintenance</h6>
-            <a class="collapse-item" href="../maintenance/users.php">Admin</a>
+
+            <a class="collapse-item" href="../maintenance/users.php">Users</a>
             <a class="collapse-item" href="../maintenance/pelanggan.php">Pelanggan</a>
+            <a class="collapse-item" href="../maintenance/service.php">Service</a>
+
           </div>
         </div>
+
       </li>
+      <?php endif; ?>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTransaction" aria-expanded="true" aria-controls="collapseTransaction">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-feather-alt"></i>
           <span>Transaction</span>
         </a>
         <div id="collapseTransaction" class="collapse" aria-labelledby="headingTransaction" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Transaction:</h6>
+
             <a class="collapse-item" href="">Pesanan</a>
+
+            <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="">Service</a>
+            <?php endif; ?>
+
           </div>
         </div>
       </li>
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseInquiry" aria-expanded="true" aria-controls="collapseInquiry">
-          <i class="fas fa-fw fa-wrench"></i>
+          <i class="fas fa-fw fa-book"></i>
           <span>Inquiry</span>
         </a>
         <div id="collapseInquiry" class="collapse" aria-labelledby="headingInquiry" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="">Admin</a>
+
+            <?php if($roleUser == 1) :?>
+            <a class="collapse-item" href="">Users</a>
             <a class="collapse-item" href="">Pelanggan</a>
+            <?php endif; ?>
             <a class="collapse-item" href="">Pesanan</a>
             <a class="collapse-item" href="">Service</a>
+
           </div>
         </div>
       </li>
@@ -198,9 +281,11 @@ $page_content = "Maintenance Pelanggan";
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Username</th>
+                          <th>Nama</th>
                           <th>Alamat</th>
                           <th>Telepon</th>
+                          <th>Email</th>
+                          <th>Username</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -209,18 +294,20 @@ $page_content = "Maintenance Pelanggan";
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_data('pelanggan') as $dt) : ?>
+                        <?php foreach ($usr->get_pelanggan() as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
-                          <td><?php echo $dt['username']; ?></td>
+                          <td><?php echo $dt['nama']; ?></td>
                           <td><?php echo $dt['alamat']; ?></td>
                           <td><?php echo $dt['no_telepon']; ?></td>
+                          <td><?php echo $dt['email']; ?></td>
+                          <td><?php echo $dt['username']; ?></td>
                           <td>
                             <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_pelanggan'];?>">
                               <i class="fas fa-edit"></i>
                             </a>
-                            <a onclick="return hapus()" href="users.php?id=<?= $dt['id_pelanggan'];?>" class="btn btn-danger btn-circle">
+                            <a onclick="return hapus()" href="pelanggan.php?id=<?= $dt['id_pelanggan'];?>" class="btn btn-danger btn-circle">
                               <i class="fas fa-trash"></i>
                             </a>
                           </td>
@@ -291,13 +378,24 @@ $page_content = "Maintenance Pelanggan";
               <div class="modal-body">
 
                 <div class="form-group">
-                  <input type="text" class="form-control" name="username" value="<?= isset($_POST['save']) ? $username:""; ?>" placeholder="Masukan username. .">
+                  <input type="text" class="form-control" name="nama" value="<?= isset($_POST['save']) ? $username:""; ?>" placeholder="Masukan username . .">
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control" name="password" placeholder="Masukan password. .">
+                  <input type="text" class="form-control" name="alamat" placeholder="Masukan alamat . .">
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control" name="password1" placeholder="Ulangi password. .">
+                  <input type="text" class="form-control" name="telepon" placeholder="Masukan telepon . .">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="email" placeholder="Masukan email . .">
+                </div>
+                <div class="form-group">
+                  <select class="form-control" name="user">
+                    <option value=""> Pilih user </option>
+                    <?php foreach ($usr->get_data('users', true) as $dt) : ?>
+                    <option value="<?= $dt['user_id'] ;?>"> <?= $dt['username'] ;?> </option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
 
               </div>
@@ -322,6 +420,13 @@ $page_content = "Maintenance Pelanggan";
       <script src="../assets/vendor/datatables/jquery.dataTables.min.js"></script>
       <script src="../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
       <script src="../assets/js/demo/datatables-demo.js"></script>
+      <script type="text/javascript" language="JavaScript">
+        function hapus(){
+          takon = confirm("Anda Yakin Akan Menghapus Data ?");
+            if (takon == true) return true;
+            else return false;
+            }
+      </script>
 
     </body>
 
