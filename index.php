@@ -21,7 +21,6 @@ if ($login->is_logged_in() != "") {
 if (isset($_POST['btn-login'])) {
 
   $username = strip_tags($_POST['txt_username_email']);
-  $email = strip_tags($_POST['txt_username_email']);
   $password = strip_tags($_POST['password']);
 
   $error = 0;
@@ -41,7 +40,7 @@ if (isset($_POST['btn-login'])) {
 
   if ($error == 0) {
 
-    if ($login->do_login($username, $email, $password)) {
+    if ($login->do_login($username, $password)) {
 
       $login->redirect('home.php');
       

@@ -35,59 +35,75 @@
 		
 		}
 
-		public function register($username, $password, $realName, $phone, $email)
+		public function register($username, $password, $realName, $phone, $email, $alamat)
 		{
 			
 			try{
 				
 				$newPassword = password_hash($password, PASSWORD_DEFAULT);
 				$inactive = 0;
-				$delete_mark = 0;
+				$role = 2;
 
-				$stmt = $this->conn->prepare("INSERT INTO users(user_id, password, real_name, phone, email, created_date, inactive, delete_mark) VALUES (:username, :password, :real_name, :phone, :email, :created_date, :inactive, :delete_mark)");
+				$this->conn->beginTransaction();
+
+				$stmt = $this->conn->prepare("INSERT INTO users(username, password, created_date, inactive, role) VALUES (:username, :password, :created_date, :inactive, :role)");
 
 				$stmt->bindParam(":username", $username);
 				$stmt->bindParam(":password", $newPassword);
-				$stmt->bindParam(":real_name", $realName);
-				$stmt->bindParam(":phone", $phone);
-				$stmt->bindParam(":email", $email);
 				$stmt->bindParam(":created_date", $this->time);
 				$stmt->bindParam(":inactive", $inactive);
-				$stmt->bindParam(":delete_mark", $delete_mark);
+				$stmt->bindParam(":role", $role);
 
 				$stmt->execute();
+				$idUser = $this->conn->lastInsertId();
+
+				$stmtPelanggan = $this->conn->prepare("INSERT INTO pelanggan(nama, email, alamat, no_telepon, user_id) VALUES (:nama, :email, :alamat, :no_telepon, :user_id)");
+				$stmtPelanggan->bindParam(":nama", $realName);
+				$stmtPelanggan->bindParam(":email", $email);
+				$stmtPelanggan->bindParam(":alamat", $alamat);
+				$stmtPelanggan->bindParam(":no_telepon", $phone);
+				$stmtPelanggan->bindParam(":user_id", $idUser);
+				$stmtPelanggan->execute();
+
+				$this->conn->commit();
 				return $stmt;
 			
 			}catch(PDOException $e){
 
+				$this->conn->rollback();
 				echo $e->getMessage();
 
 			}
 		
 		}
 
-		public function do_login($username, $email, $password)
+		public function do_login($username, $password)
 		{
 			
 			try{
 				
-				$stmt = $this->conn->prepare("SELECT * FROM users WHERE user_id = :username OR email = :email");
-				$stmt->execute(array(":username" => $username, ":email" => $email));
+				$stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
+				$stmt->execute(array(":username" => $username));
 				$userRow = $stmt->fetch(PDO::FETCH_OBJ);
 
 				if ($stmt->rowCount() == 1) {
 					
 					if (password_verify($password, $userRow->password)) {
 
-						$_SESSION['user_session'] = $userRow->id;
+						$_SESSION['user_session'] = $userRow->user_id;
 
-						$stmt = $this->conn->prepare("UPDATE users SET last_visit = :last_visit WHERE id = :id");
-						$stmt->execute(array(':id' => $userRow->id, ':last_visit' => $this->time));
+						// $this->conn->beginTransaction();
+
+						$stmt = $this->conn->prepare("UPDATE users SET last_visit = :last_visit WHERE user_id = :user_id");
+						$stmt->execute(array(':user_id' => $userRow->user_id, ':last_visit' => $this->time));
 						
+						// $this->conn->commit();
+
 						return TRUE;
 					
 					}else{
 
+						// $this->conn->rollback();
 						return FALSE;
 					
 					}
@@ -131,8 +147,8 @@
 
 		public function user_online()
 		{
-			$stmt = $this->conn->prepare("SELECT * FROM users WHERE id = :id");
-			$stmt->execute(array(":id" => $_SESSION['user_session']));
+			$stmt = $this->conn->prepare("SELECT * FROM users JOIN pelanggan ON pelanggan.user_id=users.user_id WHERE users.user_id = :user_id");
+			$stmt->execute(array(":user_id" => $_SESSION['user_session']));
 			$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $userRow;
 		}

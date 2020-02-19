@@ -28,6 +28,7 @@ if (isset($_POST['btn-register'])) {
 	$dbname = strip_tags($_POST['username']);
 	$email = strip_tags($_POST['email']);
 	$phone = strip_tags($_POST['phone']);
+	$alamat = strip_tags($_POST['alamat']);
 	$password = strip_tags($_POST['password']);
 	$rePassword = strip_tags($_POST['repassword']);
 
@@ -36,6 +37,11 @@ if (isset($_POST['btn-register'])) {
 		$errorMessage[] = "Nama tidak boleh kosong !";
 		$error = 1;
 	
+	}elseif ($alamat == "") {
+
+		$errorMessage[] = "Alamat tidak boleh kosong !";
+		$error = 1;
+
 	}else if ($dbname == "") {
 		
 		$errorMessage[] = "Username tidak boleh kosong !";
@@ -75,18 +81,13 @@ if (isset($_POST['btn-register'])) {
 
 		try{
 
-			$stmt = $db->run_query("SELECT user_id, email FROM users WHERE user_id = :username OR email = :email");
-			$stmt->execute(array(':username' => $dbname, ':email' => $email));
+			$stmt = $db->run_query("SELECT username FROM users WHERE username = :username");
+			$stmt->execute(array(':username' => $dbname));
 			$row = $stmt->fetch(PDO::FETCH_OBJ);
 
-			if ($row->user_id == $dbname) {
+			if ($row->username == $dbname) {
 
 				$errorMessage[] = "Username tidak tersedia !";
-				$error = 1;
-				
-			}elseif ($row->email == $email) {
-
-				$errorMessage[] = "Email tidak tersedia !";
 				$error = 1;
 				
 			}
@@ -101,7 +102,7 @@ if (isset($_POST['btn-register'])) {
 
 	if($error == 0){
 
-		if ($db->register($dbname, $password, $fullname, $phone, $email)) {
+		if ($db->register($dbname, $password, $fullname, $phone, $email, $alamat)) {
 			
 			$db->redirect('index.php');
 
@@ -186,6 +187,10 @@ if (isset($_POST['btn-register'])) {
 
 								<div class="form-group">
 									<input type="text" class="form-control form-control-user" value="<?= isset($_POST['btn-register']) ? $_POST['phone']:""; ?>" name="phone" id="phone" placeholder="Phone Number">
+								</div>
+
+								<div class="form-group">
+									<input type="text" class="form-control form-control-user" value="<?= isset($_POST['btn-register']) ? $_POST['alamat']:""; ?>" name="alamat" id="alamat" placeholder="Alamat">
 								</div>
 
 								<div class="form-group row">

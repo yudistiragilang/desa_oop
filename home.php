@@ -22,7 +22,7 @@ if ($db->is_logged_in() == "") {
 }
 
 $userLogin = $db->user_online();
-$namaUser = $userLogin['real_name'];
+$namaUser = $userLogin['nama'];
 
 $page_content = "Beranda";
 
