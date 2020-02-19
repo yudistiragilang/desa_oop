@@ -84,25 +84,35 @@ class Maintenance
 
 	}
 
-	public function update_admin($username, $passBaru = "", $passLama = "")
+	public function update_admin($idAdmin, $username, $password = "")
 	{
 
 		try{
 
-			if ($passBaru !="") {
-				// cek pass lama dan generate password baru
-			}
+			$passBaru = password_hash($password, PASSWORD_DEFAULT);
 
 			$sql ="UPDATE admin SET username = :username";
 
-			if ($passBaru != "") {
+			if ($password != "") {
 				$sql .= " ,password = :password";
 			}
 
-			$sql .=" WHERE id = :id";
+			$sql .=" WHERE id_admin = :id_admin";
 
-			$stmt = $this->conn->prepare("UPDATE users SET last_visit = :last_visit WHERE id = :id");
-			$stmt->execute(array(':id' => $userRow->id, ':last_visit' => $this->time));
+
+			$stmt = $this->conn->prepare($sql);			
+			$stmt->bindParam(':id_admin',$idAdmin);
+			$stmt->bindParam(':username',$username);
+
+			if ($password !="") {
+				$stmt->bindParam(':password',$passBaru);
+			}
+
+			$this->conn->beginTransaction();
+			$stmt->execute();
+			$this->conn->commit();
+
+			return TRUE;
 
 		}catch(PDOException $e){
 

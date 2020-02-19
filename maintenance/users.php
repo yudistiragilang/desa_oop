@@ -92,7 +92,12 @@ if (isset($_POST['save-update'])) {
     $errorMsg[] = "Password tidak sama !";
   }else{
 
-    $successMsg = "Data berhasil diupdate !";
+    $res = $usr->update_admin($id, $username, $password);
+    if ($res == TRUE) {
+      $successMsg = "Data berhasil diupdate !";
+    }else{
+      $errorMsg[] = "Data gagal diupdate !";
+    }
 
   }
 
