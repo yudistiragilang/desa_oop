@@ -306,6 +306,7 @@ if (isset($_GET['id'])) {
                         <tr>
                           <th>No</th>
                           <th>Username</th>
+                          <th>Available</th>
                           <th>Inactive</th>
                           <th>Aksi</th>
                         </tr>
@@ -320,6 +321,7 @@ if (isset($_GET['id'])) {
                         <tr>
                           <td><?= $no++; ?></td>
                           <td><?php echo $dt['username']; ?></td>
+                          <td><?php echo $dt['available'] == 1 ? "Yes":"No" ; ?></td>
                           <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
                           <td>
                             <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['user_id'];?>">
@@ -387,7 +389,7 @@ if (isset($_GET['id'])) {
             <div class="modal-content">
                 
               <div class="modal-header">
-                <h5 class="modal-title" id="Modaladd">Tambah Data</h5>
+                <h5 class="modal-title" id="Modaladd">Tambah Data User</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
@@ -428,7 +430,7 @@ if (isset($_GET['id'])) {
             <div class="modal-content">
                 
               <div class="modal-header">
-                <h5 class="modal-title" id="Modaledit">Edit Data</h5>
+                <h5 class="modal-title" id="Modaledit">Edit Data User</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
