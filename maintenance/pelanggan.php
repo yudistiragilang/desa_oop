@@ -85,6 +85,51 @@ if (isset($_POST['save'])) {
 
 }
 
+if (isset($_POST['save-update'])) {
+
+  $errorMsg = array();
+
+  $id_pelanggan = strip_tags($_POST['id_pelanggan']);
+  $nama = strip_tags($_POST['nama']);
+  $alamat = strip_tags($_POST['alamat']);
+  $telepon = strip_tags($_POST['telepon']);
+  $email = strip_tags($_POST['email']);
+
+  if ($nama == "") {
+
+    $errorMsg[] = "Nama tidak boleh kosong !";
+
+  }elseif ($alamat == "") {
+
+    $errorMsg[] = "Alamat tidak boleh kosong !";
+
+  }elseif ($telepon == ""){
+
+    $errorMsg[] = "Telepon tidak boleh kosong !";
+
+  }elseif ($email == "") {
+    
+    $errorMsg[] = "Email tidak boleh kosong !";
+
+  }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+
+    $errorMessage[] = "Email tidak valid !";
+    $error = 1;
+
+  }else{
+
+    $res = $usr->update_pelanggan($id_pelanggan, $nama, $email, $alamat, $telepon);
+    if ($res == TRUE) {
+      $successMsg = "Data berhasil diupdate !";
+    }else{
+      $errorMsg[] = "Data gagal diupdate !";
+    }
+
+  }
+
+
+}
+
 if (isset($_GET['id'])) {
   
   $res = $usr->delete_pelanggan($_GET['id']);
@@ -415,6 +460,53 @@ if (isset($_GET['id'])) {
         </div>
       </div>
       <!-- Add Modal-->
+
+      <!-- Edit Modal-->
+      <?php foreach ($usr->get_pelanggan() as $edit) : ?>
+      <div class="modal fade" id="editModal<?= $edit['id_pelanggan'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+
+          <form action="" method="POST">
+            <div class="modal-content">
+                
+              <div class="modal-header">
+                <h5 class="modal-title" id="Modaledit">Edit Data Pelanggan</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+
+              <div class="modal-body">
+
+
+                <input type="text" hidden="hidden" name="id_pelanggan" value="<?= $edit['id_pelanggan']; ?>">
+                <div class="form-group">
+                  <input type="text" class="form-control" name="nama" value="<?= $edit['nama'] ;?>" placeholder="Masukan username . .">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="alamat" value="<?= $edit['alamat'] ;?>" placeholder="Masukan alamat . .">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="telepon" value="<?= $edit['no_telepon'] ;?>" placeholder="Masukan telepon . .">
+                </div>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="email" value="<?= $edit['email'] ;?>" placeholder="Masukan email . .">
+                </div>
+
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <input type="submit" name="save-update" class="btn btn-primary" value="Simpan">
+              </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <?php endforeach; ?>
+      <!-- Edit Modal-->
 
 
       <script src="../assets/vendor/jquery/jquery.min.js"></script>

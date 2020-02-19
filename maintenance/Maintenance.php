@@ -252,6 +252,36 @@ class Maintenance
 
 	}
 
+	public function update_pelanggan($idPelanggan, $nama, $email, $alamat, $telepon)
+	{
+
+		try{
+
+			$this->conn->beginTransaction();
+
+			$sql ="UPDATE pelanggan SET nama = :nama, email = :email, alamat = :alamat, no_telepon = :telepon WHERE id_pelanggan = :id_pelanggan";
+			$stmt = $this->conn->prepare($sql);	
+
+			$stmt->bindParam(':id_pelanggan', $idPelanggan);
+			$stmt->bindParam(':nama', $nama);
+			$stmt->bindParam(':email', $email);
+			$stmt->bindParam(':alamat', $alamat);
+			$stmt->bindParam(':telepon', $telepon);
+
+			$stmt->execute();
+			$this->conn->commit();
+
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+
+	}
 
 }
 
