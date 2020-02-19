@@ -44,15 +44,6 @@ class Maintenance
 		return $data;
 	}
 
-	public function get_data_admin_by_id($idAdmin)
-	{
-		
-		$stmt = $this->conn->prepare("SELECT * FROM admin WHERE id_admin = :id_admin");
-		$stmt->execute(array(":id_admin" => $idAdmin));
-		return $stmt->fetch(PDO::FETCH_ASSOC);
-		
-	}
-
 	public function save_admin($username, $password)
 	{
 
@@ -89,6 +80,36 @@ class Maintenance
 			return FALSE;
 		}else{
 			return TRUE;
+		}
+
+	}
+
+	public function update_admin($username, $passBaru = "", $passLama = "")
+	{
+
+		try{
+
+			if ($passBaru !="") {
+				// cek pass lama dan generate password baru
+			}
+
+			$sql ="UPDATE admin SET username = :username";
+
+			if ($passBaru != "") {
+				$sql .= " ,password = :password";
+			}
+
+			$sql .=" WHERE id = :id";
+
+			$stmt = $this->conn->prepare("UPDATE users SET last_visit = :last_visit WHERE id = :id");
+			$stmt->execute(array(':id' => $userRow->id, ':last_visit' => $this->time));
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
 		}
 
 	}

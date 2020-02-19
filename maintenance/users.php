@@ -77,6 +77,28 @@ if (isset($_POST['save'])) {
 
 }
 
+if (isset($_POST['save-update'])) {
+
+  $errorMsg = array();
+
+  $id = strip_tags($_POST['idAdmin']);
+  $username = strip_tags($_POST['username']);
+  $password = strip_tags($_POST['password']);
+  $rePassword = strip_tags($_POST['rePassword']);
+
+  if ($username == "") {
+    $errorMsg[] = "Username tidak boleh kosong !";
+  }elseif ($password !="" && $password != $rePassword) {
+    $errorMsg[] = "Password tidak sama !";
+  }else{
+
+    $successMsg = "Data berhasil diupdate !";
+
+  }
+
+
+}
+
 if (isset($_GET['id'])) {
   
   $res = $usr->delete_admin($_GET['id']);
@@ -390,13 +412,17 @@ if (isset($_GET['id'])) {
 
               <div class="modal-body">
 
-                
+                <h6 class="mb-2"><b style="color: red;">Jika tidak mau berubah password kosongkan saja</b></h6>
 
+                <input type="text" hidden="hidden" name="idAdmin" value="<?= $edit['id_admin']; ?>">
                 <div class="form-group">
                   <input type="text" class="form-control" name="username" value="<?= $edit['username']; ?>" placeholder="Masukan username. .">
                 </div>
                 <div class="form-group">
-                  <input type="text" class="form-control" name="password" value="<?= $edit['password']; ?>" placeholder="Masukan password. .">
+                  <input type="password" class="form-control" name="password" placeholder="Masukan password baru. .">
+                </div>
+                <div class="form-group">
+                  <input type="password" class="form-control" name="rePassword" placeholder="Masukan lagi password baru. .">
                 </div>
 
 
@@ -404,7 +430,7 @@ if (isset($_GET['id'])) {
 
               <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <input type="submit" name="save" class="btn btn-primary" value="Simpan">
+                <input type="submit" name="save-update" class="btn btn-primary" value="Simpan">
               </div>
 
             </div>
