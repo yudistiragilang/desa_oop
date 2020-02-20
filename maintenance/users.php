@@ -117,6 +117,22 @@ if (isset($_GET['id'])) {
 
 }
 
+if (isset($_GET['inactive_id'])) {
+
+  if ($_GET['value'] == 1) {
+    $res = $usr->update_active_inactive('users', 'user_id', $_GET['inactive_id'], 0);
+  }else{
+    $res = $usr->update_active_inactive('users', 'user_id', $_GET['inactive_id'], 1);
+  }
+  
+  if ($res == TRUE) {
+    $successMsg = "Status berhasil diubah !";
+  }else{
+    $errorMsg[] = "Status Gagal diubah !";
+  }
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -323,7 +339,21 @@ if (isset($_GET['id'])) {
                           <td><?= $no++; ?></td>
                           <td><?php echo $dt['username']; ?></td>
                           <td><?php echo $dt['available'] == 1 ? "Yes":"No" ; ?></td>
-                          <td><?php echo $dt['inactive'] == 1 ? "Yes":"No" ; ?></td>
+                          <td>
+                            <?php if($dt['inactive'] == 1){ ?>
+                                <a href="users.php?inactive_id=<?= $dt['user_id'];?>&value=1" class="btn btn-success btn-icon-split">
+                                  <span class="icon text-white-50"><i class="fas fa-check"></i></span>
+                                  <span class="text">Yes</span>
+                                </a>
+                            <?php }else{ ?>
+                                <a href="users.php?inactive_id=<?= $dt['user_id'];?>&value=0" class="btn btn-danger btn-icon-split">
+                                  <span class="icon text-white-50">
+                                    <i class="fas fa-times"></i>
+                                  </span>
+                                  <span class="text">No</span>
+                                </a>
+                            <?php } ?>
+                          </td>
                           <td><?php echo $dt['role'] == 1 ? "Admin":"Pelanggan" ; ?></td>
                           <td>
                             <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['user_id'];?>">

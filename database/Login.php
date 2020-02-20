@@ -84,8 +84,12 @@
 			
 			try{
 				
-				$stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username");
-				$stmt->execute(array(":username" => $username));
+				$inactive = 0;
+
+				$stmt = $this->conn->prepare("SELECT * FROM users WHERE username = :username AND inactive = :inactive");
+				$stmt->bindParam(':username', $username);
+				$stmt->bindParam(':inactive', $inactive);
+				$stmt->execute();
 				$userRow = $stmt->fetch(PDO::FETCH_OBJ);
 
 				if ($stmt->rowCount() == 1) {
