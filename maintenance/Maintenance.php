@@ -187,10 +187,19 @@ class Maintenance
 
 	}
 
-	public function get_pelanggan()
+	public function get_pelanggan($idUser = '')
 	{
+
 		$data = array();
-		$stmt = $this->conn->prepare("SELECT * FROM pelanggan LEFT JOIN users ON users.user_id=pelanggan.user_id");
+
+		$sql ="SELECT * FROM pelanggan LEFT JOIN users ON users.user_id=pelanggan.user_id";
+		if($idUser !=''){
+
+			$sql .=" WHERE users.user_id=".$idUser;
+
+		}
+
+		$stmt = $this->conn->prepare($sql);
 		$stmt->execute();
 
 		while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -282,6 +291,113 @@ class Maintenance
 		}
 
 	}
+
+	public function cek_kode_service($kode)
+	{
+
+		$sql ="SELECT * FROM service_master WHERE kode_service = :kode_service";
+		$stmt = $this->conn->prepare($sql);
+		$stmt->bindParam(":kode_service", $kode);
+		$stmt->execute();
+
+		if($stmt->rowCount() > 0){
+
+			return FALSE;
+
+		}else{
+
+			return TRUE;
+
+		}
+
+	}
+
+	public function save_service($kode_service, $description)
+	{
+
+		try{
+
+			$this->conn->beginTransaction();
+			$inactive = 0;
+
+			$data = $this->get_pelanggan($_SESSION['user_session']);
+			foreach ($data as $key) {
+				$idPelanggan = $key['id_pelanggan'];
+			}
+
+			$stmt = $this->conn->prepare("INSERT INTO service_master(kode_service, description, created_by, created_date, inactive) VALUES (:kode_service, :description, :created_by, :created_date, :inactive)");
+			$stmt->bindParam(":kode_service", $kode_service);
+			$stmt->bindParam(":description", $description);
+			$stmt->bindParam(":created_by", $idPelanggan);
+			$stmt->bindParam(":created_date", $this->time);
+			$stmt->bindParam(":inactive", $inactive);
+
+			$stmt->execute();
+			$this->conn->commit();
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+
+	}
+
+	public function update_service($description, $idService)
+	{
+
+		try{
+
+			$this->conn->beginTransaction();
+
+			$sql ="UPDATE service_master SET description = :description WHERE service_id = :service_id";
+			$stmt = $this->conn->prepare($sql);	
+
+			$stmt->bindParam(':service_id', $idService);
+			$stmt->bindParam(':description', $description);
+
+			$stmt->execute();
+			$this->conn->commit();
+
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+
+	}
+
+	public function delete_service($idService)
+	{
+
+		try {
+
+		    $stmt_delete = $this->conn->prepare('DELETE FROM service_master WHERE service_id =:service_id');
+		    $stmt_delete->bindParam(":service_id", $idService);
+		      
+		    $this->conn->beginTransaction();
+		    $stmt_delete->execute();
+		    $this->conn->commit();
+
+		    return TRUE;
+
+		}catch(PDOException $e){
+
+		    $this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+
+	}
+
 
 }
 
