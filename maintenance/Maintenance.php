@@ -173,6 +173,30 @@ class Maintenance
 
 	}
 
+	public function update_status_user($idUser, $value = '')
+	{
+		try{
+
+			$sql ="UPDATE users SET available = :available WHERE user_id = :user_id";
+			$stmt = $this->conn->prepare($sql);			
+			$stmt->bindParam(':user_id', $idUser);
+			$stmt->bindParam(':available', $value);
+
+			$this->conn->beginTransaction();
+			$stmt->execute();
+			$this->conn->commit();
+
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+	}
+
 	public function cek_role($user_id)
 	{
 
@@ -187,15 +211,22 @@ class Maintenance
 
 	}
 
-	public function get_pelanggan($idUser = '')
+	public function get_pelanggan($idUser = '', $idPelanggan = '')
 	{
 
 		$data = array();
 
 		$sql ="SELECT * FROM pelanggan LEFT JOIN users ON users.user_id=pelanggan.user_id";
+		
 		if($idUser !=''){
 
 			$sql .=" WHERE users.user_id=".$idUser;
+
+		}
+
+		if($idPelanggan !=''){
+
+			$sql .=" WHERE pelanggan.id_pelanggan=".$idPelanggan;
 
 		}
 
@@ -214,18 +245,18 @@ class Maintenance
 
 		try {
 
-		    $stmt_delete = $this->conn->prepare('DELETE FROM pelanggan WHERE id_pelanggan =:id_pelanggan');
-		    $stmt_delete->bindParam(":id_pelanggan", $idPelanggan);
-		      
 		    $this->conn->beginTransaction();
-		    $stmt_delete->execute();
-		    $this->conn->commit();
 
+			$stmt_delete = $this->conn->prepare('DELETE FROM pelanggan WHERE id_pelanggan =:id_pelanggan');
+			$stmt_delete->bindParam(":id_pelanggan", $idPelanggan);  
+			$stmt_delete->execute();
+
+		    $this->conn->commit();
 		    return TRUE;
 
 		}catch(PDOException $e){
 
-		    $this->conn->rollback();
+			$this->conn->rollback();
 			echo $e->getMessage();
 			return FALSE;
 

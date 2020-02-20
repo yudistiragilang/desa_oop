@@ -132,12 +132,25 @@ if (isset($_POST['save-update'])) {
 
 if (isset($_GET['id'])) {
   
-  $res = $usr->delete_pelanggan($_GET['id']);
+  $data = $usr->get_pelanggan('', $_GET['id']);
+  foreach ($data as $key) {
+    $idUser = $key['user_id'];
+  }
 
-  if ($res == TRUE) {
-    $successMsg = "Data berhasil dihapus !";
+  $result = $usr->update_status_user($idUser, 1);
+  if($result == TRUE){
+
+    $res = $usr->delete_pelanggan($_GET['id']);
+    if ($res == TRUE) {
+      $successMsg = "Data berhasil dihapus !";
+    }else{
+      $errorMsg[] = "Gagal hapus data !";
+    }
+
   }else{
+
     $errorMsg[] = "Gagal hapus data !";
+
   }
 
 }
