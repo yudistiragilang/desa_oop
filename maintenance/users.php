@@ -106,13 +106,19 @@ if (isset($_POST['save-update'])) {
 }
 
 if (isset($_GET['id'])) {
-  
-  $res = $usr->delete_users($_GET['id']);
 
-  if ($res == TRUE) {
-    $successMsg = "Data berhasil dihapus !";
+  // cek di pelanggan ada gak
+  $pelanggan = $usr->get_pelanggan($_GET['id']);
+  if (count($pelanggan) > 0) {
+    $errorMsg[] = "Data tidak dapat dihapus karena ada turunannya !";
   }else{
-    $errorMsg[] = "Gagal hapus data !";
+    $res = $usr->delete_users($_GET['id']);
+
+    if ($res == TRUE) {
+      $successMsg = "Data berhasil dihapus !";
+    }else{
+      $errorMsg[] = "Gagal hapus data !";
+    }
   }
 
 }
