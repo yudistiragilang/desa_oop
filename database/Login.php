@@ -158,6 +158,13 @@
 			$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
 			return $userRow;
 		}
+
+		public function sql_to_date($original_date)
+		{
+			$timestamp = strtotime($original_date);
+			$new_date = date("d-M-Y", $timestamp);
+			return $new_date;
+		}
 	
 	}
 

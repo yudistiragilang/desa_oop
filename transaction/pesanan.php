@@ -10,12 +10,14 @@
 session_start();
 
 require_once '../database/Login.php';
-require_once 'Maintenance.php';
+require_once 'Transaction.php';
 
-$page_content = "Maintenance Service";
+include '../types.php';
+
+$page_content = "Transaction Pesanan";
 
 $db = new Login();
-$usr = new Maintenance();
+$trans = new Transaction();
 
 if ($db->is_logged_in() == "") {
 
@@ -31,29 +33,30 @@ if (isset($_POST['save'])) {
   
   $errorMsg = array();
 
-  $kode_service = strip_tags($_POST['kode_service']);
-  $description = strip_tags($_POST['deskripsi']);
+  $id_pelanggan = strip_tags($_POST['id_pelanggan']);
+  $service_id = strip_tags($_POST['service_id']);
+  $memo = strip_tags($_POST['memo']);
 
-  if ($kode_service == "") {
+  if ($id_pelanggan == "") {
 
-    $errorMsg[] = "Kode service tidak boleh kosong !";
+    $errorMsg[] = "Pelanggan tidak boleh kosong !";
 
-  }elseif ($usr->cek_kode_service($kode_service) == FALSE) {
+  }elseif ($service_id == "") {
 
-    $errorMsg[] = "Kode service tidak tersedia !";
+    $errorMsg[] = "Service tidak boleh kosong !";
 
-  }elseif ($description == "") {
+  }elseif ($memo == "") {
 
-    $errorMsg[] = "Description tidak boleh kosong !";
+    $errorMsg[] = "Memo tidak boleh kosong !";
 
   }else{
 
-    $return = $usr->save_service($kode_service, $description);
+    $return = $trans->save_pesanan($id_pelanggan, $service_id, $memo);
 
     if ($return == TRUE) {
 
       $successMsg = "Data berhasil disimpan !";
-      $username="";
+      // $db->redirect('pesanan.php');
 
     }else{
 
@@ -69,16 +72,26 @@ if (isset($_POST['save-update'])) {
 
   $errorMsg = array();
 
-  $idService = strip_tags($_POST['service_id']);
-  $description = strip_tags($_POST['deskripsi']);
+  $idPesan = strip_tags($_POST['id_pesan']);
+  $id_pelanggan = strip_tags($_POST['id_pelanggan']);
+  $service_id = strip_tags($_POST['service_id']);
+  $memo = strip_tags($_POST['memo']);
 
-  if ($description == "") {
+  if ($id_pelanggan == "") {
 
-    $errorMsg[] = "Description tidak boleh kosong !";
+    $errorMsg[] = "Pelanggan tidak boleh kosong !";
+
+  }elseif ($service_id == "") {
+
+    $errorMsg[] = "Service tidak boleh kosong !";
+
+  }elseif ($memo == "") {
+
+    $errorMsg[] = "Memo tidak boleh kosong !";
 
   }else{
 
-    $res = $usr->update_service($description, $idService);
+    $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
     }else{
@@ -92,28 +105,12 @@ if (isset($_POST['save-update'])) {
 
 if (isset($_GET['id'])) {
   
-  $res = $usr->delete_service($_GET['id']);
+  $res = $trans->delete_pesanan($_GET['id']);
 
   if ($res == TRUE) {
     $successMsg = "Data berhasil dihapus !";
   }else{
     $errorMsg[] = "Gagal hapus data !";
-  }
-
-}
-
-if (isset($_GET['inactive_id'])) {
-
-  if ($_GET['value'] == 1) {
-    $res = $usr->update_active_inactive('service_master', 'service_id', $_GET['inactive_id'], 0);
-  }else{
-    $res = $usr->update_active_inactive('service_master', 'service_id', $_GET['inactive_id'], 1);
-  }
-  
-  if ($res == TRUE) {
-    $successMsg = "Status berhasil diubah !";
-  }else{
-    $errorMsg[] = "Status Gagal diubah !";
   }
 
 }
@@ -306,9 +303,11 @@ if (isset($_GET['inactive_id'])) {
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Kode</th>
-                          <th>Description</th>
-                          <th>Inactive</th>
+                          <th>Pelanggan</th>
+                          <th>Service</th>
+                          <th>Tanggal</th>
+                          <th>Status</th>
+                          <th>Memo</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -317,31 +316,19 @@ if (isset($_GET['inactive_id'])) {
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_data('service_master') as $dt) : ?>
+                        <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $dt) : ?>
                         <tr>
                           <td><?= $no++; ?></td>
-                          <td><?php echo $dt['kode_service']; ?></td>
+                          <td><?php echo $dt['nama']; ?></td>
+                          <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
+                          <td><?php echo $trans->get_status($dt['status']); ?></td>
                           <td><?php echo $dt['description']; ?></td>
                           <td>
-                            <?php if($dt['inactive'] == 1){ ?>
-                                <a href="service.php?inactive_id=<?= $dt['service_id'];?>&value=1" class="btn btn-success btn-icon-split">
-                                  <span class="icon text-white-50"><i class="fas fa-check"></i></span>
-                                  <span class="text">Yes</span>
-                                </a>
-                            <?php }else{ ?>
-                                <a href="service.php?inactive_id=<?= $dt['service_id'];?>&value=0" class="btn btn-danger btn-icon-split">
-                                  <span class="icon text-white-50">
-                                    <i class="fas fa-times"></i>
-                                  </span>
-                                  <span class="text">No</span>
-                                </a>
-                            <?php } ?>
-                          </td>
-                          <td>
-                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['service_id'];?>">
+                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_pesan'];?>">
                               <i class="fas fa-edit"></i>
                             </a>
-                            <a onclick="return hapus()" href="service.php?id=<?= $dt['service_id'];?>" class="btn btn-danger btn-circle">
+                            <a onclick="return hapus()" href="pesanan.php?id=<?= $dt['id_pesan'];?>" class="btn btn-danger btn-circle">
                               <i class="fas fa-trash"></i>
                             </a>
                           </td>
@@ -412,11 +399,25 @@ if (isset($_GET['inactive_id'])) {
               <div class="modal-body">
 
                 <div class="form-group">
-                  <input type="text" class="form-control" name="kode_service" placeholder="Masukan Kode. .">
+                  <select class="form-control" name="id_pelanggan">
+                    <option value=""> Pilih Pelanggan </option>
+                    <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
+                    <option value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
 
                 <div class="form-group">
-                  <input type="text" class="form-control" name="deskripsi" placeholder="Masukan Description. .">
+                  <select class="form-control" name="service_id">
+                    <option value=""> Pilih Jenis Service </option>
+                    <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
+                    <option value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="memo" placeholder="Masukan Memo. .">
                 </div>
 
               </div>
@@ -434,7 +435,7 @@ if (isset($_GET['inactive_id'])) {
       <!-- Add Modal-->
 
       <!-- Edit Modal-->
-      <?php foreach ($usr->get_data('service_master') as $edit) : ?>
+      <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $edit) : ?>
       <div class="modal fade" id="editModal<?= $edit['service_id'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
         <div class="modal-dialog" role="document">
 
@@ -450,13 +451,7 @@ if (isset($_GET['inactive_id'])) {
 
               <div class="modal-body">
 
-                <input type="text" hidden="hidden" name="service_id" value="<?= $edit['service_id']; ?>">
-                <div class="form-group">
-                  <input type="text" class="form-control" name="kode_service" value="<?= $edit['kode_service']; ?>" readonly>
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="deskripsi" value="<?= $edit['description']; ?>">
-                </div>
+                <input type="text" hidden="hidden" name="id_pesan" value="<?= $edit['id_pesan']; ?>">
 
               </div>
 

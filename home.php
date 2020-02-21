@@ -100,7 +100,7 @@ $page_content = "Beranda";
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Transaction:</h6>
 
-            <a class="collapse-item" href="">Pesanan</a>
+            <a class="collapse-item" href="transaction/pesanan.php">Pesanan</a>
 
             <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="">Service</a>

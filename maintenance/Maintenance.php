@@ -19,7 +19,7 @@ class Maintenance
 		$db = $database->db_connection();
 		$this->conn = $db;
 
-		date_default_timezone_set("Asia/Bangkok");
+		date_default_timezone_set("Asia/Jakarta");
 		$this->time = date('Y/m/d H:i:s');
 
 	}
