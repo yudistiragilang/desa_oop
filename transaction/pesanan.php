@@ -323,7 +323,7 @@ if (isset($_GET['id'])) {
                           <td><?php echo $dt['description']; ?></td>
                           <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
                           <td><?php echo $trans->get_status($dt['status']); ?></td>
-                          <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo $dt['memo']; ?></td>
                           <td>
                             <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_pesan'];?>">
                               <i class="fas fa-edit"></i>
@@ -436,7 +436,7 @@ if (isset($_GET['id'])) {
 
       <!-- Edit Modal-->
       <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $edit) : ?>
-      <div class="modal fade" id="editModal<?= $edit['service_id'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
+      <div class="modal fade" id="editModal<?= $edit['id_pesan'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
         <div class="modal-dialog" role="document">
 
           <form action="" method="POST">
@@ -452,6 +452,45 @@ if (isset($_GET['id'])) {
               <div class="modal-body">
 
                 <input type="text" hidden="hidden" name="id_pesan" value="<?= $edit['id_pesan']; ?>">
+                <div class="form-group">
+                  <select class="form-control" name="id_pelanggan">
+                    <option value=""> Pilih Pelanggan </option>
+                    <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
+
+                    <?php
+                      if ($edit['id_pelanggan']==$dt['id_pelanggan']) {
+                        $select="selected";
+                      }else{
+                        $select="";
+                      } 
+                    ?>
+
+                    <option <?= $select; ?> value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <select class="form-control" name="service_id">
+                    <option value=""> Pilih Jenis Service </option>
+                    <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
+
+                    <?php
+                      if ($edit['service_id']==$dt['service_id']) {
+                        $select="selected";
+                      }else{
+                        $select="";
+                      } 
+                    ?>
+
+                    <option <?= $select; ?> value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <input type="text" class="form-control" name="memo" value="<?= $edit['memo'] ;?>">
+                </div>
 
               </div>
 

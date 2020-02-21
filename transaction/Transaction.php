@@ -140,7 +140,7 @@ class Transaction
 
 			$this->conn->beginTransaction();
 
-			$stmt = $this->conn->prepare("UPDATE pemesanan SET id_pelanggan = :id_pelanggan, service_id = :service_id, memo = :memo, WHERE id_pesan = :id_pesan");			
+			$stmt = $this->conn->prepare("UPDATE pemesanan SET id_pelanggan = :id_pelanggan, service_id = :service_id, memo = :memo WHERE id_pesan = :id_pesan");			
 			$stmt->bindParam(':id_pesan', $idPesan);
 			$stmt->bindParam(':id_pelanggan', $id_pelanggan);
 			$stmt->bindParam(':service_id', $service_id);
