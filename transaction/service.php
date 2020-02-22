@@ -196,12 +196,8 @@ if (isset($_POST['reject'])) {
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Utilities:</h6>
 
-            <?php if($roleUser == 1) :?>
-            <a class="collapse-item" href="">Users</a>
-            <a class="collapse-item" href="">Pelanggan</a>
-            <?php endif; ?>
-            <a class="collapse-item" href="">Pesanan</a>
-            <a class="collapse-item" href="">Service</a>
+            <a class="collapse-item" href="../inquiry/trans_pesan.php">Pesanan</a>
+            <a class="collapse-item" href="../inquiry/trans_service.php">Service</a>
 
           </div>
         </div>
