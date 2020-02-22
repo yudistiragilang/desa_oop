@@ -64,8 +64,7 @@ if (isset($_POST['save'])) {
 
   }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
 
-    $errorMessage[] = "Email tidak valid !";
-    $error = 1;
+    $errorMsg[] = "Email tidak valid !";
 
   }else{
 
@@ -114,8 +113,7 @@ if (isset($_POST['save-update'])) {
 
   }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
 
-    $errorMessage[] = "Email tidak valid !";
-    $error = 1;
+    $errorMsg[] = "Email tidak valid !";
 
   }else{
 
@@ -441,18 +439,23 @@ if (isset($_GET['id'])) {
               <div class="modal-body">
 
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <input type="text" class="form-control" name="nama" placeholder="Masukan username . .">
                 </div>
                 <div class="form-group">
+                  <label>Alamat</label>
                   <input type="text" class="form-control" name="alamat" placeholder="Masukan alamat . .">
                 </div>
                 <div class="form-group">
+                  <label>Telepon</label>
                   <input type="text" class="form-control" name="telepon" placeholder="Masukan telepon . .">
                 </div>
                 <div class="form-group">
+                  <label>Email</label>
                   <input type="text" class="form-control" name="email" placeholder="Masukan email . .">
                 </div>
                 <div class="form-group">
+                  <label>Account User</label>
                   <select class="form-control" name="user">
                     <option value=""> Pilih user </option>
                     <?php foreach ($usr->get_data('users', true) as $dt) : ?>
@@ -495,15 +498,19 @@ if (isset($_GET['id'])) {
 
                 <input type="text" hidden="hidden" name="id_pelanggan" value="<?= $edit['id_pelanggan']; ?>">
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <input type="text" class="form-control" name="nama" value="<?= $edit['nama'] ;?>" placeholder="Masukan username . .">
                 </div>
                 <div class="form-group">
+                  <label>Alamat</label>
                   <input type="text" class="form-control" name="alamat" value="<?= $edit['alamat'] ;?>" placeholder="Masukan alamat . .">
                 </div>
                 <div class="form-group">
+                  <label>Telepon</label>
                   <input type="text" class="form-control" name="telepon" value="<?= $edit['no_telepon'] ;?>" placeholder="Masukan telepon . .">
                 </div>
                 <div class="form-group">
+                  <label>Email</label>
                   <input type="text" class="form-control" name="email" value="<?= $edit['email'] ;?>" placeholder="Masukan email . .">
                 </div>
 

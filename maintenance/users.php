@@ -437,12 +437,15 @@ if (isset($_GET['inactive_id'])) {
               <div class="modal-body">
 
                 <div class="form-group">
+                  <label>Username</label>
                   <input type="text" class="form-control" name="username" value="<?= isset($_POST['save']) ? $username:""; ?>" placeholder="Masukan username. .">
                 </div>
                 <div class="form-group">
+                  <label>Password</label>
                   <input type="password" class="form-control" name="password" placeholder="Masukan password. .">
                 </div>
                 <div class="form-group">
+                  <label>Ulangi Password</label>
                   <input type="password" class="form-control" name="password1" placeholder="Ulangi password. .">
                 </div>
 
@@ -481,12 +484,15 @@ if (isset($_GET['inactive_id'])) {
 
                 <input type="text" hidden="hidden" name="idAdmin" value="<?= $edit['user_id']; ?>">
                 <div class="form-group">
+                  <label>Username</label>
                   <input type="text" class="form-control" name="username" value="<?= $edit['username']; ?>" placeholder="Masukan username. .">
                 </div>
                 <div class="form-group">
+                  <label>Password</label>
                   <input type="password" class="form-control" name="password" placeholder="Masukan password baru. .">
                 </div>
                 <div class="form-group">
+                  <label>Ulangi Password</label>
                   <input type="password" class="form-control" name="rePassword" placeholder="Masukan lagi password baru. .">
                 </div>
 

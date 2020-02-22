@@ -413,10 +413,12 @@ if (isset($_GET['inactive_id'])) {
               <div class="modal-body">
 
                 <div class="form-group">
+                  <label>Kode Service</label>
                   <input type="text" class="form-control" name="kode_service" placeholder="Masukan Kode. .">
                 </div>
 
                 <div class="form-group">
+                  <label>Jasa Service</label>
                   <input type="text" class="form-control" name="deskripsi" placeholder="Masukan Description. .">
                 </div>
 
@@ -453,9 +455,11 @@ if (isset($_GET['inactive_id'])) {
 
                 <input type="text" hidden="hidden" name="service_id" value="<?= $edit['service_id']; ?>">
                 <div class="form-group">
+                  <label>Kode Service</label>
                   <input type="text" class="form-control" name="kode_service" value="<?= $edit['kode_service']; ?>" readonly>
                 </div>
                 <div class="form-group">
+                  <label>Jasa Service</label>
                   <input type="text" class="form-control" name="deskripsi" value="<?= $edit['description']; ?>">
                 </div>
 
