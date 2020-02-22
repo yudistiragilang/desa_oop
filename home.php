@@ -288,56 +288,6 @@ $page_content = "Beranda";
 
           </div>
 
-          <div class="row">
-            <div class="col-md-12">
-              <h3>Inquiry</h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pesanan</div>
-                      <?php
-
-                        $idFilterPelanggan = "";
-                        if ($roleUser == 1 ) {
-                          $idFilterPelanggan = "";
-                        }else{
-                          $idFilterPelanggan = $idPelangganLoged;
-                        }
-
-                      ?>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('pemesanan', $idFilterPelanggan); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-book-open fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Service</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service', $idFilterPelanggan); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-toolbox fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-          </div>
-
         </div>
       </div>
       <!-- End of Main Content -->
