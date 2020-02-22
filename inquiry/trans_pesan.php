@@ -10,14 +10,14 @@
 session_start();
 
 require_once '../database/Login.php';
-require_once 'Transaction.php';
+require_once 'Inquiry.php';
 
 include '../types.php';
 
-$page_content = "Transaction Pesanan";
+$page_content = "Inquiry Pesanan";
 
 $db = new Login();
-$trans = new Transaction();
+$trans = new Inquiry();
 
 if ($db->is_logged_in() == "") {
 
@@ -30,92 +30,6 @@ $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
-
-if (isset($_POST['save'])) {
-  
-  $errorMsg = array();
-
-  $id_pelanggan = strip_tags($_POST['id_pelanggan']);
-  $service_id = strip_tags($_POST['service_id']);
-  $memo = strip_tags($_POST['memo']);
-
-  if ($id_pelanggan == "") {
-
-    $errorMsg[] = "Pelanggan tidak boleh kosong !";
-
-  }elseif ($service_id == "") {
-
-    $errorMsg[] = "Service tidak boleh kosong !";
-
-  }elseif ($memo == "") {
-
-    $errorMsg[] = "Memo tidak boleh kosong !";
-
-  }else{
-
-    $return = $trans->save_pesanan($id_pelanggan, $service_id, $memo);
-
-    if ($return == TRUE) {
-
-      $successMsg = "Data berhasil disimpan !";
-      // $db->redirect('pesanan.php');
-
-    }else{
-
-      $errorMsg[] = "Gagal simpan data !";
-
-    }
-
-  }
-
-}
-
-if (isset($_POST['save-update'])) {
-
-  $errorMsg = array();
-
-  $idPesan = strip_tags($_POST['id_pesan']);
-  $id_pelanggan = strip_tags($_POST['id_pelanggan']);
-  $service_id = strip_tags($_POST['service_id']);
-  $memo = strip_tags($_POST['memo']);
-
-  if ($id_pelanggan == "") {
-
-    $errorMsg[] = "Pelanggan tidak boleh kosong !";
-
-  }elseif ($service_id == "") {
-
-    $errorMsg[] = "Service tidak boleh kosong !";
-
-  }elseif ($memo == "") {
-
-    $errorMsg[] = "Memo tidak boleh kosong !";
-
-  }else{
-
-    $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
-    if ($res == TRUE) {
-      $successMsg = "Data berhasil diupdate !";
-    }else{
-      $errorMsg[] = "Data gagal diupdate !";
-    }
-
-  }
-
-
-}
-
-if (isset($_GET['id'])) {
-  
-  $res = $trans->delete_pesanan($_GET['id']);
-
-  if ($res == TRUE) {
-    $successMsg = "Data berhasil dihapus !";
-  }else{
-    $errorMsg[] = "Gagal hapus data !";
-  }
-
-}
 
 ?>
 
@@ -258,41 +172,6 @@ if (isset($_GET['id'])) {
                 <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
               </div>
 
-              <div class="mb-2">
-                <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#addModal"">
-                  <span class="icon text-white-50">
-                    <i class="fas fa-plus"></i>
-                  </span>
-                  <span class="text">Add</span>
-                </button>
-              </div>
-
-              <?php
-
-                if (isset($errorMsg)) {
-
-                  for ($i=0; $i < count($errorMsg) ; $i++) { 
-                    ?>
-
-                    <div class="alert alert-danger">
-                      <?= $errorMsg[$i]; ?>
-                    </div>
-
-                    <?php
-                  }
-                
-                }
-
-                if (isset($successMsg)) {
-                  ?>
-                    <div class="alert alert-success">
-                      <?= $successMsg; ?>
-                    </div>
-                  <?php
-                }
-
-              ?>
-
               <div class="card">
                 <div class="card-body">
                   <div class="table-responsive">
@@ -301,13 +180,12 @@ if (isset($_GET['id'])) {
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Kode Pesanan</th>
+                          <th>Kode Pesan</th>
                           <th>Pelanggan</th>
                           <th>Service</th>
                           <th>Tanggal</th>
                           <th>Status</th>
                           <th>Memo</th>
-                          <th>Aksi</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -324,7 +202,7 @@ if (isset($_GET['id'])) {
                           }
                         ?>
 
-                        <?php foreach ($trans->get_data_pesanan('STATUS_OPEN', $idFilterPelanggan) as $dt) : ?>
+                        <?php foreach ($trans->get_data_pesanan('', $idFilterPelanggan) as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
@@ -334,14 +212,6 @@ if (isset($_GET['id'])) {
                           <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
                           <td><?php echo $trans->get_status($dt['status']); ?></td>
                           <td><?php echo $dt['memo']; ?></td>
-                          <td>
-                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_pesan'];?>">
-                              <i class="fas fa-edit"></i>
-                            </a>
-                            <a onclick="return hapus()" href="pesanan.php?id=<?= $dt['id_pesan'];?>" class="btn btn-danger btn-circle">
-                              <i class="fas fa-trash"></i>
-                            </a>
-                          </td>
                         </tr>
 
                         <?php endforeach; ?>
@@ -392,159 +262,6 @@ if (isset($_GET['id'])) {
       </div>
       <!-- Logout Modal-->
 
-      <!-- Add Modal-->
-      <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="Modaladd" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-
-          <form action="" method="POST">
-            <div class="modal-content">
-                
-              <div class="modal-header">
-                <h5 class="modal-title" id="Modaladd">Tambah Data Service</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-
-              <div class="modal-body">
-
-              <?php if($roleUser==1){ ;?>
-                <div class="form-group">
-                  <label>Pelanggan</label>
-                  <select class="form-control" name="id_pelanggan">
-                    <option value=""> Pilih Pelanggan </option>
-                    <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
-                    <option value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              <?php }else{ ;?>
-
-                <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $idPelangganLoged; ?>">
-                <div class="form-group">
-                  <label>Pelanggan</label>
-                  <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
-                </div>
-
-              <?php } ;?>
-
-                <div class="form-group">
-                  <label>Jasa Service</label>
-                  <select class="form-control" name="service_id">
-                    <option value=""> Pilih Jenis Service </option>
-                    <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
-                    <option value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Keterangan</label>
-                  <input type="text" class="form-control" name="memo" placeholder="Masukan Memo. .">
-                </div>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <input type="submit" name="save" class="btn btn-primary" value="Simpan">
-              </div>
-
-            </div>
-          </form>
-
-        </div>
-      </div>
-      <!-- Add Modal-->
-
-      <!-- Edit Modal-->
-      <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $edit) : ?>
-      <div class="modal fade" id="editModal<?= $edit['id_pesan'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-
-          <form action="" method="POST">
-            <div class="modal-content">
-                
-              <div class="modal-header">
-                <h5 class="modal-title" id="Modaledit">Edit Data Pesanan</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-
-              <div class="modal-body">
-
-                <input type="text" hidden="hidden" name="id_pesan" value="<?= $edit['id_pesan']; ?>">
-
-                <?php if($roleUser==1){ ;?>
-                <div class="form-group">
-                  <label>Pelanggan</label>
-                  <select class="form-control" name="id_pelanggan">
-                    <option value=""> Pilih Pelanggan </option>
-                    <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
-
-                    <?php
-                      if ($edit['id_pelanggan']==$dt['id_pelanggan']) {
-                        $select="selected";
-                      }else{
-                        $select="";
-                      } 
-                    ?>
-
-                    <option <?= $select; ?> value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-                <?php }else{ ;?>
-
-                <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $idPelangganLoged; ?>">
-                <div class="form-group">
-                  <label>Pelanggan</label>
-                  <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
-                </div>
-
-                <?php } ;?>
-
-                <div class="form-group">
-                  <label>Jasa Service</label>
-                  <select class="form-control" name="service_id">
-                    <option value=""> Pilih Jenis Service </option>
-                    <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
-
-                    <?php
-                      if ($edit['service_id']==$dt['service_id']) {
-                        $select="selected";
-                      }else{
-                        $select="";
-                      } 
-                    ?>
-
-                    <option <?= $select; ?> value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-
-                <div class="form-group">
-                  <label>Keterangan</label>
-                  <input type="text" class="form-control" name="memo" value="<?= $edit['memo'] ;?>">
-                </div>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <input type="submit" name="save-update" class="btn btn-primary" value="Simpan">
-              </div>
-
-            </div>
-          </form>
-
-        </div>
-      </div>
-      <?php endforeach; ?>
-      <!-- Edit Modal-->
-
-
       <script src="../assets/vendor/jquery/jquery.min.js"></script>
       <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
       <script src="../assets/vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -552,13 +269,6 @@ if (isset($_GET['id'])) {
       <script src="../assets/vendor/datatables/jquery.dataTables.min.js"></script>
       <script src="../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
       <script src="../assets/js/demo/datatables-demo.js"></script>
-      <script type="text/javascript" language="JavaScript">
-        function hapus(){
-          takon = confirm("Anda Yakin Akan Menghapus Data ?");
-            if (takon == true) return true;
-            else return false;
-            }
-      </script>
 
     </body>
 

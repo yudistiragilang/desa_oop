@@ -102,9 +102,9 @@ if (isset($_POST['reject'])) {
 
   }else{
 
-    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo);
+    // $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo);
 
-    if ($return == TRUE) {
+    // if ($return == TRUE) {
 
       $updateStatus = $trans->change_status_pesanan($idPesan, -1);
       if ($updateStatus == TRUE) {
@@ -117,11 +117,11 @@ if (isset($_POST['reject'])) {
 
       }
 
-    }else{
+    // }else{
 
-      $errorMsg[] = "Gagal reject data !";
+    //   $errorMsg[] = "Gagal reject data !";
 
-    }
+    // }
 
   }
 

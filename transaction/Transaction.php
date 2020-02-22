@@ -85,8 +85,8 @@ class Transaction
 			$sql .= " WHERE status = :status";
 		}
 
-		if ($id_pelanggan !="") {
-			$sql .= "AND pelanggan.id_pelanggan = :id_pelanggan";
+		if ($id_pelanggan !='') {
+			$sql .= " AND pelanggan.id_pelanggan = :id_pelanggan";
 		}
 
 		$stmt = $this->conn->prepare("SELECT * FROM pemesanan JOIN pelanggan ON(pemesanan.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=pemesanan.service_id)".$sql);
@@ -97,7 +97,7 @@ class Transaction
 
 		}
 
-		if ($id_pelanggan !="") {
+		if ($id_pelanggan !='') {
 
 			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
 
