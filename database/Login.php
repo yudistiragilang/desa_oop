@@ -58,13 +58,15 @@
 
 				$stmt->execute();
 				$idUser = $this->conn->lastInsertId();
+				$foto = "default.jpg";
 
-				$stmtPelanggan = $this->conn->prepare("INSERT INTO pelanggan(nama, email, alamat, no_telepon, user_id) VALUES (:nama, :email, :alamat, :no_telepon, :user_id)");
+				$stmtPelanggan = $this->conn->prepare("INSERT INTO pelanggan(nama, email, alamat, no_telepon, user_id, foto) VALUES (:nama, :email, :alamat, :no_telepon, :user_id, :foto)");
 				$stmtPelanggan->bindParam(":nama", $realName);
 				$stmtPelanggan->bindParam(":email", $email);
 				$stmtPelanggan->bindParam(":alamat", $alamat);
 				$stmtPelanggan->bindParam(":no_telepon", $phone);
 				$stmtPelanggan->bindParam(":user_id", $idUser);
+				$stmtPelanggan->bindParam(":foto", $foto);
 				$stmtPelanggan->execute();
 
 				$this->conn->commit();
