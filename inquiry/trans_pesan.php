@@ -180,7 +180,7 @@ $foto = $userLogin['foto'];
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Kode Pesan</th>
+                          <th>Kode Pesanan</th>
                           <th>Pelanggan</th>
                           <th>Service</th>
                           <th>Tanggal</th>

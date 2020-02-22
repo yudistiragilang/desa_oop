@@ -302,7 +302,7 @@ if (isset($_POST['reject'])) {
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>No. Pesanan</th>
+                          <th>Kode Pesanan</th>
                           <th>Pelanggan</th>
                           <th>Service</th>
                           <th>Tanggal</th>
