@@ -28,6 +28,7 @@ if ($db->is_logged_in() == "") {
 $userLogin = $db->user_online();
 $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
+$idPelangganLoged = $userLogin['id_pelanggan'];
 
 if (isset($_POST['save'])) {
   
@@ -316,7 +317,17 @@ if (isset($_GET['id'])) {
                           $no=1;
                         ?>
 
-                        <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $dt) : ?>
+                        <?php
+                          $idFilterPelanggan = ""; 
+                          if($roleUser==1){
+                            $idFilterPelanggan = "";
+                          }else{
+                            $idFilterPelanggan = $idPelangganLoged;
+                          }
+                        ?>
+
+                        <?php foreach ($trans->get_data_pesanan(STATUS_OPEN, $idFilterPelanggan) as $dt) : ?>
+
                         <tr>
                           <td><?= $no++; ?></td>
                           <td><?php echo $dt['nama']; ?></td>
@@ -398,6 +409,7 @@ if (isset($_GET['id'])) {
 
               <div class="modal-body">
 
+              <?php if($roleUser==1){ ;?>
                 <div class="form-group">
                   <select class="form-control" name="id_pelanggan">
                     <option value=""> Pilih Pelanggan </option>
@@ -406,6 +418,14 @@ if (isset($_GET['id'])) {
                     <?php endforeach; ?>
                   </select>
                 </div>
+              <?php }else{ ;?>
+
+                <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $idPelangganLoged; ?>">
+                <div class="form-group">
+                  <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
+                </div>
+
+              <?php } ;?>
 
                 <div class="form-group">
                   <select class="form-control" name="service_id">
@@ -452,6 +472,8 @@ if (isset($_GET['id'])) {
               <div class="modal-body">
 
                 <input type="text" hidden="hidden" name="id_pesan" value="<?= $edit['id_pesan']; ?>">
+
+                <?php if($roleUser==1){ ;?>
                 <div class="form-group">
                   <select class="form-control" name="id_pelanggan">
                     <option value=""> Pilih Pelanggan </option>
@@ -469,6 +491,14 @@ if (isset($_GET['id'])) {
                     <?php endforeach; ?>
                   </select>
                 </div>
+                <?php }else{ ;?>
+
+                <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $idPelangganLoged; ?>">
+                <div class="form-group">
+                  <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
+                </div>
+
+                <?php } ;?>
 
                 <div class="form-group">
                   <select class="form-control" name="service_id">

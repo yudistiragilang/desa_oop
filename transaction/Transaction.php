@@ -77,7 +77,7 @@ class Transaction
 		unset($_POST);
 	}
 
-	public function get_data_pesanan($status = false)
+	public function get_data_pesanan($status = false, $id_pelanggan = '')
 	{
 		$data = array();
 		$sql = "";
@@ -85,11 +85,21 @@ class Transaction
 			$sql .= " WHERE status = :status";
 		}
 
+		if ($id_pelanggan !="") {
+			$sql .= "AND pelanggan.id_pelanggan = :id_pelanggan";
+		}
+
 		$stmt = $this->conn->prepare("SELECT * FROM pemesanan JOIN pelanggan ON(pemesanan.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=pemesanan.service_id)".$sql);
 
 		if ($status !=false) {
 
 			$stmt->bindParam(":status", $status);
+
+		}
+
+		if ($id_pelanggan !="") {
+
+			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
 
 		}
 

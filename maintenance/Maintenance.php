@@ -24,10 +24,23 @@ class Maintenance
 
 	}
 
-	public function count_data($tabel)
+	public function count_data($tabel, $idPelanggan = '')
 	{
 
-		$stmt = $this->conn->prepare("SELECT * FROM ".$tabel);
+		$sql = "SELECT * FROM ".$tabel;
+
+		if ($idPelanggan !="") {
+			$sql .= " WHERE id_pelanggan = :id_pelanggan";
+		}
+
+		$stmt = $this->conn->prepare($sql);
+
+		if ($idPelanggan !="") {
+
+			$stmt->bindParam(":id_pelanggan", $idPelanggan);
+
+		}
+
 		$stmt->execute();
 		$userRow = $stmt->fetch(PDO::FETCH_OBJ);
 

@@ -24,6 +24,7 @@ if ($db->is_logged_in() == "") {
 $userLogin = $db->user_online();
 $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
+$idPelangganLoged = $userLogin['id_pelanggan'];
 
 $page_content = "Beranda";
 
@@ -246,7 +247,17 @@ $page_content = "Beranda";
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pesanan</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('pemesanan'); ?></div>
+                      <?php
+
+                        $idFilterPelanggan = "";
+                        if ($roleUser == 1 ) {
+                          $idFilterPelanggan = "";
+                        }else{
+                          $idFilterPelanggan = $idPelangganLoged;
+                        }
+
+                      ?>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('pemesanan', $idFilterPelanggan); ?></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-book-open fa-2x text-gray-300"></i>
@@ -262,7 +273,7 @@ $page_content = "Beranda";
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Service</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service'); ?></div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service', $idFilterPelanggan); ?></div>
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-toolbox fa-2x text-gray-300"></i>
