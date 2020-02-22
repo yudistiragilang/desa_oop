@@ -412,6 +412,7 @@ if (isset($_GET['id'])) {
 
               <?php if($roleUser==1){ ;?>
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <select class="form-control" name="id_pelanggan">
                     <option value=""> Pilih Pelanggan </option>
                     <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
@@ -423,12 +424,14 @@ if (isset($_GET['id'])) {
 
                 <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $idPelangganLoged; ?>">
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
                 </div>
 
               <?php } ;?>
 
                 <div class="form-group">
+                  <label>Jasa Service</label>
                   <select class="form-control" name="service_id">
                     <option value=""> Pilih Jenis Service </option>
                     <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
@@ -438,6 +441,7 @@ if (isset($_GET['id'])) {
                 </div>
 
                 <div class="form-group">
+                  <label>Keterangan</label>
                   <input type="text" class="form-control" name="memo" placeholder="Masukan Memo. .">
                 </div>
 
@@ -476,6 +480,7 @@ if (isset($_GET['id'])) {
 
                 <?php if($roleUser==1){ ;?>
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <select class="form-control" name="id_pelanggan">
                     <option value=""> Pilih Pelanggan </option>
                     <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
@@ -496,12 +501,14 @@ if (isset($_GET['id'])) {
 
                 <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $idPelangganLoged; ?>">
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
                 </div>
 
                 <?php } ;?>
 
                 <div class="form-group">
+                  <label>Jasa Service</label>
                   <select class="form-control" name="service_id">
                     <option value=""> Pilih Jenis Service </option>
                     <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
@@ -520,6 +527,7 @@ if (isset($_GET['id'])) {
                 </div>
 
                 <div class="form-group">
+                  <label>Keterangan</label>
                   <input type="text" class="form-control" name="memo" value="<?= $edit['memo'] ;?>">
                 </div>
 

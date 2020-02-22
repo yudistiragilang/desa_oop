@@ -378,20 +378,24 @@ if (isset($_POST['reject'])) {
               <div class="modal-body">
                 
                 <div class="form-group">
+                  <label>Kode Pesan</label>
                   <input type="text" class="form-control" readonly="readonly" name="id_pesan" value="<?= $edit['id_pesan']; ?>">
                 </div>
 
                 <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $edit['id_pelanggan']; ?>">
                 <div class="form-group">
+                  <label>Pelanggan</label>
                   <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
                 </div>
 
                 <input type="text" class="form-control" hidden="hidden" name="service_id" value="<?= $edit['service_id']; ?>">
                 <div class="form-group">
+                  <label>Jasa Service</label>
                   <input type="text" class="form-control" readonly="readonly" name="" value="<?= $edit['description']; ?>">
                 </div>
 
                 <div class="form-group">
+                  <label>Keterangan</label>
                   <input type="text" readonly="readonly" class="form-control" name="memo" value="<?= $edit['memo'] ;?>">
                 </div>
 
