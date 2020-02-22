@@ -105,7 +105,7 @@ $page_content = "Beranda";
             <a class="collapse-item" href="transaction/pesanan.php">Pesanan</a>
 
             <?php if($roleUser == 1) :?>
-            <a class="collapse-item" href="">Service</a>
+            <a class="collapse-item" href="transaction/service.php">Service</a>
             <?php endif; ?>
 
           </div>

@@ -193,7 +193,7 @@ if (isset($_GET['id'])) {
             <a class="collapse-item" href="../transaction/pesanan.php">Pesanan</a>
 
             <?php if($roleUser == 1) :?>
-            <a class="collapse-item" href="">Service</a>
+            <a class="collapse-item" href="../transaction/service.php">Service</a>
             <?php endif; ?>
 
           </div>
@@ -464,7 +464,7 @@ if (isset($_GET['id'])) {
             <div class="modal-content">
                 
               <div class="modal-header">
-                <h5 class="modal-title" id="Modaledit">Edit Data Service</h5>
+                <h5 class="modal-title" id="Modaledit">Edit Data Pesanan</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>

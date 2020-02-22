@@ -10,12 +10,14 @@
 session_start();
 
 require_once '../database/Login.php';
-require_once 'Maintenance.php';
+require_once 'Transaction.php';
 
-$page_content = "Maintenance Pelanggan";
+include '../types.php';
+
+$page_content = "Transaction Service";
 
 $db = new Login();
-$usr = new Maintenance();
+$trans = new Transaction();
 
 if ($db->is_logged_in() == "") {
 
@@ -26,59 +28,41 @@ if ($db->is_logged_in() == "") {
 $userLogin = $db->user_online();
 $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
+$idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
 
-if (isset($_POST['save'])) {
+if (isset($_POST['approve'])) {
   
   $errorMsg = array();
 
-  $nama = strip_tags($_POST['nama']);
-  $alamat = strip_tags($_POST['alamat']);
-  $telepon = strip_tags($_POST['telepon']);
-  $email = strip_tags($_POST['email']);
-  $user = strip_tags($_POST['user']);
+  $idPesan = strip_tags($_POST['id_pesan']);
+  $id_pelanggan = strip_tags($_POST['id_pelanggan']);
+  $service_id = strip_tags($_POST['service_id']);
+  $memo = strip_tags($_POST['memo']);
 
-  if ($nama == "") {
+  if ($id_pelanggan == "") {
 
-    $errorMsg[] = "Nama tidak boleh kosong !";
+    $errorMsg[] = "Pelanggan tidak boleh kosong !";
 
-  }elseif ($alamat == "") {
+  }elseif ($service_id == "") {
 
-    $errorMsg[] = "Alamat tidak boleh kosong !";
+    $errorMsg[] = "Service tidak boleh kosong !";
 
-  }elseif ($telepon == ""){
+  }elseif ($memo == "") {
 
-    $errorMsg[] = "Telepon tidak boleh kosong !";
-
-  }elseif ($user == "") {
-    
-    $errorMsg[] = "User belum dipilih !";
-
-  }elseif ($usr->cek_role($user) == 1) {
-    
-    $errorMsg[] = "User dengan role admin tidak bisa digunakan !";
-
-  }elseif ($email == "") {
-    
-    $errorMsg[] = "Email tidak boleh kosong !";
-
-  }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-
-    $errorMessage[] = "Email tidak valid !";
-    $error = 1;
+    $errorMsg[] = "Memo tidak boleh kosong !";
 
   }else{
 
-    $return = $usr->save_pelanggan($nama, $email, $alamat, $telepon, $user);
+    $return = $trans->save_pesanan($id_pelanggan, $service_id, $memo);
 
     if ($return == TRUE) {
 
-      $successMsg = "Data berhasil disimpan !";
-      $username="";
+      $successMsg = "Data berhasil diapprove !";
 
     }else{
 
-      $errorMsg[] = "Gagal simpan data !";
+      $errorMsg[] = "Gagal approve data !";
 
     }
 
@@ -86,71 +70,35 @@ if (isset($_POST['save'])) {
 
 }
 
-if (isset($_POST['save-update'])) {
+if (isset($_POST['reject'])) {
 
   $errorMsg = array();
 
+  $idPesan = strip_tags($_POST['id_pesan']);
   $id_pelanggan = strip_tags($_POST['id_pelanggan']);
-  $nama = strip_tags($_POST['nama']);
-  $alamat = strip_tags($_POST['alamat']);
-  $telepon = strip_tags($_POST['telepon']);
-  $email = strip_tags($_POST['email']);
+  $service_id = strip_tags($_POST['service_id']);
+  $memo = strip_tags($_POST['memo']);
 
-  if ($nama == "") {
+  if ($id_pelanggan == "") {
 
-    $errorMsg[] = "Nama tidak boleh kosong !";
+    $errorMsg[] = "Pelanggan tidak boleh kosong !";
 
-  }elseif ($alamat == "") {
+  }elseif ($service_id == "") {
 
-    $errorMsg[] = "Alamat tidak boleh kosong !";
+    $errorMsg[] = "Service tidak boleh kosong !";
 
-  }elseif ($telepon == ""){
+  }elseif ($memo == "") {
 
-    $errorMsg[] = "Telepon tidak boleh kosong !";
-
-  }elseif ($email == "") {
-    
-    $errorMsg[] = "Email tidak boleh kosong !";
-
-  }else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-
-    $errorMessage[] = "Email tidak valid !";
-    $error = 1;
+    $errorMsg[] = "Memo tidak boleh kosong !";
 
   }else{
 
-    $res = $usr->update_pelanggan($id_pelanggan, $nama, $email, $alamat, $telepon);
+    $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
     if ($res == TRUE) {
-      $successMsg = "Data berhasil diupdate !";
+      $successMsg = "Data berhasil direject !";
     }else{
-      $errorMsg[] = "Data gagal diupdate !";
+      $errorMsg[] = "Gagal reject data !";
     }
-
-  }
-
-
-}
-
-if (isset($_GET['id'])) {
-  
-  $data = $usr->get_pelanggan('', $_GET['id']);
-  foreach ($data as $key) {
-    $idUser = $key['user_id'];
-  }
-
-  $result = $usr->update_status_user($idUser, 1);
-  if($result == TRUE){
-
-    $res = $usr->delete_pelanggan($_GET['id']);
-    if ($res == TRUE) {
-      $successMsg = "Data berhasil dihapus !";
-    }else{
-      $errorMsg[] = "Gagal hapus data !";
-    }
-
-  }else{
-
-    $errorMsg[] = "Gagal hapus data !";
 
   }
 
@@ -301,15 +249,6 @@ if (isset($_GET['id'])) {
                 <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
               </div>
 
-              <div class="mb-2">
-                <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#addModal"">
-                  <span class="icon text-white-50">
-                    <i class="fas fa-plus"></i>
-                  </span>
-                  <span class="text">Add</span>
-                </button>
-              </div>
-
               <?php
 
                 if (isset($errorMsg)) {
@@ -344,11 +283,12 @@ if (isset($_GET['id'])) {
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Nama</th>
-                          <th>Alamat</th>
-                          <th>Telepon</th>
-                          <th>Email</th>
-                          <th>Username</th>
+                          <th>No. Pesanan</th>
+                          <th>Pelanggan</th>
+                          <th>Service</th>
+                          <th>Tanggal</th>
+                          <th>Status</th>
+                          <th>Memo</th>
                           <th>Aksi</th>
                         </tr>
                       </thead>
@@ -357,22 +297,18 @@ if (isset($_GET['id'])) {
                           $no=1;
                         ?>
 
-                        <?php foreach ($usr->get_pelanggan() as $dt) : ?>
+                        <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
+                          <td><?php echo $dt['id_pesan']; ?></td>
                           <td><?php echo $dt['nama']; ?></td>
-                          <td><?php echo $dt['alamat']; ?></td>
-                          <td><?php echo $dt['no_telepon']; ?></td>
-                          <td><?php echo $dt['email']; ?></td>
-                          <td><?php echo $dt['username']; ?></td>
+                          <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
+                          <td><?php echo $trans->get_status($dt['status']); ?></td>
+                          <td><?php echo $dt['memo']; ?></td>
                           <td>
-                            <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['id_pelanggan'];?>">
-                              <i class="fas fa-edit"></i>
-                            </a>
-                            <a onclick="return hapus()" href="pelanggan.php?id=<?= $dt['id_pelanggan'];?>" class="btn btn-danger btn-circle">
-                              <i class="fas fa-trash"></i>
-                            </a>
+                            <a href="#" class="btn btn-info" data-toggle="modal" data-target="#prosesModal<?= $dt['id_pesan'];?>">Proses</a>
                           </td>
                         </tr>
 
@@ -424,94 +360,47 @@ if (isset($_GET['id'])) {
       </div>
       <!-- Logout Modal-->
 
-      <!-- Add Modal-->
-      <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="Modaladd" aria-hidden="true">
+      <!-- Proses Modal-->
+      <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $edit) : ?>
+      <div class="modal fade" id="prosesModal<?= $edit['id_pesan'];?>" tabindex="-1" role="dialog" aria-labelledby="Modalproses" aria-hidden="true">
         <div class="modal-dialog" role="document">
 
           <form action="" method="POST">
             <div class="modal-content">
                 
               <div class="modal-header">
-                <h5 class="modal-title" id="Modaladd">Tambah Data Pelanggan</h5>
+                <h5 class="modal-title" id="Modalproses">Proses Data Pesanan</h5>
                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">×</span>
                 </button>
               </div>
 
               <div class="modal-body">
-
-                <div class="form-group">
-                  <input type="text" class="form-control" name="nama" placeholder="Masukan username . .">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="alamat" placeholder="Masukan alamat . .">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="telepon" placeholder="Masukan telepon . .">
-                </div>
-                <div class="form-group">
-                  <input type="text" class="form-control" name="email" placeholder="Masukan email . .">
-                </div>
-                <div class="form-group">
-                  <select class="form-control" name="user">
-                    <option value=""> Pilih user </option>
-                    <?php foreach ($usr->get_data('users', true) as $dt) : ?>
-                    <option value="<?= $dt['user_id'] ;?>"> <?= $dt['username'] ;?> </option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <input type="submit" name="save" class="btn btn-primary" value="Simpan">
-              </div>
-
-            </div>
-          </form>
-
-        </div>
-      </div>
-      <!-- Add Modal-->
-
-      <!-- Edit Modal-->
-      <?php foreach ($usr->get_pelanggan() as $edit) : ?>
-      <div class="modal fade" id="editModal<?= $edit['id_pelanggan'];?>" tabindex="-1" role="dialog" aria-labelledby="Modaledit" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-
-          <form action="" method="POST">
-            <div class="modal-content">
                 
-              <div class="modal-header">
-                <h5 class="modal-title" id="Modaledit">Edit Data Pelanggan</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                </button>
-              </div>
-
-              <div class="modal-body">
-
-
-                <input type="text" hidden="hidden" name="id_pelanggan" value="<?= $edit['id_pelanggan']; ?>">
                 <div class="form-group">
-                  <input type="text" class="form-control" name="nama" value="<?= $edit['nama'] ;?>" placeholder="Masukan username . .">
+                  <input type="text" class="form-control" readonly="readonly" name="id_pesan" value="<?= $edit['id_pesan']; ?>">
                 </div>
+
+                <input type="text" class="form-control" hidden="hidden" name="id_pelanggan" value="<?= $edit['id_pelanggan']; ?>">
                 <div class="form-group">
-                  <input type="text" class="form-control" name="alamat" value="<?= $edit['alamat'] ;?>" placeholder="Masukan alamat . .">
+                  <input type="text" class="form-control" readonly="readonly" name="" value="<?= $namaUser; ?>">
                 </div>
+
+                <input type="text" class="form-control" hidden="hidden" name="service_id" value="<?= $edit['service_id']; ?>">
                 <div class="form-group">
-                  <input type="text" class="form-control" name="telepon" value="<?= $edit['no_telepon'] ;?>" placeholder="Masukan telepon . .">
+                  <input type="text" class="form-control" readonly="readonly" name="" value="<?= $edit['description']; ?>">
                 </div>
+
                 <div class="form-group">
-                  <input type="text" class="form-control" name="email" value="<?= $edit['email'] ;?>" placeholder="Masukan email . .">
+                  <input type="text" readonly="readonly" class="form-control" name="memo" value="<?= $edit['memo'] ;?>">
                 </div>
 
               </div>
 
               <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <input type="submit" name="save-update" class="btn btn-primary" value="Simpan">
+                <input type="submit" name="reject" class="btn btn-danger" value="Reject">
+                <input type="submit" name="approve" class="btn btn-success" value="Approve">
               </div>
 
             </div>
@@ -520,7 +409,7 @@ if (isset($_GET['id'])) {
         </div>
       </div>
       <?php endforeach; ?>
-      <!-- Edit Modal-->
+      <!-- Proses Modal-->
 
 
       <script src="../assets/vendor/jquery/jquery.min.js"></script>
