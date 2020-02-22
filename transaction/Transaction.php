@@ -77,11 +77,11 @@ class Transaction
 		unset($_POST);
 	}
 
-	public function get_data_pesanan($status = false, $id_pelanggan = '')
+	public function get_data_pesanan($status = '', $id_pelanggan = '')
 	{
 		$data = array();
 		$sql = "";
-		if ($status !=false) {
+		if ($status !='') {
 			$sql .= " WHERE status = :status";
 		}
 
@@ -91,7 +91,7 @@ class Transaction
 
 		$stmt = $this->conn->prepare("SELECT * FROM pemesanan JOIN pelanggan ON(pemesanan.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=pemesanan.service_id)".$sql);
 
-		if ($status !=false) {
+		if ($status !='') {
 
 			$stmt->bindParam(":status", $status);
 
@@ -189,6 +189,69 @@ class Transaction
 		}catch(PDOException $e){
 
 		    $this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+
+	}
+
+	public function change_status_pesanan($id_pesan, $value = '')
+	{
+		
+		try{
+
+			$this->conn->beginTransaction();
+			$approve_by = $_SESSION['user_session'];
+
+			$stmt = $this->conn->prepare("UPDATE pemesanan SET status = :status, approve_by = :approve_by, approve_date = :approve_date WHERE id_pesan = :id_pesan");
+			$stmt->bindParam(':id_pesan', $id_pesan);
+			$stmt->bindParam(':status', $value);
+			$stmt->bindParam(':approve_by', $approve_by);
+			$stmt->bindParam(':approve_date', $this->time);
+			$stmt->execute();
+
+			$this->conn->commit();
+
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+
+	}
+
+	public function save_trans_service($id_pesan, $id_pelanggan, $service_id, $memo)
+	{
+		
+		try{
+
+			$this->conn->beginTransaction();
+			$status = 0;
+			$created_by = $_SESSION['user_session'];
+
+			$stmt = $this->conn->prepare("INSERT INTO service(id_pesan, id_pelanggan, service_id, memo, created_date, created_by, status) VALUES (:id_pesan, :id_pelanggan, :service_id, :memo, :created_date, :created_by, :status)");
+
+			$stmt->bindParam(":id_pesan", $id_pesan);
+			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
+			$stmt->bindParam(":service_id", $service_id);
+			$stmt->bindParam(":memo", $memo);
+			$stmt->bindParam(":created_date", $this->time);
+			$stmt->bindParam(":created_by", $created_by);
+			$stmt->bindParam(":status", $status);
+
+			$stmt->execute();
+
+			$this->conn->commit();
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
 			echo $e->getMessage();
 			return FALSE;
 

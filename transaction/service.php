@@ -54,11 +54,20 @@ if (isset($_POST['approve'])) {
 
   }else{
 
-    $return = $trans->save_pesanan($id_pelanggan, $service_id, $memo);
+    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo);
 
     if ($return == TRUE) {
 
-      $successMsg = "Data berhasil diapprove !";
+      $updateStatus = $trans->change_status_pesanan($idPesan, 1);
+      if ($updateStatus == TRUE) {
+
+        $successMsg = "Data berhasil di approve !";
+
+      }else{
+
+        $errorMsg[] = "Gagal approve data !";
+
+      }
 
     }else{
 
@@ -93,11 +102,25 @@ if (isset($_POST['reject'])) {
 
   }else{
 
-    $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
-    if ($res == TRUE) {
-      $successMsg = "Data berhasil direject !";
+    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo);
+
+    if ($return == TRUE) {
+
+      $updateStatus = $trans->change_status_pesanan($idPesan, -1);
+      if ($updateStatus == TRUE) {
+
+        $successMsg = "Data berhasil di reject !";
+        
+      }else{
+
+        $errorMsg[] = "Gagal reject data !";
+
+      }
+
     }else{
+
       $errorMsg[] = "Gagal reject data !";
+
     }
 
   }
@@ -293,7 +316,7 @@ if (isset($_POST['reject'])) {
                           $no=1;
                         ?>
 
-                        <?php foreach ($trans->get_data_pesanan(STATUS_OPEN) as $dt) : ?>
+                        <?php foreach ($trans->get_data_pesanan('STATUS_OPEN') as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>

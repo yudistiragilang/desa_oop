@@ -323,7 +323,7 @@ if (isset($_GET['id'])) {
                           }
                         ?>
 
-                        <?php foreach ($trans->get_data_pesanan(STATUS_OPEN, $idFilterPelanggan) as $dt) : ?>
+                        <?php foreach ($trans->get_data_pesanan('STATUS_OPEN', $idFilterPelanggan) as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
