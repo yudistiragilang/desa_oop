@@ -75,14 +75,14 @@ if (isset($_POST['update-user'])) {
         }else{
 
           $errorMessage[] = "Ukuran gambar terlalu besar !";
-          $foword = '<meta http-equiv="refresh" content="1">';
+          $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
         }
               
       }else{
 
         $errorMessage[] = "Format gambar tidak di dukung !";
-        $foword = '<meta http-equiv="refresh" content="1">';
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
       }
     
@@ -93,12 +93,12 @@ if (isset($_POST['update-user'])) {
     if ($return == TRUE) {
 
       $successMsg = "Berhasil Update Profil ! ";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
     }else{
 
       $errorMessage[] = "Gagal Update Profil ! ";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
     }
 

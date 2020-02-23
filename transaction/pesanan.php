@@ -58,12 +58,12 @@ if (isset($_POST['save'])) {
     if ($return == TRUE) {
 
       $successMsg = "Data berhasil disimpan !";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
     }else{
 
       $errorMsg[] = "Gagal simpan data !";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
     }
 
@@ -97,10 +97,10 @@ if (isset($_POST['save-update'])) {
     $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
     }else{
       $errorMsg[] = "Data gagal diupdate !";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
     }
 
   }
@@ -114,10 +114,10 @@ if (isset($_GET['id'])) {
 
   if ($res == TRUE) {
     $successMsg = "Data berhasil dihapus !";
-    $foword = '<meta http-equiv="refresh" content="1">';
+    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
   }else{
     $errorMsg[] = "Gagal hapus data !";
-    $foword = '<meta http-equiv="refresh" content="1">';
+    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
   }
 
 }

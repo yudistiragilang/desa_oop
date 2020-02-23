@@ -109,6 +109,7 @@ if (isset($_POST['btn-register'])) {
 		}else{
 
 			$error = "Failed create a account !";
+			$foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
 		}
 	

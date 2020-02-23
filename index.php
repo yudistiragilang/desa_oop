@@ -47,6 +47,7 @@ if (isset($_POST['btn-login'])) {
     }else{
 
       $message[] = "Wrong ! Username and Password dont match.";
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
       
     }
 

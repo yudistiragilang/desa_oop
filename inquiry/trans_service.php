@@ -41,10 +41,10 @@ if (isset($_GET['status'])) {
   
   if ($res == TRUE) {
     $successMsg = "Status berhasil diubah !";
-    $foword = '<meta http-equiv="refresh" content="1">';
+    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
   }else{
     $errorMsg[] = "Status Gagal diubah !";
-    $foword = '<meta http-equiv="refresh" content="1">';
+    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
   }
 
 }

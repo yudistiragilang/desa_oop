@@ -62,19 +62,19 @@ if (isset($_POST['approve'])) {
       if ($updateStatus == TRUE) {
 
         $successMsg = "Data berhasil di approve !";
-        $foword = '<meta http-equiv="refresh" content="1">';
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
       }else{
 
         $errorMsg[] = "Gagal approve data !";
-        $foword = '<meta http-equiv="refresh" content="1">';
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
       }
 
     }else{
 
       $errorMsg[] = "Gagal approve data !";
-      $foword = '<meta http-equiv="refresh" content="1">';
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
     }
 
@@ -113,12 +113,12 @@ if (isset($_POST['reject'])) {
       if ($updateStatus == TRUE) {
 
         $successMsg = "Data berhasil di reject !";
-        $foword = '<meta http-equiv="refresh" content="1">';
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
         
       }else{
 
         $errorMsg[] = "Gagal reject data !";
-        $foword = '<meta http-equiv="refresh" content="1">';
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
       }
 
