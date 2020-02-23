@@ -198,12 +198,20 @@ if (isset($_POST['cetak'])) {
                 <div class="col-md-12">
                   <form class="form-inline" action="" method="POST">
                     
+                    <?php if($roleUser == 1) :?>
                     <select class="form-control mb-2 mr-sm-2" name="q_pelanggan">
                       <option value=""> All Pelanggan </option>
                       <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
                       <option value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
                       <?php endforeach; ?>
                     </select>
+
+                    <?php elseif($roleUser == 2) :?>
+
+                      <input type="text" hidden="hidden" name="q_pelanggan" value="<?= $idPelangganLoged; ?>">
+                      <input type="text" class="form-control mb-2 mr-sm-2" readonly="readonly" name="" value="<?= $namaUser; ?>">
+                      
+                    <?php endif;?>
 
                     <select class="form-control mb-2 mr-sm-2" name="q_service">
                       <option value=""> All Service </option>
