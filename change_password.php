@@ -12,6 +12,8 @@ session_start();
 require_once 'database/Login.php';
 require_once 'maintenance/Maintenance.php';
 
+include 'types.php';
+
 $db = new Login();
 $usr = new Maintenance();
 
@@ -62,7 +64,8 @@ if (isset($_POST['update-user'])) {
     if ($return == TRUE) {
 
       $successMsg = "Berhasil Update Password ! ";
-      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+
+      $foword = '<meta http-equiv="refresh" content="1; url='.BASE_URL.'logout.php">';
 
     }else{
 
