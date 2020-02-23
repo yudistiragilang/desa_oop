@@ -134,28 +134,38 @@ if (isset($_POST['save-update'])) {
 
 if (isset($_GET['id'])) {
   
-  $data = $usr->get_pelanggan('', $_GET['id']);
-  foreach ($data as $key) {
-    $idUser = $key['user_id'];
-  }
 
-  $result = $usr->update_status_user($idUser, 1);
-  if($result == TRUE){
+  if($usr->cek_foreign('pemesanan', 'id_pelanggan', $_GET['id']) == TRUE){
 
-    $res = $usr->delete_pelanggan($_GET['id']);
-    if ($res == TRUE) {
-      $successMsg = "Data berhasil dihapus !";
-      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+    $data = $usr->get_pelanggan('', $_GET['id']);
+    foreach ($data as $key) {
+      $idUser = $key['user_id'];
+    }
+
+    $result = $usr->update_status_user($idUser, 1);
+    if($result == TRUE){
+
+      $res = $usr->delete_pelanggan($_GET['id']);
+      if ($res == TRUE) {
+        $successMsg = "Data berhasil dihapus !";
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+      }else{
+        $errorMsg[] = "Gagal hapus data !";
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+      }
+
     }else{
+
       $errorMsg[] = "Gagal hapus data !";
       $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+
     }
 
   }else{
 
-    $errorMsg[] = "Gagal hapus data !";
+    $errorMsg[] = "Data tidak dapat dihapus sudah ada transaction !";
     $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
-
+  
   }
 
 }

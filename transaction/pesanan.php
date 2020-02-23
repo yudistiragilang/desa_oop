@@ -109,16 +109,26 @@ if (isset($_POST['save-update'])) {
 }
 
 if (isset($_GET['id'])) {
-  
-  $res = $trans->delete_pesanan($_GET['id']);
 
-  if ($res == TRUE) {
-    $successMsg = "Data berhasil dihapus !";
-    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+  if($trans->cek_foreign('service', 'id_pesan', $_GET['id']) == TRUE){
+
+    $res = $trans->delete_pesanan($_GET['id']);
+
+    if ($res == TRUE) {
+      $successMsg = "Data berhasil dihapus !";
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+    }else{
+      $errorMsg[] = "Gagal hapus data !";
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+    }
+  
   }else{
-    $errorMsg[] = "Gagal hapus data !";
+
+    $errorMsg[] = "Data tidak dapat dihapus sudah ada transaction !";
     $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+    
   }
+  
 
 }
 

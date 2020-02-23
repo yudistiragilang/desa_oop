@@ -466,6 +466,24 @@ class Maintenance
 		}
 	}
 
+	public function cek_foreign($tabel, $field, $value)
+	{
+
+		$sql ="SELECT * FROM ".$tabel." WHERE ".$field." = :".$field;
+
+		$stmt = $this->conn->prepare($sql);
+
+		$stmt->bindParam(':'.$field, $value);
+		
+		$stmt->execute();
+
+		if ($stmt->rowCount() > 0) {
+			return FALSE;
+		}else{
+			return TRUE;
+		}
+
+	}
 
 }
 
