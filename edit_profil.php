@@ -30,6 +30,8 @@ $emailUser = $userLogin['email'];
 $alamatUser = $userLogin['alamat'];
 $teleponUser = $userLogin['no_telepon'];
 
+$idUserActive = $userLogin['user_id'];
+
 $page_content = "Edit Profil";
 
 if (isset($_POST['update-user'])) {
@@ -66,6 +68,13 @@ if (isset($_POST['update-user'])) {
       $upload_dir = 'assets/img/profiles/';
       $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION));
       $valid_extensions = array('jpeg', 'jpg', 'png', 'gif');
+
+      // cek foto sebelumnya apa
+      if($db->cek_foto_used($idUserActive) != $imgFile AND $db->cek_foto_used($idUserActive) != "default.jpg"){
+
+          unlink($upload_dir.$db->cek_foto_used($idUserActive));
+
+      }
 
       if(in_array($imgExt, $valid_extensions)){
 

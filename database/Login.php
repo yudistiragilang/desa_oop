@@ -255,6 +255,18 @@
 
 		}
 
+		public function cek_foto_used($idUserActive)
+		{
+			
+			$stmt = $this->conn->prepare("SELECT * FROM pelanggan WHERE user_id = :user_id");
+			$stmt->bindParam(':user_id', $idUserActive);
+			$stmt->execute();
+			$userRow = $stmt->fetch(PDO::FETCH_OBJ);
+
+			return $userRow->foto;
+		
+		}
+
 	}
 
 ?>
