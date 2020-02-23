@@ -47,6 +47,28 @@ if (isset($_GET['status'])) {
 
 }
 
+if (isset($_POST['cetak'])) {
+  
+  $id_pelanggan = strip_tags($_POST['q_pelanggan']);
+  $id_service = strip_tags($_POST['q_service']);
+  $date_from = $_POST['q_from'];
+  $date_to = $_POST['q_to'];
+  $destination = $_POST['q_destinasi'];
+
+  if ($destination == 1) {
+    
+    // cetak pdf
+    $db->redirect('cetak_pdf_service.php?id_pelanggan='.$id_pelanggan.'&id_service='.$id_service.'&from='.$date_from.'&to='.$date_to);
+
+  }else{
+    
+    // cetak excel
+    $db->redirect('cetak_excel_service.php?id_pelanggan='.$id_pelanggan.'&id_service='.$id_service.'&from='.$date_from.'&to='.$date_to);
+  
+  }
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -213,6 +235,48 @@ if (isset($_GET['status'])) {
                 }
 
               ?>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <form class="form-inline" action="" method="POST">
+                    
+                    <?php if($roleUser == 1) :?>
+                    <select class="form-control mb-2 mr-sm-2" name="q_pelanggan">
+                      <option value=""> All Pelanggan </option>
+                      <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
+                      <option value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
+                      <?php endforeach; ?>
+                    </select>
+
+                    <?php elseif($roleUser == 2) :?>
+
+                      <input type="text" hidden="hidden" name="q_pelanggan" value="<?= $idPelangganLoged; ?>">
+                      <input type="text" class="form-control mb-2 mr-sm-2" readonly="readonly" name="" value="<?= $namaUser; ?>">
+                      
+                    <?php endif;?>
+
+                    <select class="form-control mb-2 mr-sm-2" name="q_service">
+                      <option value=""> All Service </option>
+                      <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
+                      <option value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
+                      <?php endforeach; ?>
+                    </select>
+
+                    <input type="date" name="q_from" class="form-control mb-2 mr-sm-2" required="required">
+
+                    <input type="date" name="q_to" class="form-control mb-2 mr-sm-2" required="required">
+
+                    <select class="form-control mb-2 mr-sm-2" name="q_destinasi" required="required">
+                      <option value=""> Destination </option>
+                      <option value="1"> Pdf </option>
+                      <option value="2"> Excel </option>
+                    </select>
+
+                    <button type="submit" name="cetak" class="btn btn-primary mb-2">Cetak</button>
+
+                  </form>
+                </div>
+              </div>
 
               <div class="card">
                 <div class="card-body">

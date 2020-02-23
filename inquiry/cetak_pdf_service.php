@@ -20,7 +20,7 @@ $pdf->AddPage();
 $pdf->SetFont('Arial','B',16);
 
 // Membuat string
-$pdf->Cell(280,7,'LAPORAN PEMESANAN',0,1,'C');
+$pdf->Cell(280,7,'LAPORAN SERVICE',0,1,'C');
 $pdf->SetFont('Arial','B',9);
 $pdf->Cell(280,7,'PERIODE '.$tgl_from.' - '.$tgl_to,0,1,'C');
 
@@ -40,40 +40,20 @@ $pdf->SetFont('Arial','',10);
 $db = new Login();
 
 $pesan = new Inquiry();
-$data = $pesan->get_pesanan_filter($id_service, $id_pelanggan, $tgl_from, $tgl_to);
+$data = $pesan->get_service_filter($id_service, $id_pelanggan, $tgl_from, $tgl_to);
 
 foreach ($data as $row) {
 
-    $pdf->Cell(30,6,$row['id_pesan'],1,0);
-    $pdf->Cell(60,6,$row['nama'],1,0);
-    $pdf->Cell(45,6,$row['description'],1,0);
-    $pdf->Cell(30,6,_sql_to_date($row['created_date']),1,0);
-    $pdf->Cell(30,6,_get_status($row['status']),1,0);
-    $pdf->Cell(80,6,$row['memo'],1,1);
+    $pdf->Cell(30, 6, $row['id_pesan'], 1, 0);
+    $pdf->Cell(60, 6, $row['nama'], 1, 0);
+    $pdf->Cell(45, 6, $row['description'], 1, 0);
+    $pdf->Cell(30, 6, _sql_to_date($row['created_date']), 1, 0);
+    $pdf->Cell(30, 6, $row['status'] == 1? "Done":"Repaired", 1, 0);
+    $pdf->Cell(80, 6, $row['memo'], 1, 1);
 
 }
 
-// $pdf->Output();
-$pdf->Output('I', 'Laporan_pesanan.pdf');
-
-function _get_status($id){
-	$status = "";
-		switch ($id) {
-			    case 0:
-			        $status = "OPEN";
-			        break;
-			    case 1:
-			        $status = "APPROVED";
-			        break;
-			    case -1:
-			        $status = "REJECT";
-			        break;
-			    default:
-			        $status;
-			}
-
-		return $status;
-}
+$pdf->Output('I', 'Laporan_service.pdf');
 
 function _sql_to_date($original_date){
 	$timestamp = strtotime($original_date);

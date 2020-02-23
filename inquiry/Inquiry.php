@@ -210,6 +210,55 @@ class Inquiry
 
 		return $data;
 	}
+
+	public function get_service_filter($id_service = '', $id_pelanggan = '', $date_from = '', $date_to = '')
+	{
+		
+		$data = array();
+		$sql = "";
+
+		if ($date_from !='') {
+			$sql .= " WHERE service.created_date BETWEEN :from_date AND :to_date";
+		}
+
+		if ($id_pelanggan !='') {
+			$sql .= " AND pelanggan.id_pelanggan = :id_pelanggan";
+		}
+
+		if ($id_service !='') {
+			$sql .= " AND service_master.service_id = :service_id";
+		}
+
+		$stmt = $this->conn->prepare("SELECT * FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
+
+		if ($date_from !='') {
+
+			$stmt->bindParam(":from_date", $date_from);
+			$stmt->bindParam(":to_date", $date_to);
+
+		}
+
+		if ($id_pelanggan !='') {
+
+			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
+
+		}
+
+		if ($id_service !='') {
+
+			$stmt->bindParam(":service_id", $id_service);
+
+		}
+
+		$stmt->execute();
+
+		while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $dt;
+		}
+
+		return $data;
+	}
+
 }
 
 ?>
