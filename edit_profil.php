@@ -56,28 +56,34 @@ if (isset($_POST['update-user'])) {
   
   }else{
 
-    $imgFile = $_FILES['item_image']['name'];
-    $tmp_dir = $_FILES['item_image']['tmp_name'];
-    $imgSize = $_FILES['item_image']['size'];
-    $upload_dir = 'assets/img/profiles/';
-    $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION));
-    $valid_extensions = array('jpeg', 'jpg', 'png', 'gif');
+    $imgFile = "";
+    
+    if($_FILES['item_image']['name'] !=""){
 
-    if(in_array($imgExt, $valid_extensions)){
+      $imgFile = $_FILES['item_image']['name'];
+      $tmp_dir = $_FILES['item_image']['tmp_name'];
+      $imgSize = $_FILES['item_image']['size'];
+      $upload_dir = 'assets/img/profiles/';
+      $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION));
+      $valid_extensions = array('jpeg', 'jpg', 'png', 'gif');
 
-      if($imgSize < 1000000){
-        move_uploaded_file($tmp_dir, $upload_dir.$imgFile);
+      if(in_array($imgExt, $valid_extensions)){
+
+        if($imgSize < 1000000){
+          move_uploaded_file($tmp_dir, $upload_dir.$imgFile);
+                
+        }else{
+
+          $errorMessage[] = "Ukuran gambar terlalu besar !";
+
+        }
               
       }else{
 
-        echo "Ukuran gambar terlalu besar";
+        $errorMessage[] = "Format gambar tidak di dukung !";
 
       }
-            
-    }else{
-
-      echo "Format gambar tidak di dukung";
-
+    
     }
 
     $return = $db->update_profil($idPelangganLoged, $fullname, $alamat, $no_telepon, $imgFile);
@@ -85,11 +91,11 @@ if (isset($_POST['update-user'])) {
     if ($return == TRUE) {
 
       $db->redirect('edit_profil.php');
-      echo "Sukses";
+      $successMsg = "Berhasil Update Profil ! ";
 
     }else{
 
-      echo "gagal";
+      $errorMessage[] = "Gagal Update Profil ! ";
 
     }
 
@@ -240,6 +246,32 @@ if (isset($_POST['update-user'])) {
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
           </div>
+
+          <?php
+
+          if (isset($errorMessage)) {
+
+            for ($i=0; $i < count($errorMessage) ; $i++) { 
+          ?>
+
+            <div class="alert alert-danger">
+              <?= $errorMessage[$i]; ?>
+            </div>
+
+          <?php
+            }
+                
+          }
+
+          if (isset($successMsg)) {
+          ?>
+            <div class="alert alert-success">
+              <?= $successMsg; ?>
+            </div>
+          <?php
+          }
+
+          ?>
 
           <div class="row">
             <div class="col-lg-8">
