@@ -26,8 +26,76 @@ $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
+$emailUser = $userLogin['email'];
+$alamatUser = $userLogin['alamat'];
+$teleponUser = $userLogin['no_telepon'];
 
 $page_content = "Edit Profil";
+
+if (isset($_POST['update-user'])) {
+  
+  $error = 0;
+  $errorMessage = array();
+
+
+  $fullname = strip_tags($_POST['nama']);
+  $no_telepon = strip_tags($_POST['telepon']);
+  $alamat = strip_tags($_POST['alamat']);
+
+  if ($fullname == "") {
+    
+    $errorMessage[] = "Nama tidak boleh kosong !";
+  
+  }elseif ($alamat == "") {
+
+    $errorMessage[] = "Alamat tidak boleh kosong !";
+
+  }else if ($no_telepon == "") {
+    
+    $errorMessage[] = "Telepon tidak boleh kosong !";
+  
+  }else{
+
+    $imgFile = $_FILES['item_image']['name'];
+    $tmp_dir = $_FILES['item_image']['tmp_name'];
+    $imgSize = $_FILES['item_image']['size'];
+    $upload_dir = 'assets/img/profiles/';
+    $imgExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION));
+    $valid_extensions = array('jpeg', 'jpg', 'png', 'gif');
+
+    if(in_array($imgExt, $valid_extensions)){
+
+      if($imgSize < 1000000){
+        move_uploaded_file($tmp_dir, $upload_dir.$imgFile);
+              
+      }else{
+
+        echo "Ukuran gambar terlalu besar";
+
+      }
+            
+    }else{
+
+      echo "Format gambar tidak di dukung";
+
+    }
+
+    $return = $db->update_profil($idPelangganLoged, $fullname, $alamat, $no_telepon, $imgFile);
+    
+    if ($return == TRUE) {
+
+      $db->redirect('edit_profil.php');
+      echo "Sukses";
+
+    }else{
+
+      echo "gagal";
+
+    }
+
+  }
+
+}
 
 ?>
 
@@ -173,6 +241,65 @@ $page_content = "Edit Profil";
             <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
           </div>
 
+          <div class="row">
+            <div class="col-lg-8">
+              <form action="" method="POST" enctype="multipart/form-data">
+                <div class="form-group row">
+                  <label for="email" class="col-sm-2 col-form-label">Email</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" name="email" readonly value="<?= $emailUser; ?>">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="name" class="col-sm-2 col-form-label">Full name</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="nama" value="<?= $namaUser; ?>">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="name" class="col-sm-2 col-form-label">Alamat</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="alamat" value="<?= $alamatUser; ?>">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label for="name" class="col-sm-2 col-form-label">Telepon</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="telepon" value="<?= $teleponUser; ?>">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <div class="col-sm-2">Picture</div>
+                  <div class="col-sm-10">
+                    <div class="row">
+                      <div class="col-sm-3">
+                        <img src="assets/img/profiles/<?= $foto; ?>" class="img-thumbnail">
+                      </div>
+                      <div class="col-sm-9">
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="item_image" name="item_image">
+                          <label class="custom-file-label" for="item_image">Choose file</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row justify-content-end">
+                  <div class="col-sm-10">
+                    <button type="submit" name="update-user" class="btn btn-primary">Edit</button>
+                  </div>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+
         </div>
       </div>
       <!-- End of Main Content -->
@@ -224,6 +351,14 @@ $page_content = "Edit Profil";
   <script src="assets/vendor/chart.js/Chart.min.js"></script>
   <script src="assets/js/demo/chart-area-demo.js"></script>
   <script src="assets/js/demo/chart-pie-demo.js"></script>
+  <script type="text/javascript">
+    $('.custom-file-input').on('change', function(){
+
+      let fileName = $(this).val().split('\\').pop();
+      $(this).next('.custom-file-label').addClass("selected").html(fileName);
+
+    });
+  </script>
 
 </body>
 

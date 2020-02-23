@@ -174,7 +174,54 @@
 			$new_date = date("Y-m-d", $timestamp);
 			return $new_date;
 		}
-	
+
+		public function update_profil($id_pelanggan, $nama, $alamat, $no_telepon, $foto='')
+		{
+
+			try{
+
+				$this->conn->beginTransaction();
+
+				$sql = "UPDATE pelanggan SET nama = :nama, alamat = :alamat, no_telepon = :no_telepon";
+
+				if ($foto != '') {
+
+					$sql .=", foto = :foto";
+
+				}
+
+				$sql .=" WHERE id_pelanggan = :id_pelanggan";
+
+				$stmt = $this->conn->prepare($sql);			
+				
+				$stmt->bindParam(':id_pelanggan', $id_pelanggan);
+
+				$stmt->bindParam(':nama', $nama);
+				$stmt->bindParam(':alamat', $alamat);
+				$stmt->bindParam(':no_telepon', $no_telepon);
+				
+				if ($foto !='') {
+
+					$stmt->bindParam(':foto', $foto);
+				
+				}
+				
+				$stmt->execute();
+
+				$this->conn->commit();
+
+				return TRUE;
+
+			}catch(PDOException $e){
+
+				$this->conn->rollback();
+				echo $e->getMessage();
+				return FALSE;
+
+			}
+
+		}
+
 	}
 
 ?>
