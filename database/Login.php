@@ -167,6 +167,13 @@
 			$new_date = date("d-M-Y", $timestamp);
 			return $new_date;
 		}
+
+		public function date_to_sql($original_date)
+		{
+			$timestamp = strtotime($original_date);
+			$new_date = date("Y-m-d", $timestamp);
+			return $new_date;
+		}
 	
 	}
 
