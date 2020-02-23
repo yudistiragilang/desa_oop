@@ -27,7 +27,7 @@ $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
 
-$page_content = "Beranda";
+$page_content = "Edit Profil";
 
 ?>
 

@@ -274,7 +274,7 @@ if (isset($_GET['id'])) {
                     <img class="img-profile rounded-circle" src="../assets/img/profiles/<?= $foto; ?>">
                   </a>
                   <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="../edit_profil.php">
                       <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                       Profile
                     </a>
