@@ -51,7 +51,7 @@ foreach ($data as $row) {
 	$sheet->setCellValue('A'.$i, $row['id_pesan']);
 	$sheet->setCellValue('B'.$i, $row['nama']);
 	$sheet->setCellValue('C'.$i, $row['description']);
-	$sheet->setCellValue('D'.$i, $row['created_date']);
+	$sheet->setCellValue('D'.$i, _sql_to_date($row['created_date']));
 	$sheet->setCellValue('E'.$i, _get_status($row['status']));
 	$sheet->setCellValue('F'.$i, $row['memo']);
 	$i++;
@@ -105,5 +105,12 @@ function _get_status($id){
 
 		return $status;
 }
+
+function _sql_to_date($original_date){
+	$timestamp = strtotime($original_date);
+	$new_date = date("d-M-Y", $timestamp);
+	return $new_date;
+}
+
 
 ?>
