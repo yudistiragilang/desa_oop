@@ -261,6 +261,11 @@ if (isset($_POST['reject'])) {
                       Profile
                     </a>
                     <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="../change_password.php">
+                      <i class="fas fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                      Change Password
+                    </a>
+                    <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                       <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                       Logout

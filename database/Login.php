@@ -222,6 +222,39 @@
 
 		}
 
+		public function change_password($idUserActive, $passwordNew, $passwordActive)
+		{
+
+			$stmt = $this->conn->prepare("SELECT * FROM users WHERE user_id = :user_id");
+			$stmt->bindParam(':user_id', $idUserActive);
+			$stmt->execute();
+			$userRow = $stmt->fetch(PDO::FETCH_OBJ);
+
+			if (password_verify($passwordActive, $userRow->password)) {
+
+				$this->conn->beginTransaction();
+				$newPassword = password_hash($passwordNew, PASSWORD_DEFAULT);
+
+				$stmt = $this->conn->prepare("UPDATE users SET password = :password WHERE user_id = :user_id");
+				
+				$stmt->bindParam(':password', $newPassword);
+				$stmt->bindParam(':user_id', $idUserActive);
+				
+				$stmt->execute();
+						
+				$this->conn->commit();
+
+				return TRUE;
+					
+			}else{
+
+				$this->conn->rollback();
+				return FALSE;
+					
+			}
+
+		}
+
 	}
 
 ?>

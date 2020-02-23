@@ -26,8 +26,54 @@ $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
+$emailUser = $userLogin['email'];
+$alamatUser = $userLogin['alamat'];
+$teleponUser = $userLogin['no_telepon'];
+$idUsrActive = $userLogin['user_id'];
 
-$page_content = "Beranda";
+$page_content = "Change Password";
+
+if (isset($_POST['update-user'])) {
+  
+  $error = 0;
+  $errorMessage = array();
+
+
+  $Password1 = strip_tags($_POST['password_1']);
+  $Password2 = strip_tags($_POST['password_2']);
+  $PasswordActive = strip_tags($_POST['password_active']);
+
+  if ($Password1 == "") {
+    
+    $errorMessage[] = "Password tidak boleh kosong !";
+  
+  }elseif ($Password1 != $Password2) {
+
+    $errorMessage[] = "Password baru tidak sama dengan ulangi password !";
+
+  }else if ($PasswordActive == "") {
+    
+    $errorMessage[] = "Password active tidak boleh kosong !";
+  
+  }else{
+
+    $return = $db->change_password($idUsrActive, $Password1, $PasswordActive);
+    
+    if ($return == TRUE) {
+
+      $successMsg = "Berhasil Update Password ! ";
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+
+    }else{
+
+      $errorMessage[] = "Gagal Update Password ! ";
+      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+
+    }
+
+  }
+
+}
 
 ?>
 
@@ -41,7 +87,11 @@ $page_content = "Beranda";
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
+  
+  <?php if(isset($foword)) : ?>
+  <?= $foword; ?>
+  <?php endif;?>
+  
   <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="assets/img/favicon.ico">
   <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -178,115 +228,66 @@ $page_content = "Beranda";
             <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
           </div>
 
-          <?php if($roleUser == 1) :?>
+          <?php
+
+          if (isset($errorMessage)) {
+
+            for ($i=0; $i < count($errorMessage) ; $i++) { 
+          ?>
+
+            <div class="alert alert-danger">
+              <?= $errorMessage[$i]; ?>
+            </div>
+
+          <?php
+            }
+                
+          }
+
+          if (isset($successMsg)) {
+          ?>
+            <div class="alert alert-success">
+              <?= $successMsg; ?>
+            </div>
+          <?php
+          }
+
+          ?>
 
           <div class="row">
-            <div class="col-md-12">
-              <h3>Maintenance</h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-primary shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">User</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('users'); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-key fa-2x text-gray-300"></i>
-                    </div>
+            <div class="col-lg-8">
+              <form action="" method="POST" enctype="multipart/form-data">
+
+                <div class="form-group row">
+                  <label for="name" class="col-sm-4 col-form-label">Password baru</label>
+                  <div class="col-sm-8">
+                    <input type="password" class="form-control" name="password_1" placeholder="Masukan password baru . .">
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-danger shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Pelanggan</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('pelanggan'); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-users fa-2x text-gray-300"></i>
-                    </div>
+                <div class="form-group row">
+                  <label for="name" class="col-sm-4 col-form-label">Ulangi password</label>
+                  <div class="col-sm-8">
+                    <input type="password" class="form-control" name="password_2" placeholder="Ulangi Password Baru . .">
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-info shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Service</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service_master'); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fab fa-servicestack fa-2x text-gray-300"></i>
-                    </div>
+                <div class="form-group row">
+                  <label for="name" class="col-sm-4 col-form-label">Password</label>
+                  <div class="col-sm-8">
+                    <input type="password" class="form-control" name="password_active" placeholder="Masukan password lama . .">
                   </div>
                 </div>
-              </div>
-            </div>
 
-          </div>
-          <?php endif; ?>
-
-          <div class="row">
-            <div class="col-md-12">
-              <h3>Transaction</h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-success shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Pesanan</div>
-                      <?php
-
-                        $idFilterPelanggan = "";
-                        if ($roleUser == 1 ) {
-                          $idFilterPelanggan = "";
-                        }else{
-                          $idFilterPelanggan = $idPelangganLoged;
-                        }
-
-                      ?>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('pemesanan', $idFilterPelanggan); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-book-open fa-2x text-gray-300"></i>
-                    </div>
+                <div class="form-group row justify-content-end">
+                  <div class="col-sm-8">
+                    <button type="submit" name="update-user" class="btn btn-primary">Change</button>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <?php if($roleUser == 1) :?>
-            <div class="col-xl-3 col-md-6 mb-4">
-              <div class="card border-left-warning shadow h-100 py-2">
-                <div class="card-body">
-                  <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Service</div>
-                      <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $usr->count_data('service', $idFilterPelanggan); ?></div>
-                    </div>
-                    <div class="col-auto">
-                      <i class="fas fa-toolbox fa-2x text-gray-300"></i>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <?php endif; ?>
+              </form>
 
+            </div>
           </div>
 
         </div>
@@ -337,9 +338,6 @@ $page_content = "Beranda";
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="assets/vendor/jquery-easing/jquery.easing.min.js"></script>
   <script src="assets/js/sb-admin-2.min.js"></script>
-  <script src="assets/vendor/chart.js/Chart.min.js"></script>
-  <script src="assets/js/demo/chart-area-demo.js"></script>
-  <script src="assets/js/demo/chart-pie-demo.js"></script>
 
 </body>
 
