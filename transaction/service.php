@@ -62,16 +62,19 @@ if (isset($_POST['approve'])) {
       if ($updateStatus == TRUE) {
 
         $successMsg = "Data berhasil di approve !";
+        $foword = '<meta http-equiv="refresh" content="1">';
 
       }else{
 
         $errorMsg[] = "Gagal approve data !";
+        $foword = '<meta http-equiv="refresh" content="1">';
 
       }
 
     }else{
 
       $errorMsg[] = "Gagal approve data !";
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }
 
@@ -110,10 +113,12 @@ if (isset($_POST['reject'])) {
       if ($updateStatus == TRUE) {
 
         $successMsg = "Data berhasil di reject !";
+        $foword = '<meta http-equiv="refresh" content="1">';
         
       }else{
 
         $errorMsg[] = "Gagal reject data !";
+        $foword = '<meta http-equiv="refresh" content="1">';
 
       }
 
@@ -139,6 +144,10 @@ if (isset($_POST['reject'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+
+  <?php if(isset($foword)) : ?>
+  <?= $foword; ?>
+  <?php endif;?>
 
   <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="../assets/img/favicon.ico">

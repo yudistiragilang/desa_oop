@@ -54,11 +54,12 @@ if (isset($_POST['save'])) {
     if ($return == TRUE) {
 
       $successMsg = "Data berhasil disimpan !";
-      $username="";
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }else{
 
       $errorMsg[] = "Gagal simpan data !";
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }
 
@@ -82,8 +83,10 @@ if (isset($_POST['save-update'])) {
     $res = $usr->update_service($description, $idService);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
+      $foword = '<meta http-equiv="refresh" content="1">';
     }else{
       $errorMsg[] = "Data gagal diupdate !";
+      $foword = '<meta http-equiv="refresh" content="1">';
     }
 
   }
@@ -97,8 +100,10 @@ if (isset($_GET['id'])) {
 
   if ($res == TRUE) {
     $successMsg = "Data berhasil dihapus !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }else{
     $errorMsg[] = "Gagal hapus data !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }
 
 }
@@ -113,8 +118,10 @@ if (isset($_GET['inactive_id'])) {
   
   if ($res == TRUE) {
     $successMsg = "Status berhasil diubah !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }else{
     $errorMsg[] = "Status Gagal diubah !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }
 
 }
@@ -131,6 +138,10 @@ if (isset($_GET['inactive_id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+
+  <?php if(isset($foword)) : ?>
+  <?= $foword; ?>
+  <?php endif;?>
 
   <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="../assets/img/favicon.ico">

@@ -58,11 +58,12 @@ if (isset($_POST['save'])) {
     if ($return == TRUE) {
 
       $successMsg = "Data berhasil disimpan !";
-      // $db->redirect('pesanan.php');
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }else{
 
       $errorMsg[] = "Gagal simpan data !";
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }
 
@@ -96,8 +97,10 @@ if (isset($_POST['save-update'])) {
     $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
+      $foword = '<meta http-equiv="refresh" content="1">';
     }else{
       $errorMsg[] = "Data gagal diupdate !";
+      $foword = '<meta http-equiv="refresh" content="1">';
     }
 
   }
@@ -111,8 +114,10 @@ if (isset($_GET['id'])) {
 
   if ($res == TRUE) {
     $successMsg = "Data berhasil dihapus !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }else{
     $errorMsg[] = "Gagal hapus data !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }
 
 }
@@ -129,6 +134,10 @@ if (isset($_GET['id'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+
+  <?php if(isset($foword)) : ?>
+  <?= $foword; ?>
+  <?php endif;?>
 
   <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="../assets/img/favicon.ico">

@@ -41,8 +41,10 @@ if (isset($_GET['status'])) {
   
   if ($res == TRUE) {
     $successMsg = "Status berhasil diubah !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }else{
     $errorMsg[] = "Status Gagal diubah !";
+    $foword = '<meta http-equiv="refresh" content="1">';
   }
 
 }
@@ -82,6 +84,10 @@ if (isset($_POST['cetak'])) {
   <meta name="description" content="">
   <meta name="author" content="">
 
+  <?php if(isset($foword)) : ?>
+  <?= $foword; ?>
+  <?php endif;?>
+  
   <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="../assets/img/favicon.ico">
   <link href="../assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">

@@ -57,7 +57,7 @@ if (isset($_POST['update-user'])) {
   }else{
 
     $imgFile = "";
-    
+
     if($_FILES['item_image']['name'] !=""){
 
       $imgFile = $_FILES['item_image']['name'];
@@ -75,12 +75,14 @@ if (isset($_POST['update-user'])) {
         }else{
 
           $errorMessage[] = "Ukuran gambar terlalu besar !";
+          $foword = '<meta http-equiv="refresh" content="1">';
 
         }
               
       }else{
 
         $errorMessage[] = "Format gambar tidak di dukung !";
+        $foword = '<meta http-equiv="refresh" content="1">';
 
       }
     
@@ -90,12 +92,13 @@ if (isset($_POST['update-user'])) {
     
     if ($return == TRUE) {
 
-      $db->redirect('edit_profil.php');
       $successMsg = "Berhasil Update Profil ! ";
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }else{
 
       $errorMessage[] = "Gagal Update Profil ! ";
+      $foword = '<meta http-equiv="refresh" content="1">';
 
     }
 
@@ -115,7 +118,11 @@ if (isset($_POST['update-user'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-
+  
+  <?php if(isset($foword)) : ?>
+  <?= $foword; ?>
+  <?php endif;?>
+  
   <title><?= $page_content; ?></title>
   <link rel="shortcut icon" href="assets/img/favicon.ico">
   <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
