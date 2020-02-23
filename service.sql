@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.9.0.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 19 Feb 2020 pada 20.24
--- Versi server: 10.1.37-MariaDB
--- Versi PHP: 7.3.1
+-- Generation Time: Feb 23, 2020 at 07:37 PM
+-- Server version: 10.3.16-MariaDB
+-- PHP Version: 7.1.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,33 +25,30 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pelanggan`
+-- Table structure for table `pelanggan`
 --
 
 CREATE TABLE `pelanggan` (
   `id_pelanggan` int(11) NOT NULL,
   `nama` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
-  `alamat` text,
+  `alamat` text DEFAULT NULL,
   `no_telepon` varchar(15) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `foto` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data untuk tabel `pelanggan`
+-- Dumping data for table `pelanggan`
 --
 
 INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `email`, `alamat`, `no_telepon`, `user_id`, `foto`) VALUES
-(3, 'Yudistira Gilang Adisetyo', 'yudhistiragilang22@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '085647247592', 6, NULL),
-(5, 'Tyas Ayu Nanda Pertiwi', 'gilacoc1122@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '081226558445', 8, NULL),
-(6, 'Yayas', 'gilacoc1122@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '081226558445', 9, NULL),
-(7, 'cek cek', 'gilacoc1122@gmail.com', 'Dsn Karangasem RT 04 RW 03 Sroyo Jaten', '085647247592', 11, NULL);
+(1, 'Alicization', 'yudhistiragilang22@gmail.com', 'Dsn Karangasem RT.04 RW.03 Sroyo Jaten Kab.Karanganyar', '085647247592', 1, 'Screenshot_1.png');
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `pemesanan`
+-- Table structure for table `pemesanan`
 --
 
 CREATE TABLE `pemesanan` (
@@ -69,7 +66,7 @@ CREATE TABLE `pemesanan` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `service`
+-- Table structure for table `service`
 --
 
 CREATE TABLE `service` (
@@ -86,7 +83,7 @@ CREATE TABLE `service` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `service_master`
+-- Table structure for table `service_master`
 --
 
 CREATE TABLE `service_master` (
@@ -101,7 +98,7 @@ CREATE TABLE `service_master` (
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -116,28 +113,25 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
--- Dumping data untuk tabel `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `last_visit`, `created_date`, `inactive`, `role`, `available`) VALUES
-(6, 'gilang.adisetyo', '$2y$10$dFrJ07tWIQoIC7y0pqxB8eVLAJUWyIrNiVybM3NXQdmDJWNDw3Mmy', '2020-02-20 01:40:22', '2020-02-19 23:43:25', 0, 1, 0),
-(8, 'yayo', '$2y$10$98czJ8DFnrEOehwn0YDLYOxGjK6JrakV8svBlmLSU3HnOOnWHOnL.', NULL, '2020-02-20 01:20:42', 0, 2, 0),
-(9, 'yess', '$2y$10$.gOy0wogNSPKvWjCGEbHteD30U83ubXlrymQoJhyvIepnFRNiJ1c2', NULL, '2020-02-20 01:24:27', 0, 2, 0),
-(11, 'ceks', '$2y$10$HGW5aieqJLbJvgCk.BX4deSFdLXunJpL8VnG4rw4yuw7cQad9m5l2', NULL, '2020-02-20 01:40:01', 0, 2, 0);
+(1, 'aliciz', '$2y$10$m1fu2NE9yG3zEhMBaQ.W2eoaiZk4YPXbFgYCI9Z4oVQGSLXAjRvna', '2020-02-24 01:22:21', '2020-02-24 01:21:15', 0, 1, 0);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indeks untuk tabel `pelanggan`
+-- Indexes for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
   ADD PRIMARY KEY (`id_pelanggan`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indeks untuk tabel `pemesanan`
+-- Indexes for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
   ADD PRIMARY KEY (`id_pesan`),
@@ -145,7 +139,7 @@ ALTER TABLE `pemesanan`
   ADD KEY `service_id` (`service_id`);
 
 --
--- Indeks untuk tabel `service`
+-- Indexes for table `service`
 --
 ALTER TABLE `service`
   ADD PRIMARY KEY (`id_service`),
@@ -154,75 +148,75 @@ ALTER TABLE `service`
   ADD KEY `service_id` (`service_id`);
 
 --
--- Indeks untuk tabel `service_master`
+-- Indexes for table `service_master`
 --
 ALTER TABLE `service_master`
   ADD PRIMARY KEY (`service_id`);
 
 --
--- Indeks untuk tabel `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`) USING BTREE;
 
 --
--- AUTO_INCREMENT untuk tabel yang dibuang
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT untuk tabel `pelanggan`
+-- AUTO_INCREMENT for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT untuk tabel `pemesanan`
+-- AUTO_INCREMENT for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
   MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `service`
+-- AUTO_INCREMENT for table `service`
 --
 ALTER TABLE `service`
   MODIFY `id_service` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `service_master`
+-- AUTO_INCREMENT for table `service_master`
 --
 ALTER TABLE `service_master`
   MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT untuk tabel `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
+-- Constraints for dumped tables
 --
 
 --
--- Ketidakleluasaan untuk tabel `pelanggan`
+-- Constraints for table `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  ADD CONSTRAINT `pelanggan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+  ADD CONSTRAINT `pelanggan_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Ketidakleluasaan untuk tabel `pemesanan`
+-- Constraints for table `pemesanan`
 --
 ALTER TABLE `pemesanan`
-  ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`),
-  ADD CONSTRAINT `pemesanan_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service_master` (`service_id`);
+  ADD CONSTRAINT `pemesanan_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `pemesanan_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service_master` (`service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Ketidakleluasaan untuk tabel `service`
+-- Constraints for table `service`
 --
 ALTER TABLE `service`
-  ADD CONSTRAINT `service_ibfk_1` FOREIGN KEY (`service_id`) REFERENCES `service_master` (`service_id`),
-  ADD CONSTRAINT `service_ibfk_2` FOREIGN KEY (`id_pesan`) REFERENCES `pemesanan` (`id_pesan`),
-  ADD CONSTRAINT `service_ibfk_3` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`);
+  ADD CONSTRAINT `service_ibfk_1` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id_pelanggan`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `service_ibfk_2` FOREIGN KEY (`service_id`) REFERENCES `service_master` (`service_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `service_ibfk_3` FOREIGN KEY (`id_pesan`) REFERENCES `pemesanan` (`id_pesan`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
