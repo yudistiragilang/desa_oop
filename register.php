@@ -9,6 +9,7 @@
 session_start();
 
 require_once 'database/Login.php';
+include 'types.php';
 
 $db = new Login();
 
@@ -20,9 +21,7 @@ if ($db->is_logged_in() != "") {
 
 if (isset($_POST['btn-register'])) {
 	
-	$error = 0;
 	$errorMessage = array();
-
 
 	$fullname = strip_tags($_POST['fullname']);
 	$dbname = strip_tags($_POST['username']);
@@ -35,47 +34,38 @@ if (isset($_POST['btn-register'])) {
 	if ($fullname == "") {
 		
 		$errorMessage[] = "Nama tidak boleh kosong !";
-		$error = 1;
 	
 	}elseif ($alamat == "") {
 
 		$errorMessage[] = "Alamat tidak boleh kosong !";
-		$error = 1;
 
 	}else if ($dbname == "") {
 		
 		$errorMessage[] = "Username tidak boleh kosong !";
-		$error = 1;
 	
 	}else if ($email == "") {
 		
 		$errorMessage[] = "Email tidak boleh kosong !";
-		$error = 1;
 	
 	}else if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
 
 		$errorMessage[] = "Email tidak valid !";
-		$error = 1;
 
 	}else if ($phone == "") {
 		
 		$errorMessage[] = "Phone tidak boleh kosong !";
-		$error = 1;
-	
+
 	}else if ($password == "") {
 		
 		$errorMessage[] = "Password tidak boleh kosong !";
-		$error = 1;
 	
 	}else if (strlen($password) < 6 ) {
 		
 		$errorMessage[] = "Password harus lebih dari 6 karakter !";
-		$error = 1;
-	
+
 	} else if ($password != $rePassword) {
 		
 		$errorMessage[] = "Password dan Re Password tidak sama !";
-		$error = 1;
 	
 	}else{
 
@@ -85,31 +75,31 @@ if (isset($_POST['btn-register'])) {
 			$stmt->execute(array(':username' => $dbname));
 			$row = $stmt->fetch(PDO::FETCH_OBJ);
 
-			if ($row->username == $dbname) {
+			$cekUser = ($row == false ? "":$row->username);
+			if ($cekUser == $dbname) {
 
 				$errorMessage[] = "Username tidak tersedia !";
-				$error = 1;
 				
+			}else{
+
+				if ($db->register($dbname, $password, $fullname, $phone, $email, $alamat) == TRUE) {
+
+					// $db->redirect('index.php');
+					$successMsg = "Berhasil membuat account ! ";
+		      		$foword = '<meta http-equiv="refresh" content="1; url='.BASE_URL.'index.php">';
+
+				}else{
+
+					$errorMessage[] = "Failed create a account !";
+					$foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+
+				}
+
 			}
 
 		}catch(PDOException $e){
 
 			echo $e->getMessage();
-
-		}
-	
-	}
-
-	if($error == 0){
-
-		if ($db->register($dbname, $password, $fullname, $phone, $email, $alamat)) {
-			
-			$db->redirect('index.php');
-
-		}else{
-
-			$error = "Failed create a account !";
-			$foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
 
 		}
 	
@@ -129,6 +119,10 @@ if (isset($_POST['btn-register'])) {
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
+
+	<?php if(isset($foword)) : ?>
+	<?= $foword; ?>
+	<?php endif;?>
 
 	<title>Register</title>
 	<link rel="shortcut icon" href="assets/img/favicon.ico">
@@ -156,21 +150,29 @@ if (isset($_POST['btn-register'])) {
 
 							<?php
 
-								if (isset($errorMessage)) {
+				                if (isset($errorMessage)) {
 
-									for ($i=0; $i < count($errorMessage) ; $i++) { 
-										?>
+				                  for ($i=0; $i < count($errorMessage) ; $i++) { 
+				                    ?>
 
-										<div class="alert alert-danger">
-											<?= $errorMessage[$i]; ?>
-										</div>
+				                    <div class="alert alert-danger">
+				                      <?= $errorMessage[$i]; ?>
+				                    </div>
 
-										<?php
-									}
-								
-								}
+				                    <?php
+				                  }
+				                
+				                }
 
-							?>
+				                if (isset($successMsg)) {
+				                  ?>
+				                    <div class="alert alert-success">
+				                      <?= $successMsg; ?>
+				                    </div>
+				                  <?php
+				                }
+
+				              ?>
 
 							<form class="user" method="POST" action="">
 

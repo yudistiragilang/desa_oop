@@ -284,12 +284,15 @@ class Maintenance
 
 			$this->conn->beginTransaction();
 
-			$stmt = $this->conn->prepare("INSERT INTO pelanggan(nama, email, alamat, no_telepon, user_id) VALUES (:nama, :email, :alamat, :no_telepon, :user_id)");
+			$fotoDefault = "default.jpg";
+
+			$stmt = $this->conn->prepare("INSERT INTO pelanggan(nama, email, alamat, no_telepon, user_id, foto) VALUES (:nama, :email, :alamat, :no_telepon, :user_id, :foto)");
 			$stmt->bindParam(":nama", $nama);
 			$stmt->bindParam(":email", $email);
 			$stmt->bindParam(":alamat", $alamat);
 			$stmt->bindParam(":no_telepon", $telepon);
 			$stmt->bindParam(":user_id", $user);
+			$stmt->bindParam(":foto", $fotoDefault);
 
 			$stmt->execute();
 			$this->conn->commit();

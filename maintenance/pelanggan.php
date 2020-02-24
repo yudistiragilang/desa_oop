@@ -72,8 +72,20 @@ if (isset($_POST['save'])) {
 
     if ($return == TRUE) {
 
-      $successMsg = "Data berhasil disimpan !";
-      $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+      $updateAvailable = $usr->update_status_user($user, '0');
+
+      if ($updateAvailable == TRUE) {
+
+        $successMsg = "Data berhasil disimpan !";
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+      
+      }else{
+
+        $errorMsg[] = "Gagal simpan data !";
+        $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">'; 
+      
+      }
+
 
     }else{
 
