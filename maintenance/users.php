@@ -148,6 +148,24 @@ if (isset($_GET['inactive_id'])) {
 
 }
 
+if (isset($_GET['role'])) {
+
+  if ($_GET['valueRole'] == 1) {
+    $res = $usr->update_role_user('users', 'user_id', $_GET['role'], 2);
+  }else{
+    $res = $usr->update_role_user('users', 'user_id', $_GET['role'], 1);
+  }
+  
+  if ($res == TRUE) {
+    $successMsg = "Status berhasil diubah !";
+    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+  }else{
+    $errorMsg[] = "Status Gagal diubah !";
+    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
+  }
+
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -374,7 +392,21 @@ if (isset($_GET['inactive_id'])) {
                                 </a>
                             <?php } ?>
                           </td>
-                          <td><?php echo $dt['role'] == 1 ? "Admin":"Pelanggan" ; ?></td>
+                          <td>
+                            <?php if($dt['role'] == 1){ ?>
+                                <a href="users.php?role=<?= $dt['user_id'];?>&valueRole=1" class="btn btn-success btn-icon-split">
+                                  <span class="icon text-white-50"><i class="fas fa-check"></i></span>
+                                  <span class="text">Admin</span>
+                                </a>
+                            <?php }else{ ?>
+                                <a href="users.php?role=<?= $dt['user_id'];?>&valueRole=2" class="btn btn-info btn-icon-split">
+                                  <span class="icon text-white-50">
+                                    <i class="fas fa-user"></i>
+                                  </span>
+                                  <span class="text">Pelanggan</span>
+                                </a>
+                            <?php } ?>  
+                          </td>
                           <td>
                             <a href="#" class="btn btn-info btn-circle" data-toggle="modal" data-target="#editModal<?= $dt['user_id'];?>">
                               <i class="fas fa-edit"></i>

@@ -469,6 +469,30 @@ class Maintenance
 		}
 	}
 
+	public function update_role_user($table, $field, $id, $value = '')
+	{
+		try{
+
+			$sql ="UPDATE ".$table." SET role = :role WHERE ".$field." = :".$field;
+			$stmt = $this->conn->prepare($sql);			
+			$stmt->bindParam(':'.$field.'', $id);
+			$stmt->bindParam(':role', $value);
+
+			$this->conn->beginTransaction();
+			$stmt->execute();
+			$this->conn->commit();
+
+			return TRUE;
+
+		}catch(PDOException $e){
+
+			$this->conn->rollback();
+			echo $e->getMessage();
+			return FALSE;
+
+		}
+	}
+
 	public function cek_foreign($tabel, $field, $value)
 	{
 
