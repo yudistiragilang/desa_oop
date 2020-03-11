@@ -1,3 +1,4 @@
 1. buat database di localhost dengan nama service.
 2. export serice.sql di database yang sudah dibuat
 3. buka types.php dan seting base_urlnya sesuai direktori
+4. username yui password 123456 (ADMIN)
