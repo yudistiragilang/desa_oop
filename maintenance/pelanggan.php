@@ -259,7 +259,9 @@ if (isset($_GET['id'])) {
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">List Transaction:</h6>
 
+            <?php if($roleUser == 2) :?>
             <a class="collapse-item" href="../transaction/pesanan.php">Pesanan</a>
+            <?php endif; ?>
 
             <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="../transaction/service.php">Service</a>
