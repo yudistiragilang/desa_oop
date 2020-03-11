@@ -359,7 +359,7 @@ class Maintenance
 
 	}
 
-	public function save_service($kode_service, $description)
+	public function save_service($kode_service, $description, $harga)
 	{
 
 		try{
@@ -372,9 +372,10 @@ class Maintenance
 				$idPelanggan = $key['id_pelanggan'];
 			}
 
-			$stmt = $this->conn->prepare("INSERT INTO service_master(kode_service, description, created_by, created_date, inactive) VALUES (:kode_service, :description, :created_by, :created_date, :inactive)");
+			$stmt = $this->conn->prepare("INSERT INTO service_master(kode_service, description, harga_service, created_by, created_date, inactive) VALUES (:kode_service, :description, :harga_service, :created_by, :created_date, :inactive)");
 			$stmt->bindParam(":kode_service", $kode_service);
 			$stmt->bindParam(":description", $description);
+			$stmt->bindParam(":harga_service", $harga);
 			$stmt->bindParam(":created_by", $idPelanggan);
 			$stmt->bindParam(":created_date", $this->time);
 			$stmt->bindParam(":inactive", $inactive);
@@ -393,18 +394,19 @@ class Maintenance
 
 	}
 
-	public function update_service($description, $idService)
+	public function update_service($description, $harga, $idService)
 	{
 
 		try{
 
 			$this->conn->beginTransaction();
 
-			$sql ="UPDATE service_master SET description = :description WHERE service_id = :service_id";
+			$sql ="UPDATE service_master SET description = :description,  harga_service = :harga_service WHERE service_id = :service_id";
 			$stmt = $this->conn->prepare($sql);	
 
 			$stmt->bindParam(':service_id', $idService);
 			$stmt->bindParam(':description', $description);
+			$stmt->bindParam(':harga_service', $harga);
 
 			$stmt->execute();
 			$this->conn->commit();

@@ -34,6 +34,7 @@ if (isset($_POST['save'])) {
 
   $kode_service = strip_tags($_POST['kode_service']);
   $description = strip_tags($_POST['deskripsi']);
+  $harga = strip_tags($_POST['harga']);
 
   if ($kode_service == "") {
 
@@ -47,9 +48,13 @@ if (isset($_POST['save'])) {
 
     $errorMsg[] = "Description tidak boleh kosong !";
 
+  }elseif ($harga == "") {
+
+    $errorMsg[] = "Harga tidak boleh kosong !";
+
   }else{
 
-    $return = $usr->save_service($kode_service, $description);
+    $return = $usr->save_service($kode_service, $description, $harga);
 
     if ($return == TRUE) {
 
@@ -73,14 +78,19 @@ if (isset($_POST['save-update'])) {
 
   $idService = strip_tags($_POST['service_id']);
   $description = strip_tags($_POST['deskripsi']);
+  $harga = strip_tags($_POST['harga']);
 
   if ($description == "") {
 
     $errorMsg[] = "Description tidak boleh kosong !";
 
+  }elseif ($harga == "") {
+
+    $errorMsg[] = "Harga tidak boleh kosong !";
+
   }else{
 
-    $res = $usr->update_service($description, $idService);
+    $res = $usr->update_service($description, $harga, $idService);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
       $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
@@ -331,6 +341,7 @@ if (isset($_GET['inactive_id'])) {
                           <th>No</th>
                           <th>Kode</th>
                           <th>Description</th>
+                          <th>Harga</th>
                           <th>Inactive</th>
                           <th>Aksi</th>
                         </tr>
@@ -345,6 +356,7 @@ if (isset($_GET['inactive_id'])) {
                           <td><?= $no++; ?></td>
                           <td><?php echo $dt['kode_service']; ?></td>
                           <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo "Rp ".number_format($dt['harga_service'],2,",","."); ?></td>
                           <td>
                             <?php if($dt['inactive'] == 1){ ?>
                                 <a href="service.php?inactive_id=<?= $dt['service_id'];?>&value=1" class="btn btn-success btn-icon-split">
@@ -444,6 +456,11 @@ if (isset($_GET['inactive_id'])) {
                   <input type="text" class="form-control" name="deskripsi" placeholder="Masukan Description. .">
                 </div>
 
+                <div class="form-group">
+                  <label>Harga Service</label>
+                  <input type="number" class="form-control" name="harga" placeholder="Masukan Harga Service. .">
+                </div>
+
               </div>
 
               <div class="modal-footer">
@@ -483,6 +500,10 @@ if (isset($_GET['inactive_id'])) {
                 <div class="form-group">
                   <label>Jasa Service</label>
                   <input type="text" class="form-control" name="deskripsi" value="<?= $edit['description']; ?>">
+                </div>
+                <div class="form-group">
+                  <label>Harga Service</label>
+                  <input type="number" class="form-control" name="harga" value="<?= $edit['harga_service']; ?>">
                 </div>
 
               </div>
