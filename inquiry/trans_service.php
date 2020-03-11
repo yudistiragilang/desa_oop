@@ -295,6 +295,7 @@ if (isset($_POST['cetak'])) {
                           <th>Kode Pesanan</th>
                           <th>Pelanggan</th>
                           <th>Service</th>
+                          <th>Harga</th>
                           <th>Tanggal</th>
                           <th>Memo</th>
                           <th>Status</th>
@@ -312,6 +313,7 @@ if (isset($_POST['cetak'])) {
                           <td><?php echo $dt['id_pesan']; ?></td>
                           <td><?php echo $dt['nama']; ?></td>
                           <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
                           <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
                           <td><?php echo $dt['memo']; ?></td>
                           <td>

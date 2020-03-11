@@ -31,9 +31,10 @@ $pdf->SetFont('Arial','B',10);
 $pdf->Cell(30,6,'Kode Pesan',1,0);
 $pdf->Cell(60,6,'Pelanggan',1,0);
 $pdf->Cell(45,6,'Service',1,0);
+$pdf->Cell(30,6,'Harga',1,0);
 $pdf->Cell(30,6,'Tanggal',1,0);
 $pdf->Cell(30,6,'Status',1,0);
-$pdf->Cell(80,6,'Memo',1,1);
+$pdf->Cell(50,6,'Memo',1,1);
  
 $pdf->SetFont('Arial','',10);
 
@@ -44,12 +45,13 @@ $data = $pesan->get_pesanan_filter($id_service, $id_pelanggan, $tgl_from, $tgl_t
 
 foreach ($data as $row) {
 
-    $pdf->Cell(30,6,$row['id_pesan'],1,0);
-    $pdf->Cell(60,6,$row['nama'],1,0);
-    $pdf->Cell(45,6,$row['description'],1,0);
-    $pdf->Cell(30,6,_sql_to_date($row['created_date']),1,0);
-    $pdf->Cell(30,6,_get_status($row['status']),1,0);
-    $pdf->Cell(80,6,$row['memo'],1,1);
+    $pdf->Cell(30, 6, $row['id_pesan'], 1, 0);
+    $pdf->Cell(60, 6, $row['nama'], 1, 0);
+    $pdf->Cell(45, 6, $row['description'], 1, 0);
+    $pdf->Cell(30, 6, "Rp".number_format($row['harga'],2,",","."), 1, 0);
+    $pdf->Cell(30, 6, _sql_to_date($row['created_date']), 1, 0);
+    $pdf->Cell(30, 6, _get_status($row['status']), 1, 0);
+    $pdf->Cell(50, 6, $row['memo'], 1, 1);
 
 }
 

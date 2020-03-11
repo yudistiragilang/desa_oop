@@ -39,6 +39,7 @@ if (isset($_POST['approve'])) {
   $id_pelanggan = strip_tags($_POST['id_pelanggan']);
   $service_id = strip_tags($_POST['service_id']);
   $memo = strip_tags($_POST['memo']);
+  $harga = strip_tags($_POST['harga']);
 
   if ($id_pelanggan == "") {
 
@@ -54,7 +55,7 @@ if (isset($_POST['approve'])) {
 
   }else{
 
-    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo);
+    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo, $harga);
 
     if ($return == TRUE) {
 
@@ -319,6 +320,7 @@ if (isset($_POST['reject'])) {
                           <th>Kode Pesanan</th>
                           <th>Pelanggan</th>
                           <th>Service</th>
+                          <th>Harga</th>
                           <th>Tanggal</th>
                           <th>Status</th>
                           <th>Memo</th>
@@ -337,6 +339,7 @@ if (isset($_POST['reject'])) {
                           <td><?php echo $dt['id_pesan']; ?></td>
                           <td><?php echo $dt['nama']; ?></td>
                           <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
                           <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
                           <td><?php echo $trans->get_status($dt['status']); ?></td>
                           <td><?php echo $dt['memo']; ?></td>
@@ -425,6 +428,11 @@ if (isset($_POST['reject'])) {
                 <div class="form-group">
                   <label>Jasa Service</label>
                   <input type="text" class="form-control" readonly="readonly" name="" value="<?= $edit['description']; ?>">
+                </div>
+
+                <div class="form-group">
+                  <label>Harga</label>
+                  <input type="text" class="form-control" readonly="readonly" name="harga" value="<?= $edit['harga']; ?>">
                 </div>
 
                 <div class="form-group">

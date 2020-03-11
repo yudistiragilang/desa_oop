@@ -25,18 +25,20 @@ $sheet->setCellValue('A2', 'PERIODE '.$_GET['from'].' - '.$_GET['to']);
 $sheet->setCellValue('A4', 'Kode Pesan');
 $sheet->setCellValue('B4', 'Pelanggan');
 $sheet->setCellValue('C4', 'Service');
-$sheet->setCellValue('D4', 'Tanggal');
-$sheet->setCellValue('E4', 'Status');
-$sheet->setCellValue('F4', 'Memo');
+$sheet->setCellValue('D4', 'Harga');
+$sheet->setCellValue('E4', 'Tanggal');
+$sheet->setCellValue('F4', 'Status');
+$sheet->setCellValue('G4', 'Memo');
 
 $sheet->mergeCells('A1:F1');
 $sheet->mergeCells('A2:F2');
 $sheet->getColumnDimension('A')->setWidth(15);
 $sheet->getColumnDimension('B')->setWidth(30);
 $sheet->getColumnDimension('C')->setWidth(30);
-$sheet->getColumnDimension('D')->setWidth(20);
+$sheet->getColumnDimension('D')->setWidth(25);
 $sheet->getColumnDimension('E')->setWidth(20);
 $sheet->getColumnDimension('F')->setWidth(50);
+$sheet->getColumnDimension('G')->setWidth(50);
 
 $pesan = new Inquiry();
 $data = $pesan->get_pesanan_filter($id_service, $id_pelanggan, $tgl_from, $tgl_to);
@@ -51,9 +53,10 @@ foreach ($data as $row) {
 	$sheet->setCellValue('A'.$i, $row['id_pesan']);
 	$sheet->setCellValue('B'.$i, $row['nama']);
 	$sheet->setCellValue('C'.$i, $row['description']);
-	$sheet->setCellValue('D'.$i, _sql_to_date($row['created_date']));
-	$sheet->setCellValue('E'.$i, _get_status($row['status']));
-	$sheet->setCellValue('F'.$i, $row['memo']);
+	$sheet->setCellValue('D'.$i, $row['harga']);
+	$sheet->setCellValue('E'.$i, _sql_to_date($row['created_date']));
+	$sheet->setCellValue('F'.$i, _get_status($row['status']));
+	$sheet->setCellValue('G'.$i, $row['memo']);
 	$i++;
 
 }
@@ -78,8 +81,8 @@ $styleData = [
 			],
 		];
 $i = $i - 1;
-$sheet->getStyle('A4:F'.$i)->applyFromArray($styleData);
-$sheet->getStyle('A4:F4')->getFont()->setBold(true);
+$sheet->getStyle('A4:G'.$i)->applyFromArray($styleData);
+$sheet->getStyle('A4:G4')->getFont()->setBold(true);
 
 $writer = new Xlsx($spreadsheet);
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

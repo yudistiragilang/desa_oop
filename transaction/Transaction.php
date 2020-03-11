@@ -112,7 +112,7 @@ class Transaction
 		return $data;
 	}
 
-	public function save_pesanan($id_pelanggan, $service_id, $memo)
+	public function save_pesanan($id_pelanggan, $service_id, $memo, $harga)
 	{
 
 		try{
@@ -121,9 +121,10 @@ class Transaction
 			$status = 0;
 			$created_by = $_SESSION['user_session'];
 
-			$stmt = $this->conn->prepare("INSERT INTO pemesanan(id_pelanggan, service_id, memo, created_date, created_by, status) VALUES (:id_pelanggan, :service_id, :memo, :created_date, :created_by, :status)");
+			$stmt = $this->conn->prepare("INSERT INTO pemesanan(id_pelanggan, service_id, harga, memo, created_date, created_by, status) VALUES (:id_pelanggan, :service_id, :harga, :memo, :created_date, :created_by, :status)");
 			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
 			$stmt->bindParam(":service_id", $service_id);
+			$stmt->bindParam(":harga", $harga);
 			$stmt->bindParam(":memo", $memo);
 			$stmt->bindParam(":created_date", $this->time);
 			$stmt->bindParam(":created_by", $created_by);
@@ -143,17 +144,18 @@ class Transaction
 
 	}
 
-	public function update_pesanan($idPesan, $id_pelanggan, $service_id, $memo)
+	public function update_pesanan($idPesan, $id_pelanggan, $service_id, $memo, $harga)
 	{
 
 		try{
 
 			$this->conn->beginTransaction();
 
-			$stmt = $this->conn->prepare("UPDATE pemesanan SET id_pelanggan = :id_pelanggan, service_id = :service_id, memo = :memo WHERE id_pesan = :id_pesan");			
+			$stmt = $this->conn->prepare("UPDATE pemesanan SET id_pelanggan = :id_pelanggan, service_id = :service_id, harga = :harga, memo = :memo WHERE id_pesan = :id_pesan");			
 			$stmt->bindParam(':id_pesan', $idPesan);
 			$stmt->bindParam(':id_pelanggan', $id_pelanggan);
 			$stmt->bindParam(':service_id', $service_id);
+			$stmt->bindParam(':harga', $harga);
 			$stmt->bindParam(':memo', $memo);
 			$stmt->execute();
 
@@ -225,7 +227,7 @@ class Transaction
 
 	}
 
-	public function save_trans_service($id_pesan, $id_pelanggan, $service_id, $memo)
+	public function save_trans_service($id_pesan, $id_pelanggan, $service_id, $memo, $harga)
 	{
 		
 		try{
@@ -234,11 +236,12 @@ class Transaction
 			$status = 0;
 			$created_by = $_SESSION['user_session'];
 
-			$stmt = $this->conn->prepare("INSERT INTO service(id_pesan, id_pelanggan, service_id, memo, created_date, created_by, status) VALUES (:id_pesan, :id_pelanggan, :service_id, :memo, :created_date, :created_by, :status)");
+			$stmt = $this->conn->prepare("INSERT INTO service(id_pesan, id_pelanggan, service_id, harga, memo, created_date, created_by, status) VALUES (:id_pesan, :id_pelanggan, :service_id, :harga, :memo, :created_date, :created_by, :status)");
 
 			$stmt->bindParam(":id_pesan", $id_pesan);
 			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
 			$stmt->bindParam(":service_id", $service_id);
+			$stmt->bindParam(":harga", $harga);
 			$stmt->bindParam(":memo", $memo);
 			$stmt->bindParam(":created_date", $this->time);
 			$stmt->bindParam(":created_by", $created_by);

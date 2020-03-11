@@ -38,6 +38,7 @@ if (isset($_POST['save'])) {
   $id_pelanggan = strip_tags($_POST['id_pelanggan']);
   $service_id = strip_tags($_POST['service_id']);
   $memo = strip_tags($_POST['memo']);
+  $harga = strip_tags($_POST['harga']);
 
   if ($id_pelanggan == "") {
 
@@ -53,7 +54,7 @@ if (isset($_POST['save'])) {
 
   }else{
 
-    $return = $trans->save_pesanan($id_pelanggan, $service_id, $memo);
+    $return = $trans->save_pesanan($id_pelanggan, $service_id, $memo, $harga);
 
     if ($return == TRUE) {
 
@@ -79,6 +80,7 @@ if (isset($_POST['save-update'])) {
   $id_pelanggan = strip_tags($_POST['id_pelanggan']);
   $service_id = strip_tags($_POST['service_id']);
   $memo = strip_tags($_POST['memo']);
+  $harga = strip_tags($_POST['harga']);
 
   if ($id_pelanggan == "") {
 
@@ -94,7 +96,7 @@ if (isset($_POST['save-update'])) {
 
   }else{
 
-    $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo);
+    $res = $trans->update_pesanan($idPesan, $id_pelanggan, $service_id, $memo, $harga);
     if ($res == TRUE) {
       $successMsg = "Data berhasil diupdate !";
       $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
@@ -283,7 +285,7 @@ if (isset($_GET['id'])) {
               </div>
 
               <div class="mb-2">
-                <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#addModal"">
+                <button class="btn btn-success btn-icon-split" data-toggle="modal" data-target="#addModal">
                   <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                   </span>
@@ -328,6 +330,7 @@ if (isset($_GET['id'])) {
                           <th>Kode Pesanan</th>
                           <th>Pelanggan</th>
                           <th>Service</th>
+                          <th>Harga</th>
                           <th>Tanggal</th>
                           <th>Status</th>
                           <th>Memo</th>
@@ -355,6 +358,7 @@ if (isset($_GET['id'])) {
                           <td><?php echo $dt['id_pesan']; ?></td>
                           <td><?php echo $dt['nama']; ?></td>
                           <td><?php echo $dt['description']; ?></td>
+                          <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
                           <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
                           <td><?php echo $trans->get_status($dt['status']); ?></td>
                           <td><?php echo $dt['memo']; ?></td>
@@ -454,12 +458,25 @@ if (isset($_GET['id'])) {
 
                 <div class="form-group">
                   <label>Jasa Service</label>
-                  <select class="form-control" name="service_id">
+                  <select class="form-control" name="service_id" onchange="changeValue(this.value)">
                     <option value=""> Pilih Jenis Service </option>
+
+                    <?php $service = "var kode = new Array();\n"; ?>
+                    
                     <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
+                    
                     <option value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
+                    
+                    <?php $service .= "kode['" . $dt['service_id'] . "'] = {hargax:'" . addslashes($dt['harga_service']) . "'};\n"; ?>
+                    
                     <?php endforeach; ?>
+                  
                   </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Harga</label>
+                  <input type="number" readonly="readonly" class="form-control" name="harga" id="tampil_harga">
                 </div>
 
                 <div class="form-group">
@@ -531,8 +548,10 @@ if (isset($_GET['id'])) {
 
                 <div class="form-group">
                   <label>Jasa Service</label>
-                  <select class="form-control" name="service_id">
+                  <select class="form-control" name="service_id" onchange="changeValueEdit(this.value)">
                     <option value=""> Pilih Jenis Service </option>
+                    
+                    <?php $serviceEdit = "var kodes = new Array();\n"; ?>
                     <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
 
                     <?php
@@ -544,8 +563,15 @@ if (isset($_GET['id'])) {
                     ?>
 
                     <option <?= $select; ?> value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
+                    <?php $serviceEdit .= "kodes['" . $dt['service_id'] . "'] = {hargae:'" . addslashes($dt['harga_service']) . "'};\n"; ?>
                     <?php endforeach; ?>
+                  
                   </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Harga</label>
+                  <input type="number" readonly="readonly" class="form-control" name="harga" id="edit_harga" value="<?= $edit['harga'] ;?>">
                 </div>
 
                 <div class="form-group">
@@ -582,6 +608,23 @@ if (isset($_GET['id'])) {
             if (takon == true) return true;
             else return false;
             }
+      </script>
+      <script type="text/javascript">    
+      
+        <?php echo $service; ?>
+        function changeValue(x){
+          document.getElementById('tampil_harga').value = kode[x].hargax;   
+        };
+      
+      </script>
+
+      <script type="text/javascript">    
+      
+        <?php echo $serviceEdit; ?>
+        function changeValueEdit(x){
+          document.getElementById('edit_harga').value = kodes[x].hargae;   
+        };
+      
       </script>
 
     </body>
