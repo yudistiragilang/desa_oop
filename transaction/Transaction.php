@@ -227,7 +227,7 @@ class Transaction
 
 	}
 
-	public function save_trans_service($id_pesan, $id_pelanggan, $service_id, $memo, $harga)
+	public function save_trans_service($id_pesan, $id_pelanggan, $service_id, $memo, $harga, $biaya_tambahan, $memo_biaya_tambahan)
 	{
 		
 		try{
@@ -236,7 +236,7 @@ class Transaction
 			$status = 0;
 			$created_by = $_SESSION['user_session'];
 
-			$stmt = $this->conn->prepare("INSERT INTO service(id_pesan, id_pelanggan, service_id, harga, memo, created_date, created_by, status) VALUES (:id_pesan, :id_pelanggan, :service_id, :harga, :memo, :created_date, :created_by, :status)");
+			$stmt = $this->conn->prepare("INSERT INTO service(id_pesan, id_pelanggan, service_id, harga, memo, created_date, created_by, status, biaya_tambahan, memo_biaya_tambahan) VALUES (:id_pesan, :id_pelanggan, :service_id, :harga, :memo, :created_date, :created_by, :status, :biaya_tambahan, :memo_biaya_tambahan)");
 
 			$stmt->bindParam(":id_pesan", $id_pesan);
 			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
@@ -246,6 +246,8 @@ class Transaction
 			$stmt->bindParam(":created_date", $this->time);
 			$stmt->bindParam(":created_by", $created_by);
 			$stmt->bindParam(":status", $status);
+			$stmt->bindParam(":biaya_tambahan", $biaya_tambahan);
+			$stmt->bindParam(":memo_biaya_tambahan", $memo_biaya_tambahan);
 
 			$stmt->execute();
 

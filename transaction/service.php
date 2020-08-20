@@ -40,6 +40,8 @@ if (isset($_POST['approve'])) {
   $service_id = strip_tags($_POST['service_id']);
   $memo = strip_tags($_POST['memo']);
   $harga = strip_tags($_POST['harga']);
+  $biaya_tambahan = strip_tags($_POST['biaya_tambahan']);
+  $memo_biaya_tambahan = strip_tags($_POST['memo_biaya_tambahan']);
 
   if ($id_pelanggan == "") {
 
@@ -55,7 +57,7 @@ if (isset($_POST['approve'])) {
 
   }else{
 
-    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo, $harga);
+    $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo, $harga, $biaya_tambahan, $memo_biaya_tambahan);
 
     if ($return == TRUE) {
 
@@ -436,11 +438,21 @@ if (isset($_POST['reject'])) {
                   <label>Harga</label>
                   <input type="text" class="form-control" readonly="readonly" name="harga" value="<?= $edit['harga']; ?>">
                 </div>
-
+                
                 <div class="form-group">
                   <label>Keterangan</label>
                   <input type="text" readonly="readonly" class="form-control" name="memo" value="<?= $edit['memo'] ;?>">
                 </div>
+
+                <div class="form-group">
+                  <label>Biaya Tambahan</label>
+                  <input type="text" class="form-control" name="biaya_tambahan" value="0">
+                </div>
+
+                <div class="form-group">
+                  <textarea class="form-control" name="memo_biaya_tambahan"></textarea>
+                </div>
+
 
               </div>
 
