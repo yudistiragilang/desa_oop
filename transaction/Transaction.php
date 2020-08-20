@@ -283,6 +283,41 @@ class Transaction
 
 	}
 
+	public function get_data_service($status = '', $id_pelanggan = '')
+	{
+		$data = array();
+		$sql = "";
+		if ($status !='') {
+			$sql .= " WHERE service.status = :status";
+		}
+
+		if ($id_pelanggan !='') {
+			$sql .= " AND pelanggan.id_pelanggan = :id_pelanggan";
+		}
+
+		$stmt = $this->conn->prepare("SELECT * FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
+
+		if ($status !='') {
+
+			$stmt->bindParam(":status", $status);
+
+		}
+
+		if ($id_pelanggan !='') {
+
+			$stmt->bindParam(":id_pelanggan", $id_pelanggan);
+
+		}
+
+		$stmt->execute();
+
+		while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $dt;
+		}
+
+		return $data;
+	}
+
 
 }
 
