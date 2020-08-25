@@ -134,7 +134,7 @@ if (isset($_POST['process'])) {
 
             <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="../transaction/service.php">Service</a>
-            <a class="collapse-item" href="../transaction/tagihan.php">Payment</a>
+            <a class="collapse-item" href="../transaction/tagihan.php">Invoice</a>
             <?php endif; ?>
 
           </div>

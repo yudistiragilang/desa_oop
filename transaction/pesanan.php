@@ -217,7 +217,7 @@ if (isset($_GET['id'])) {
             
             <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="../transaction/service.php">Service</a>
-            <a class="collapse-item" href="../transaction/tagihan.php">Tagihan</a>
+            <a class="collapse-item" href="../transaction/tagihan.php">Invoice</a>
             <?php endif; ?>
 
           </div>
