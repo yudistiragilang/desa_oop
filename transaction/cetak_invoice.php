@@ -49,11 +49,17 @@ $pdf->Cell(30, 6, 'Total', 1, 1, 'C');
 $no = 1;
 $total = 0;
 foreach ($data as $dt) {
+	$pdf->Cell(10, 6, '', 'L,R', 0, 'C');
+	$pdf->Cell(80, 6, '', 'R', 0, 'C');
+	$pdf->Cell(30, 6, '', 'R', 0, 'C');
+	$pdf->Cell(40, 6, '', 'R', 0, 'C');
+	$pdf->Cell(30, 6, '', 'R', 1, 'C');
+
 	$pdf->Cell(10, 6, $no, 'L,R', 0, 'C');
 	$pdf->Cell(80, 6, $dt['description'], 'R', 0, 'C');
-	$pdf->Cell(30, 6, $dt['harga'], 'R', 0, 'C');
-	$pdf->Cell(40, 6, $dt['biaya_tambahan'], 'R', 0, 'C');
-	$pdf->Cell(30, 6, ($dt['harga']+$dt['biaya_tambahan']), 'R', 1, 'C');
+	$pdf->Cell(30, 6, "Rp ".number_format($dt['harga'], 2, ",", "."), 'R', 0, 'C');
+	$pdf->Cell(40, 6, "Rp ".number_format($dt['biaya_tambahan'], 2, ",", "."), 'R', 0, 'C');
+	$pdf->Cell(30, 6, "Rp ".number_format(($dt['harga']+$dt['biaya_tambahan']), 2, ",", "."), 'R', 1, 'C');
 
 	$pdf->Cell(10, 6, '', 'L,R', 0, 'C');
 	$pdf->Cell(80, 6, '', 'R', 0, 'C');
@@ -66,7 +72,7 @@ foreach ($data as $dt) {
 }
 
 $pdf->Cell(160, 6, 'Grand Total', 'L,B,T', 0, 'C');
-$pdf->Cell(30, 6, $total, 'R,B,T', 1, 'C');
+$pdf->Cell(30, 6, "Rp ".number_format($total, 2, ",", "."), 'R,B,T', 1, 'C');
 
 $pdf->Cell(10, 7, '', 0, 1, 'C');
 $pdf->Cell(160, 6, '', 0, 0, 'C');
@@ -75,7 +81,7 @@ $pdf->Ln(15);
 $pdf->Cell(160, 6, '', 0, 0, 'C');
 $pdf->Cell(30, 6, $namaUser, 0, 1, 'C');
 
-$pdf->Cell(190, 6, "Terima kasih Atas Kepercayaan Anda", 0, 1, 'C');
+$pdf->Cell(190, 6, "Terima Kasih Atas Kepercayaan Anda", 0, 1, 'C');
 
 
 $pdf->Output('I', 'invoice'.$id.'.pdf');
