@@ -13,7 +13,7 @@ require_once 'Inquiry.php';
 
 include '../types.php';
 
-$page_content = "Inquiry Pesanan";
+$page_content = "Inquiry Pendapatan";
 
 $db = new Login();
 $trans = new Inquiry();
@@ -29,28 +29,6 @@ $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
-
-if (isset($_POST['cetak'])) {
-  
-  $id_pelanggan = strip_tags($_POST['q_pelanggan']);
-  $id_service = strip_tags($_POST['q_service']);
-  $date_from = $_POST['q_from'];
-  $date_to = $_POST['q_to'];
-  $destination = $_POST['q_destinasi'];
-
-  if ($destination == 1) {
-    
-    // cetak pdf
-    $db->redirect('cetak_pdf_pesanan.php?id_pelanggan='.$id_pelanggan.'&id_service='.$id_service.'&from='.$date_from.'&to='.$date_to);
-
-  }else{
-    
-    // cetak excel
-    $db->redirect('cetak_excel_pesanan.php?id_pelanggan='.$id_pelanggan.'&id_service='.$id_service.'&from='.$date_from.'&to='.$date_to);
-  
-  }
-
-}
 
 ?>
 
@@ -197,48 +175,6 @@ if (isset($_POST['cetak'])) {
                 <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
               </div>
 
-              <div class="row">
-                <div class="col-md-12">
-                  <form class="form-inline" action="" method="POST">
-                    
-                    <?php if($roleUser == 1) :?>
-                    <select class="form-control mb-2 mr-sm-2" name="q_pelanggan">
-                      <option value=""> All Pelanggan </option>
-                      <?php foreach ($trans->get_data('pelanggan JOIN users ON(pelanggan.user_id=users.user_id AND users.role=2)', true) as $dt) : ?>
-                      <option value="<?= $dt['id_pelanggan'] ;?>"> <?= $dt['nama'] ;?> </option>
-                      <?php endforeach; ?>
-                    </select>
-
-                    <?php elseif($roleUser == 2) :?>
-
-                      <input type="text" hidden="hidden" name="q_pelanggan" value="<?= $idPelangganLoged; ?>">
-                      <input type="text" class="form-control mb-2 mr-sm-2" readonly="readonly" name="" value="<?= $namaUser; ?>">
-                      
-                    <?php endif;?>
-
-                    <select class="form-control mb-2 mr-sm-2" name="q_service">
-                      <option value=""> All Service </option>
-                      <?php foreach ($trans->get_data('service_master', true) as $dt) : ?>
-                      <option value="<?= $dt['service_id'] ;?>"> <?= $dt['description'] ;?> </option>
-                      <?php endforeach; ?>
-                    </select>
-
-                    <input type="date" name="q_from" class="form-control mb-2 mr-sm-2" required="required">
-
-                    <input type="date" name="q_to" class="form-control mb-2 mr-sm-2" required="required">
-
-                    <select class="form-control mb-2 mr-sm-2" name="q_destinasi" required="required">
-                      <option value=""> Destination </option>
-                      <option value="1"> Pdf </option>
-                      <option value="2"> Excel </option>
-                    </select>
-
-                    <button type="submit" name="cetak" class="btn btn-primary mb-2">Cetak</button>
-
-                  </form>
-                </div>
-              </div>
-
               <div class="card">
                 <div class="card-body">
                   <div class="table-responsive">
@@ -247,13 +183,10 @@ if (isset($_POST['cetak'])) {
                       <thead>
                         <tr>
                           <th>No</th>
-                          <th>Kode Pesanan</th>
-                          <th>Pelanggan</th>
-                          <th>Service</th>
-                          <th>Harga</th>
                           <th>Tanggal</th>
-                          <th>Status</th>
-                          <th>Memo</th>
+                          <th>Harga</th>
+                          <th>Biaya Tambahan</th>
+                          <th>Total</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -261,26 +194,14 @@ if (isset($_POST['cetak'])) {
                           $no=1;
                         ?>
 
-                        <?php
-                          $idFilterPelanggan = ""; 
-                          if($roleUser==1){
-                            $idFilterPelanggan = "";
-                          }else{
-                            $idFilterPelanggan = $idPelangganLoged;
-                          }
-                        ?>
-
-                        <?php foreach ($trans->get_data_pesanan('', $idFilterPelanggan) as $dt) : ?>
+                        <?php foreach ($trans->get_data_service() as $dt) : ?>
 
                         <tr>
                           <td><?= $no++; ?></td>
-                          <td><?php echo $dt['id_pesan']; ?></td>
-                          <td><?php echo $dt['nama']; ?></td>
-                          <td><?php echo $dt['description']; ?></td>
-                          <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
                           <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
-                          <td><?php echo $trans->get_status($dt['status']); ?></td>
-                          <td><?php echo $dt['memo']; ?></td>
+                          <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
+                          <td><?php echo "Rp ".number_format($dt['biaya_tambahan'],2,",","."); ?></td>
+                          <td><?php echo "Rp ".number_format(($dt['harga']+$dt['biaya_tambahan']),2,",","."); ?></td>
                         </tr>
 
                         <?php endforeach; ?>
