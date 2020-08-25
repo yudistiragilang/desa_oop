@@ -13,7 +13,7 @@ require_once 'Transaction.php';
 
 include '../types.php';
 
-$page_content = "Transaction Payment";
+$page_content = "Transaction Cetak Faktur";
 
 $db = new Login();
 $trans = new Transaction();
