@@ -126,7 +126,9 @@ $page_content = "Beranda";
             
             <a class="collapse-item" href="inquiry/trans_pesan.php">Pesanan</a>
             <a class="collapse-item" href="inquiry/trans_service.php">Service</a>
+            <?php if($roleUser == 1) :?>
             <a class="collapse-item" href="inquiry/margin.php">Pendapatan</a>
+            <?php endif; ?>
 
           </div>
         </div>
