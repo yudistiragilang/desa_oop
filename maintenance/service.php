@@ -247,6 +247,7 @@ if (isset($_GET['inactive_id'])) {
 
             <a class="collapse-item" href="../inquiry/trans_pesan.php">Pesanan</a>
             <a class="collapse-item" href="../inquiry/trans_service.php">Service</a>
+            <a class="collapse-item" href="../inquiry/margin.php">Pendapatan</a>
 
           </div>
         </div>
