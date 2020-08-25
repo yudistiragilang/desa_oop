@@ -318,6 +318,31 @@ class Transaction
 		return $data;
 	}
 
+	public function get_data_service_by_id($id = '')
+	{
+		$data = array();
+		$sql = "";
+		if ($id !='') {
+			$sql .= " WHERE service.id_service = :id_service";
+		}
+
+		$stmt = $this->conn->prepare("SELECT * FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
+
+		if ($id !='') {
+
+			$stmt->bindParam(":id_service", $id);
+
+		}
+
+		$stmt->execute();
+
+		while ($dt = $stmt->fetch(PDO::FETCH_ASSOC)) {
+			$data[] = $dt;
+		}
+
+		return $data;
+	}
+
 
 }
 

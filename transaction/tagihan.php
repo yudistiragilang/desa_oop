@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -30,26 +29,6 @@ $namaUser = $userLogin['nama'];
 $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
-
-if (isset($_POST['process'])) {
-  
-  $errorMsg = array();
-
-  $return = $trans->save_trans_service($idPesan, $id_pelanggan, $service_id, $memo, $harga, $biaya_tambahan, $memo_biaya_tambahan);
-
-  if ($return == TRUE) {
-
-    $successMsg = "Data berhasil di approve !";
-    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
-
-  }else{
-
-    $errorMsg[] = "Gagal approve data !";
-    $foword = '<meta http-equiv="refresh" content="1; url='.$_SERVER['PHP_SELF'].'">';
-
-  }
-
-}
 
 ?>
 
@@ -265,7 +244,7 @@ if (isset($_POST['process'])) {
                           <td><?php echo "Rp ".number_format($dt['biaya_tambahan'],2,",","."); ?></td>
                           <td><?php echo $dt['memo_biaya_tambahan']; ?></td>
                           <td>
-                            <a href="tagihan.php?id=<?= $dt['id_service'];?>" class="btn btn-success btn-icon-split">
+                            <a href="cetak_invoice.php?id=<?= $dt['id_service'];?>" target="_blank" class="btn btn-success btn-icon-split">
                               <span class="icon text-white-50"><i class="fas fa-check"></i></span>
                               <span class="text">Invoice</span>
                             </a>
