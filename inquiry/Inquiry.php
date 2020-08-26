@@ -284,6 +284,29 @@ class Inquiry
 		return $data;
 	}
 
+	public function get_data_penjualan_per_hari()
+	{
+		$sql = "SELECT
+					created_date,
+					SUM(harga+biaya_tambahan) AS amount
+				FROM
+					service
+				GROUP BY
+					created_date";
+
+		$stmt = $this->conn->prepare($sql);
+		$stmt->execute();
+
+		$data_tanggal = array();
+		$data_total = array();
+		while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
+	      $data_tanggal[] = date('d-m-Y', strtotime($data['created_date']));
+	      $data_total[] = $data['amount'];
+	    }
+
+	    return array($data_tanggal, $data_total);
+	}
+
 }
 
 ?>

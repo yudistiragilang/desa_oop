@@ -30,6 +30,8 @@ $roleUser = $userLogin['role'];
 $idPelangganLoged = $userLogin['id_pelanggan'];
 $foto = $userLogin['foto'];
 
+$data_pendapatan = $trans->get_data_penjualan_per_hari();
+
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +51,15 @@ $foto = $userLogin['foto'];
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href="../assets/css/sb-admin-2.min.css" rel="stylesheet">
   <link href="../assets/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+
+  <style>
+    .chart {
+      width: 50%;
+      float: left;
+      text-align: center;
+    }
+  </style>
+  <script type="text/javascript" src="../assets/js/chart/Chart.bundle.min.js"></script>
 
 </head>
 
@@ -172,45 +183,10 @@ $foto = $userLogin['foto'];
 
             <!-- Begin Page Content -->
             <div class="container-fluid">
-
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800"><?= $page_content; ?></h1>
-              </div>
-
               <div class="card">
                 <div class="card-body">
-                  <div class="table-responsive">
-
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                      <thead>
-                        <tr>
-                          <th>No</th>
-                          <th>Tanggal</th>
-                          <th>Harga</th>
-                          <th>Biaya Tambahan</th>
-                          <th>Total</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <?php 
-                          $no=1;
-                        ?>
-
-                        <?php foreach ($trans->get_data_service() as $dt) : ?>
-
-                        <tr>
-                          <td><?= $no++; ?></td>
-                          <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
-                          <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
-                          <td><?php echo "Rp ".number_format($dt['biaya_tambahan'],2,",","."); ?></td>
-                          <td><?php echo "Rp ".number_format(($dt['harga']+$dt['biaya_tambahan']),2,",","."); ?></td>
-                        </tr>
-
-                        <?php endforeach; ?>
-                      </tbody>
-                    </table>
-
-                  </div>
+                  <h2>Grafik Pendapatan Per Hari</h2>
+                  <canvas id="line-chart"></canvas>
                 </div>
               </div>
             </div>
@@ -262,6 +238,22 @@ $foto = $userLogin['foto'];
       <script src="../assets/vendor/datatables/dataTables.bootstrap4.min.js"></script>
       <script src="../assets/js/demo/datatables-demo.js"></script>
 
+      <script>
+        var linechart = document.getElementById('line-chart');
+        var chart = new Chart(linechart, {
+          type: 'line',
+          data: {
+            labels: <?php echo json_encode($data_pendapatan[0]) ?>,
+            datasets: [{
+              label: 'Pendapatan',
+              data: <?php echo json_encode($data_pendapatan[1]) ?>,
+              borderColor: 'rgba(255,99,132,1)',
+              backgroundColor: 'transparent',
+              borderWidth: 2
+            }]
+          }
+        });
+      </script>
     </body>
 
     </html>
