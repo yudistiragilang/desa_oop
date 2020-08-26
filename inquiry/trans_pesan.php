@@ -280,7 +280,7 @@ if (isset($_POST['cetak'])) {
                           <td><?php echo $dt['nama']; ?></td>
                           <td><?php echo $dt['description']; ?></td>
                           <td><?php echo "Rp ".number_format($dt['harga'],2,",","."); ?></td>
-                          <td><?php echo $db->sql_to_date($dt['created_date']); ?></td>
+                          <td><?php echo $dt['created_date']; ?></td>
                           <td><?php echo $trans->get_status($dt['status']); ?></td>
                           <td><?php echo $dt['memo']; ?></td>
                         </tr>

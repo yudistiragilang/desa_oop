@@ -33,7 +33,7 @@ class Inquiry
 			$sql .= "AND pelanggan.id_pelanggan = :id_pelanggan";
 		}
 
-		$stmt = $this->conn->prepare("SELECT * FROM pemesanan JOIN pelanggan ON(pemesanan.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=pemesanan.service_id)".$sql);
+		$stmt = $this->conn->prepare("SELECT pemesanan.*, pelanggan.nama, service_master.description  FROM pemesanan JOIN pelanggan ON(pemesanan.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=pemesanan.service_id)".$sql);
 
 		if ($status !='') {
 
@@ -68,7 +68,7 @@ class Inquiry
 			$sql .= "AND pelanggan.id_pelanggan = :id_pelanggan";
 		}
 
-		$stmt = $this->conn->prepare("SELECT * FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
+		$stmt = $this->conn->prepare("SELECT service.*, pelanggan.nama, service_master.description FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
 
 		if ($status !='') {
 
@@ -267,7 +267,7 @@ class Inquiry
 			$sql .= " WHERE service.id_service = :id_service";
 		}
 
-		$stmt = $this->conn->prepare("SELECT * FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
+		$stmt = $this->conn->prepare("SELECT service.*, pelanggan.nama, service_master.description FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
 
 		if ($id !='') {
 
@@ -287,12 +287,12 @@ class Inquiry
 	public function get_data_penjualan_per_hari()
 	{
 		$sql = "SELECT
-					created_date,
-					SUM(harga+biaya_tambahan) AS amount
+					DATE_FORMAT(created_date, '%Y-%m-%d') AS created_date,
+					SUM( harga + biaya_tambahan ) AS amount 
 				FROM
-					service
+					service 
 				GROUP BY
-					created_date";
+					DATE_FORMAT(created_date, '%Y-%m-%d')";
 
 		$stmt = $this->conn->prepare($sql);
 		$stmt->execute();

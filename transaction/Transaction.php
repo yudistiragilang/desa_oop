@@ -295,7 +295,7 @@ class Transaction
 			$sql .= " AND pelanggan.id_pelanggan = :id_pelanggan";
 		}
 
-		$stmt = $this->conn->prepare("SELECT * FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
+		$stmt = $this->conn->prepare("SELECT service.*, pelanggan.nama, service_master.description FROM service JOIN pelanggan ON(service.id_pelanggan=pelanggan.id_pelanggan) JOIN service_master ON(service_master.service_id=service.service_id)".$sql);
 
 		if ($status !='') {
 
