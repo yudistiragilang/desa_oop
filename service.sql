@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 11 Mar 2020 pada 07.52
+-- Waktu pembuatan: 26 Agu 2020 pada 16.25
 -- Versi server: 10.1.37-MariaDB
 -- Versi PHP: 7.3.1
 
@@ -43,8 +43,9 @@ CREATE TABLE `pelanggan` (
 --
 
 INSERT INTO `pelanggan` (`id_pelanggan`, `nama`, `email`, `alamat`, `no_telepon`, `user_id`, `foto`) VALUES
-(1, 'Yui kato', 'programsekripsi@db.com', 'Solo, Jawa tengah', '085647247592', 1, 'Logo Fpj 10cm X 10cm.png'),
-(2, 'Yuki', 'programsekripsi@db.com', 'Solo, Jawa tengah', '085647247592', 2, 'default.jpg');
+(1, 'Super Admin', 'programskripsi@test.com', 'Karangasem 4/3 Sroyo Jaten Kab. Karanganyar', '085647247592', 1, 'default.jpg'),
+(2, 'Yudhistira Gilang Adisetyo', 'yudhistiragilang22@gmail.com', 'Karangasem 4/3 Sroyo Jaten Kab. Karanganyar', '081226558445', 2, 'default.jpg'),
+(3, 'Bambang Sutedjo', 'bambang.tedjo@gmail.com', 'Karangasem 4/3 Sroyo Jaten Kab. Karanganyar', '081226558445', 3, 'default.jpg');
 
 -- --------------------------------------------------------
 
@@ -70,7 +71,10 @@ CREATE TABLE `pemesanan` (
 --
 
 INSERT INTO `pemesanan` (`id_pesan`, `id_pelanggan`, `service_id`, `harga`, `memo`, `created_date`, `created_by`, `status`, `approve_by`, `approve_date`) VALUES
-(1, 2, 2, 100000, 'Pintu tidak rapet', '2020-03-11 13:09:16', 1, 1, 1, '2020-03-11 13:26:45');
+(1, 2, 2, 300000, 'Tidak tampil gambar', '2020-08-26 21:00:07', 2, 1, 1, '2020-08-26 21:00:34'),
+(2, 2, 1, 100000, 'Tidak dingin', '2020-08-26 21:01:34', 2, 1, 1, '2020-08-26 21:02:00'),
+(3, 3, 3, 150000, 'Suara tidak jernih', '2020-08-27 21:03:39', 3, 1, 1, '2020-08-27 21:04:02'),
+(4, 3, 2, 300000, 'Gambar Tidak Tampil', '2020-08-28 21:18:49', 3, 1, 1, '2020-08-28 21:19:26');
 
 -- --------------------------------------------------------
 
@@ -87,15 +91,20 @@ CREATE TABLE `service` (
   `memo` varchar(100) DEFAULT NULL,
   `created_date` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
-  `status` tinyint(1) DEFAULT NULL
+  `status` tinyint(1) DEFAULT NULL,
+  `biaya_tambahan` int(11) NOT NULL,
+  `memo_biaya_tambahan` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data untuk tabel `service`
 --
 
-INSERT INTO `service` (`id_service`, `id_pesan`, `id_pelanggan`, `service_id`, `harga`, `memo`, `created_date`, `created_by`, `status`) VALUES
-(1, 1, 2, 2, 100000, 'Pintu tidak rapet', '2020-03-11 13:26:45', 1, 0);
+INSERT INTO `service` (`id_service`, `id_pesan`, `id_pelanggan`, `service_id`, `harga`, `memo`, `created_date`, `created_by`, `status`, `biaya_tambahan`, `memo_biaya_tambahan`) VALUES
+(1, 1, 2, 2, 300000, 'Tidak tampil gambar', '2020-08-26 21:00:34', 1, 1, 25000, 'Jasa Service'),
+(2, 2, 2, 1, 100000, 'Tidak dingin', '2020-08-26 21:02:00', 1, 1, 0, 'tidak ada biaya tambahan'),
+(3, 3, 3, 3, 150000, 'Suara tidak jernih', '2020-08-27 21:04:02', 1, 1, 50000, 'Beli Equalizer'),
+(4, 4, 3, 2, 300000, 'Gambar Tidak Tampil', '2020-08-28 21:19:26', 1, 1, 50000, 'Beli PCB');
 
 -- --------------------------------------------------------
 
@@ -118,8 +127,10 @@ CREATE TABLE `service_master` (
 --
 
 INSERT INTO `service_master` (`service_id`, `kode_service`, `description`, `harga_service`, `created_by`, `created_date`, `inactive`) VALUES
-(1, '10600', 'Service AC', 60000, 1, '2020-03-11 12:07:09', 0),
-(2, '10600', 'Service Kulkas', 100000, 1, '2020-03-11 13:22:51', 0);
+(1, 'E-01', 'Service Kulkas', 100000, 1, '2020-08-26 20:56:46', 0),
+(2, 'E-02', 'Service TV LED', 300000, 1, '2020-08-26 20:57:05', 0),
+(3, 'E-03', 'Service Audio', 150000, 1, '2020-08-26 20:57:28', 0),
+(4, 'E-04', 'Service TV Tabung', 90000, 1, '2020-08-26 20:57:50', 0);
 
 -- --------------------------------------------------------
 
@@ -143,8 +154,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `password`, `last_visit`, `created_date`, `inactive`, `role`, `available`) VALUES
-(1, 'yui', '$2y$10$c86R8HUK.CbqKKzvTWcZKOozcxmDAxl9QcLyxNQnJh7c32T2lWJem', '2020-03-11 13:02:33', '2020-03-11 11:54:29', 0, 1, 0),
-(2, 'yuki', '$2y$10$d9sAyWxs3n7p7Pw0QT0VgOlXH74oyELm60r70QxEZstFYzhvFgoEq', '2020-03-11 13:01:14', '2020-03-11 13:01:06', 0, 2, 0);
+(1, 'alice', '$2y$10$M47XnmcIREaP7HtQUWIKzOaTgaDXPJclV7CdwF9z9KYs1V/4VBlXi', '2020-08-26 20:55:57', '2020-08-26 20:55:29', 0, 1, 0),
+(2, 'gilang', '$2y$10$diwO.ytmNQm94jexqnvRQ.Qqk9N/nAMsJzbXLJrCBOAUQmCDbdTiC', '2020-08-26 20:59:50', '2020-08-26 20:59:42', 0, 2, 0),
+(3, 'bambang', '$2y$10$QaH8jtblYHswH15Jb2LANe2QI0646P9Shnd4xG9t.0/NCyW84kjba', '2020-08-26 21:11:07', '2020-08-26 21:03:18', 0, 2, 0);
 
 --
 -- Indexes for dumped tables
@@ -194,31 +206,31 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT untuk tabel `pelanggan`
 --
 ALTER TABLE `pelanggan`
-  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pelanggan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `pemesanan`
 --
 ALTER TABLE `pemesanan`
-  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_pesan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `service`
 --
 ALTER TABLE `service`
-  MODIFY `id_service` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_service` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `service_master`
 --
 ALTER TABLE `service_master`
-  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `service_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
