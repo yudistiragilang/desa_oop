@@ -5,9 +5,7 @@
 *  Email  : yudhistiragilang22@gmail.com
 *  
 */
-
 session_start();
-
 require_once __DIR__.'/database/Login.php';
 
 $login = new Login();

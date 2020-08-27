@@ -45,9 +45,6 @@ $data = $pesan->get_service_filter($id_service, $id_pelanggan, $tgl_from, $tgl_t
 
 $i = 5;
 $no = 1;
-
-
-
 foreach ($data as $row) {
 
 	$sheet->setCellValue('A'.$i, $row['id_pesan']);

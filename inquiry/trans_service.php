@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -6,7 +5,6 @@
 *  Email  : yudhistiragilang22@gmail.com
 *  
 */
-
 session_start();
 
 require_once '../database/Login.php';
