@@ -1,2 +1,2 @@
-# desa_oop
-Contoh aplikasi desa dengan oop php
+# service_oop
+Contoh aplikasi pemesanan service dengan oop php
