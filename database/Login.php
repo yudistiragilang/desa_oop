@@ -9,18 +9,14 @@
 
 	class Login
 	{
-		
 		private $conn;
 		public $time;
 
 		public function __construct()
 		{
-			
 			$database = new Connection();
-
 			$db = $database->db_connection();
 			$this->conn = $db;
-
 			date_default_timezone_set("Asia/Bangkok");
 			$this->time = date('Y/m/d H:i:s');
 		
@@ -28,10 +24,8 @@
 
 		public function run_query($sql)
 		{
-			
 			$stmt = $this->conn->prepare($sql);
 			return $stmt;
-		
 		}
 
 		public function register($username, $password, $realName, $phone, $email, $alamat)
@@ -66,14 +60,17 @@
 				$stmtPelanggan->bindParam(":no_telepon", $phone);
 				$stmtPelanggan->bindParam(":user_id", $idUser);
 				$stmtPelanggan->bindParam(":foto", $foto);
-				$stmtPelanggan->execute();
-
-				$this->conn->commit();
+				
+				if($stmtPelanggan->execute()){
+					$this->conn->commit();
+				}else{
+					$this->conn->rollback();
+				}
+				
 				return $stmt;
 			
 			}catch(PDOException $e){
-
-				$this->conn->rollback();
+				
 				echo $e->getMessage();
 
 			}
