@@ -1,0 +1,80 @@
+<?php
+	/**
+	 *  author : Yudhistira Gilang Adisetyo
+	 *  email : yudhistiragilang22@gmail.com
+	 */
+	class PrivilegedUser extends User
+	{
+		private $roles;
+		
+		public function __construct(){
+			parent::__construct();
+		}
+
+		// override user method
+		public static function getByUsername($username){
+			$sql = "SELECT * FROM users WHERE username = :username";
+			$sth = $GLOBALS["DB"]->prepare($sql);
+			$sth->execute(array(":username" => $username));
+			$result = $sth->fetchAll();
+
+			if(!empty($result)){
+				$privUser = new PrivilegedUser();
+				$privUser->user_id = $result[0]["user_id"];
+				$privUser->username = $username;
+				$privUser->user_id = $result[0]["password"];
+				$privUser->user_id = $result[0]["email_addr"];
+				$privUser->initRoles();
+				return $privUser;
+			}else{
+				return FALSE;
+			}
+		}
+
+		// populate roles with their assosiated permissions
+		protected function initRoles(){
+			$this->roles = array();
+			$sql = "SELECT 
+						t1.role_id,
+						t2.role_name 
+					FROM
+						user_role AS t1
+						JOIN roles AS t2 
+							ON (t1.role_id = t2.role_id)
+					WHERE
+						t1.user_id = :user_id";
+			$sth = $GLOBALS["DB"]->prepare($sql);
+			$sth->execute(array("user_id" => $this->user_id));
+
+			while ($row = $sth->fetch(PDO::FETCH_ASSOC)) {
+				$this->roles[$row["role_name"]] = Role::getRolePerms($row["role_id"]);
+			}
+		}
+
+		// check if user has a specific privilege
+		public function hasPrivilege($perm){
+			foreach ($this->roles as $role) {
+				if($role->hasPerm($perm)){
+					return TRUE;
+				}
+			}
+			return FALSE;
+		}
+
+		public function hasRole($role_name){
+			return isset($this->roles[$role_name]);
+		}
+
+		public static function insertPerm($role_id, $perm_id){
+			$sql = "INSERT INTO role_perm (role_id, perm_id) VALUES (:role_id, :perm_id)";
+			$sth = $GLOBALS["DB"]->prepare($sql);
+			return $sth->execute(array(":role_id" => $role_id, ":perm_id" => $perm_id));
+		}
+
+		public static function deletePerms(){
+			$sql = "TRUNCATE role_perm";
+			$sth = $GLOBALS["DB"]->prepare($sql);
+			return $sth->execute();
+		}
+	}
+?>
